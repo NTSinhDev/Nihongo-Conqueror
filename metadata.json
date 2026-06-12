@@ -1,0 +1,6 @@
+{
+  "name": "Hiragana Randomizer",
+  "description": "Ứng dụng luyện tập ngẫu nhiên các ký tự Hiragana tiếng Nhật qua Flashcard, Trắc nghiệm sinh động và Bảng tra cứu âm thanh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

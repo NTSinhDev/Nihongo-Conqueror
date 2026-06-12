@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=BIZ+UDMincho:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif-jp: "BIZ UDMincho", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-brand-primary: #e11d48; /* soft crimson rose */
+  --color-brand-lightrose: #fff1f2;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #fafaf9; /* ultra warm tone background */
+  color: #1c1917; /* Slate dark stone gray */
+}
+
+/* Beautiful custom soft animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
