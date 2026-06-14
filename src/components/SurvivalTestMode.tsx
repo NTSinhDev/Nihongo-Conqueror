@@ -515,37 +515,39 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
 
       {/* RUNNING GAME SCREEN */}
       {gameState === "running" && currentQuestion && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
           {/* Left Block: Main Quiz Area (7 Columns) */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-stone-200 p-6 md:p-8 shadow-xs space-y-6">
+          <div className="lg:col-span-7 bg-white rounded-xl sm:rounded-2xl border border-stone-200 p-4 sm:p-6 md:p-8 shadow-xs space-y-4 sm:space-y-6">
             
             {/* Answer Stats Info & Time countdown */}
-            <div className="flex justify-between items-center pb-4 border-b border-stone-100 gap-4">
-              <span className="text-xs font-mono font-bold text-stone-400 shrink-0">
-                Lượt bấm: <span id="span-total-clicks" className="text-stone-700">{totalQuestionsAsked}</span>
-              </span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 sm:pb-4 border-b border-stone-100 gap-2 sm:gap-3">
+              <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+                <span className="text-xs font-mono font-bold text-stone-400 shrink-0">
+                  Lượt bấm: <span id="span-total-clicks" className="text-stone-700">{totalQuestionsAsked}</span>
+                </span>
 
-              {/* Countdown indicator */}
-              {enableTimer && (
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold text-stone-400 font-sans">Thời gian còn lại:</span>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-mono font-extrabold shadow-2xs ${
-                    hasAnswered 
-                      ? "bg-stone-50 text-stone-450"
-                      : timeLeft <= 2 
-                        ? "bg-red-500 text-white animate-pulse" 
-                        : "bg-rose-100 text-rose-700"
-                  }`}>
-                    {hasAnswered ? "--" : `${timeLeft} giây`}
-                  </span>
-                </div>
-              )}
+                {/* Countdown indicator */}
+                {enableTimer && (
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-[11px] font-bold text-stone-400 font-sans">Thời gian:</span>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-mono font-extrabold shadow-2xs ${
+                      hasAnswered 
+                        ? "bg-stone-50 text-stone-450"
+                        : timeLeft <= 2 
+                          ? "bg-red-500 text-white animate-pulse" 
+                          : "bg-rose-100 text-rose-700"
+                    }`}>
+                      {hasAnswered ? "--" : `${timeLeft}s`}
+                    </span>
+                  </div>
+                )}
+              </div>
 
               <button
                 id="btn-survival-speak"
                 onClick={() => speakJapanese(currentQuestion.speakText)}
-                className="flex items-center gap-1.5 text-xs text-rose-600 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-lg font-bold transition-all shrink-0 ml-auto"
+                className="flex items-center justify-center gap-1.5 text-xs text-rose-600 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-lg font-bold transition-all w-full sm:w-auto mt-0.5 sm:mt-0"
                 title="Nghe phát âm chuẩn"
               >
                 <Volume2 className="w-3.5 h-3.5" /> Phát âm giọng chuẩn
@@ -565,32 +567,32 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
             )}
 
             {/* Question Display Card (Hidden in listening mode until answered) */}
-            <div className="bg-stone-50 rounded-2xl py-12 text-center relative border border-stone-100 overflow-hidden">
+            <div className="bg-stone-50 rounded-xl sm:rounded-2xl py-6 sm:py-12 text-center relative border border-stone-100 overflow-hidden">
               
               {testType === "listening" && !hasAnswered ? (
                 // Listening mode: Display a big interactive Speaker button so they listen carefully
-                <div className="flex flex-col items-center justify-center py-6 space-y-4">
+                <div className="flex flex-col items-center justify-center py-4 sm:py-6 space-y-3 sm:space-y-4">
                   <button
                     id="btn-listening-pulse"
                     onClick={() => speakJapanese(currentQuestion.speakText)}
-                    className="w-24 h-24 bg-rose-500 hover:bg-rose-400 text-white rounded-full flex items-center justify-center shadow-md border-4 border-rose-100 transition-all cursor-pointer animate-float"
+                    className="w-20 h-20 sm:w-24 sm:h-24 bg-rose-500 hover:bg-rose-400 text-white rounded-full flex items-center justify-center shadow-md border-4 border-rose-100 transition-all cursor-pointer animate-float"
                   >
-                    <Volume2 className="w-10 h-10" />
+                    <Volume2 className="w-8 h-8 sm:w-10 sm:h-10" />
                   </button>
-                  <span className="text-xs font-bold text-rose-500 animate-pulse">Luyện Nghe: Nhấn loa phát lại âm thanh</span>
+                  <span className="text-[11px] sm:text-xs font-bold text-rose-500 animate-pulse">Luyện Nghe: Nhấn loa phát lại âm thanh</span>
                 </div>
               ) : (
                 // Reading mode & Vocabulary mode OR after answered in listening mode
                 <div>
                   <span className={`font-serif-jp font-black text-stone-850 tracking-normal select-none block animate-float ${
-                    testType === "vocabulary" ? "text-5xl md:text-6xl" : "text-9xl"
+                    testType === "vocabulary" ? "text-4xl sm:text-5xl md:text-6xl" : "text-7xl sm:text-8xl md:text-9xl"
                   }`}>
                     {currentQuestion.display}
                   </span>
                   
                   {/* Under reading or vocabulary, show help subtitle after answering */}
                   {hasAnswered && (
-                    <div className="mt-3 flex flex-col items-center gap-1.5">
+                    <div className="mt-2.5 sm:mt-3 flex flex-col items-center gap-1 sm:gap-1.5">
                       <span className="block text-xs font-mono text-rose-600 font-extrabold bg-rose-50 px-3 py-1 rounded-full">
                         Phát âm chuẩn: /{currentQuestion.correctRomaji}/
                       </span>
@@ -619,23 +621,23 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
               </div>
 
               {/* Individual streak count badge */}
-              <div className="absolute top-4 left-4">
-                <span className="text-[10px] bg-white border border-stone-150 rounded-full px-2.5 py-1 font-bold text-stone-600 block shadow-2xs">
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+                <span className="text-[10px] bg-white border border-stone-150 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 font-bold text-stone-600 block shadow-3xs">
                   Chuỗi hiện tại: {progressMap[currentQuestion.id]?.consecutiveCorrect || 0}/5
                 </span>
               </div>
             </div>
 
             {/* Grid options choices */}
-            <div className="space-y-3">
-              <span className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">
+            <div className="space-y-2 sm:space-y-3">
+              <span className="block text-[11px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">
                 {testType === "vocabulary"
                   ? "Chọn nghĩa Tiếng Việt tương ứng (Romaji được ẩn):"
                   : testType === "listening"
                     ? "Chọn biểu tượng Hiragana phù hợp âm đọc:"
                     : "Chọn đúng Romaji tương ứng:"}
               </span>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5">
                 {choices.map((choice) => {
                   const isChoiceSelected = selectedAnswerId === choice.id;
                   const isChoiceCorrect = choice.id === currentQuestion.id;
@@ -645,8 +647,8 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
 
                   if (hasAnswered) {
                     if (isChoiceCorrect) {
-                      btnColor = "bg-green-50 border-green-300 text-green-700 font-extrabold scale-[1.01]";
-                      endIcon = <CheckCircle className="w-4 h-4 text-green-600 shrink-0 fill-green-50" />;
+                       btnColor = "bg-green-50 border-green-300 text-green-700 font-extrabold scale-[1.01]";
+                       endIcon = <CheckCircle className="w-4 h-4 text-green-600 shrink-0 fill-green-50" />;
                     } else if (isChoiceSelected) {
                       btnColor = "bg-rose-50 border-rose-300 text-rose-700 font-extrabold";
                       endIcon = <XCircle className="w-4 h-4 text-rose-600 shrink-0 fill-rose-50" />;
@@ -678,7 +680,7 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
                       key={choice.id}
                       disabled={hasAnswered}
                       onClick={() => handleAnswerSubmit(choice.id)}
-                      className={`p-4 rounded-2xl border-2 text-left text-xs md:text-sm font-sans font-bold transition-all flex items-center justify-between gap-3 cursor-pointer ${btnColor}`}
+                      className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 text-left text-xs md:text-sm font-sans font-bold transition-all flex items-center justify-between gap-3 cursor-pointer ${btnColor}`}
                     >
                       <span className={testType === "listening" ? "font-serif-jp text-base" : "font-sans"}>
                         {labelHTMLText}
@@ -726,7 +728,7 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
                   <p className="text-xs text-stone-600 mt-1 leading-relaxed">
                     Mẫu chữ <strong className="font-serif-jp text-rose-600 text-sm font-black">{currentQuestion.display}</strong> có phiên âm la-tinh là <strong className="font-mono text-stone-900 font-bold">{currentQuestion.correctRomaji}</strong> ({currentQuestion.vietnameseLabel}).
                     {currentQuestion.mnemonic && (
-                      <span className="block mt-1 italic text-stone-400">&ldquo;{currentQuestion.mnemonic}&rdquo;</span>
+                      <span className="block mt-1 italic text-stone-405">&ldquo;{currentQuestion.mnemonic}&rdquo;</span>
                     )}
                   </p>
                 </div>

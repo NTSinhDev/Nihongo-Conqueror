@@ -19,16 +19,18 @@ export default function HiraganaChart({
   onSelectNone,
   characterSet,
 }: Properties) {
-  const [activeTab, setActiveTab] = React.useState<"gojuon" | "dakuten" | "handakuten">("gojuon");
+  const [activeTab, setActiveTab] = React.useState<"gojuon" | "dakuten" | "handakuten" | "yoon">("gojuon");
 
   const gojuonKeys = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa"];
   const dakutenKeys = ["dakuten"];
   const handakutenKeys = ["handakuten"];
+  const yoonKeys = ["yoon"];
 
   const currentGroups = React.useMemo(() => {
     if (activeTab === "gojuon") return gojuonKeys;
     if (activeTab === "dakuten") return dakutenKeys;
-    return handakutenKeys;
+    if (activeTab === "handakuten") return handakutenKeys;
+    return yoonKeys;
   }, [activeTab]);
 
   const activeGroupsSource = characterSet === "hiragana" ? HIRAGANA_GROUPS : KATAKANA_GROUPS;
@@ -75,14 +77,14 @@ export default function HiraganaChart({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-stone-100 mb-6 gap-2">
+      <div className="flex border-b border-stone-100 mb-6 gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-0.5">
         <button
           id="tab-chart-gojuon"
           onClick={() => {
             sounds.playClick();
             setActiveTab("gojuon");
           }}
-          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] ${
+          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] shrink-0 ${
             activeTab === "gojuon"
               ? "border-rose-500 text-rose-600 font-bold"
               : "border-transparent text-stone-500 hover:text-stone-800"
@@ -96,7 +98,7 @@ export default function HiraganaChart({
             sounds.playClick();
             setActiveTab("dakuten");
           }}
-          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] ${
+          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] shrink-0 ${
             activeTab === "dakuten"
               ? "border-rose-500 text-rose-600 font-bold"
               : "border-transparent text-stone-500 hover:text-stone-800"
@@ -110,13 +112,27 @@ export default function HiraganaChart({
             sounds.playClick();
             setActiveTab("handakuten");
           }}
-          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] ${
+          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] shrink-0 ${
             activeTab === "handakuten"
               ? "border-rose-500 text-rose-600 font-bold"
               : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
           Bán Biến Âm (Handakuten)
+        </button>
+        <button
+          id="tab-chart-yoon"
+          onClick={() => {
+            sounds.playClick();
+            setActiveTab("yoon");
+          }}
+          className={`px-4 py-2 text-xs font-medium transition-all border-b-2 -mb-[2px] shrink-0 ${
+            activeTab === "yoon"
+              ? "border-rose-500 text-rose-600 font-bold"
+              : "border-transparent text-stone-500 hover:text-stone-800"
+          }`}
+        >
+          Âm Ghép (Yōon)
         </button>
       </div>
 

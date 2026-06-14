@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Sparkles, Cherry, Milestone } from "lucide-react";
 
 interface Properties {
@@ -8,8 +8,42 @@ interface Properties {
 }
 
 export default function Header({ activeCount, totalCount, characterSet }: Properties) {
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Threshold at the top to keep physical header visible initially
+      if (currentScrollY < 60) {
+        setIsVisible(true);
+      } else {
+        // Scroll down exceeds old scroll value -> Hide
+        if (currentScrollY > lastScrollY.current) {
+          setIsVisible(false);
+        } else {
+          // Scroll up -> Show
+          setIsVisible(true);
+        }
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    // Use passive scroll event for better frame rates on mobile
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="border-b border-stone-200/80 bg-white/70 backdrop-blur-md sticky top-0 z-50 transition-all">
+    <header 
+      className={`border-b border-stone-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300 ease-in-out transform ${
+        isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Brand Banner */}
         <div className="flex items-center gap-3">
@@ -22,7 +56,7 @@ export default function Header({ activeCount, totalCount, characterSet }: Proper
                 {characterSet === "hiragana" ? "Hiragana Ryusei" : "Katakana Ryusei"}
               </h1>
               <span className="text-[10px] bg-rose-50 text-rose-600 font-bold px-1.5 py-0.5 rounded-full border border-rose-100 uppercase">
-                v2.0
+                v2.1
               </span>
             </div>
             <p className="text-xs text-stone-500">

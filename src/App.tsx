@@ -88,25 +88,25 @@ export default function App() {
         characterSet={characterSet}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-4 sm:space-y-8">
         
         {/* Quick Search Tool & Banner overlay */}
-        <div className="bg-gradient-to-br from-rose-500 to-rose-700 text-white rounded-3xl p-6 md:p-8 shadow-md relative overflow-hidden">
+        <div className="bg-gradient-to-br from-rose-500 to-rose-700 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-md relative overflow-hidden">
           {/* Decorative shapes */}
           <div className="absolute right-0 top-0 translate-x-6 -translate-y-6 w-56 h-56 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
           <div className="absolute left-1/3 bottom-0 translate-y-12 w-32 h-32 bg-rose-400/20 rounded-full blur-xl pointer-events-none"></div>
 
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             {/* Banner details */}
-            <div className="md:col-span-8 space-y-2">
+            <div className="md:col-span-8 space-y-1.5 sm:space-y-2">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-rose-200 fill-rose-200" />
-                <span className="text-xs font-bold uppercase tracking-widest text-rose-100 font-mono">Phương pháp học sâu</span>
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-rose-100 font-mono">Phương pháp học sâu</span>
               </div>
-              <h2 className="text-2xl md:text-3.5xl font-extrabold tracking-tight">
+              <h2 className="text-lg sm:text-2xl md:text-3.5xl font-extrabold tracking-tight">
                 Luyện Tập {characterSet === "hiragana" ? "Hiragana" : "Katakana"} Tiếng Nhật Phản Xạ
               </h2>
-              <p className="text-rose-100 text-xs md:text-sm max-w-xl font-normal leading-relaxed">
+              <p className="text-rose-100 text-[11px] sm:text-xs md:text-sm max-w-xl font-normal leading-relaxed">
                 Thiết chế kiểm tra thông minh giúp bạn thuộc vĩnh viễn mặt chữ cái: Mỗi ký tự cần được nhận thức chính xác 
                 <strong className="text-white font-bold underline decoration-wavy decoration-rose-350 ml-1 font-medium">5 lần đúng liên tiếp</strong> để được ghi nhận đã thuộc bài!
               </p>

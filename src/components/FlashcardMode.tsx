@@ -270,7 +270,7 @@ export default function FlashcardMode({ activeCharPool, characterSet }: Properti
         </div>
 
         {/* 3D Card Containment */}
-        <div className="w-full relative h-96 [perspective:1000px] cursor-pointer" onClick={handleFlip}>
+        <div className="w-full relative h-[320px] sm:h-96 [perspective:1000px] cursor-pointer" onClick={handleFlip}>
           <AnimatePresence mode="wait">
             <motion.div
               id={`flashcard-item-${currentChar.romaji}`}
@@ -279,7 +279,7 @@ export default function FlashcardMode({ activeCharPool, characterSet }: Properti
               animate={{ rotateY: 0, opacity: 1 }}
               exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
               transition={{ duration: 0.35, ease: "easeInOut" }}
-              className={`absolute inset-0 w-full h-full rounded-3xl border p-8 flex flex-col justify-between shadow-xs select-none backface-hidden ${
+              className={`absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl border p-4 sm:p-8 flex flex-col justify-between shadow-xs select-none backface-hidden ${
                 isFlipped
                   ? "bg-stone-900 border-stone-800 text-stone-200"
                   : "bg-white border-stone-200 text-stone-850"
@@ -294,7 +294,7 @@ export default function FlashcardMode({ activeCharPool, characterSet }: Properti
               {/* Card Center: Main big symbol details */}
               {!isFlipped ? (
                 <div className="flex-1 flex flex-col items-center justify-center space-y-2">
-                  <span className="font-serif-jp text-stone-850 text-9xl font-black block select-none">
+                  <span className="font-serif-jp text-stone-850 text-7xl sm:text-9xl font-black block select-none">
                     {currentChar.hiragana}
                   </span>
                   <span className="text-xs text-stone-400">Nhấp để xem phiên âm la-tinh</span>
@@ -303,7 +303,7 @@ export default function FlashcardMode({ activeCharPool, characterSet }: Properti
                 <div className="flex-1 flex flex-col items-center justify-center space-y-4">
                   <div className="text-center">
                     <span className="text-[10px] text-stone-400 uppercase font-bold block mb-1">Phiên âm Romaji</span>
-                    <span className="font-sans font-black text-rose-500 text-6xl block select-all tracking-tight">
+                    <span className="font-sans font-black text-rose-500 text-5xl sm:text-6xl block select-all tracking-tight">
                       {currentChar.romaji}
                     </span>
                   </div>

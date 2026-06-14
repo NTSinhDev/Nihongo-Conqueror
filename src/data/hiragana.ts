@@ -138,6 +138,44 @@ export const HIRAGANA_GROUPS: { [key: string]: { label: string; chars: HiraganaC
       { hiragana: "ぺ", romaji: "pe", vietnamesePronunciation: "pê", row: "handakuten", mnemonic: "Biến âm từ へ (he) với vòng tròn maru" },
       { hiragana: "ぽ", romaji: "po", vietnamesePronunciation: "pô", row: "handakuten", mnemonic: "Biến âm từ ほ (ho) with maru circle" }
     ]
+  },
+  yoon: {
+    label: "Âm Ghép (Yōon - Hiragana)",
+    chars: [
+      { hiragana: "きゃ", romaji: "kya", vietnamesePronunciation: "kya", row: "yoon", mnemonic: "Ki + ya nhỏ" },
+      { hiragana: "きゅ", romaji: "kyu", vietnamesePronunciation: "kyu", row: "yoon", mnemonic: "Ki + yu nhỏ" },
+      { hiragana: "きょ", romaji: "kyo", vietnamesePronunciation: "kyo", row: "yoon", mnemonic: "Ki + yo nhỏ" },
+      { hiragana: "しゃ", romaji: "sha", vietnamesePronunciation: "sha", row: "yoon", mnemonic: "Shi + ya nhỏ" },
+      { hiragana: "しゅ", romaji: "shu", vietnamesePronunciation: "shu", row: "yoon", mnemonic: "Shi + yu nhỏ" },
+      { hiragana: "しょ", romaji: "sho", vietnamesePronunciation: "sho", row: "yoon", mnemonic: "Shi + yo nhỏ" },
+      { hiragana: "ちゃ", romaji: "cha", vietnamesePronunciation: "cha", row: "yoon", mnemonic: "Chi + ya nhỏ" },
+      { hiragana: "ちゅ", romaji: "chu", vietnamesePronunciation: "chu", row: "yoon", mnemonic: "Chi + yu nhỏ" },
+      { hiragana: "ちょ", romaji: "cho", vietnamesePronunciation: "cho", row: "yoon", mnemonic: "Chi + yo nhỏ" },
+      { hiragana: "にゃ", romaji: "nya", vietnamesePronunciation: "nya", row: "yoon", mnemonic: "Ni + ya nhỏ" },
+      { hiragana: "にゅ", romaji: "nyu", vietnamesePronunciation: "nyu", row: "yoon", mnemonic: "Ni + yu nhỏ" },
+      { hiragana: "にょ", romaji: "nyo", vietnamesePronunciation: "nyo", row: "yoon", mnemonic: "Ni + yo nhỏ" },
+      { hiragana: "ひゃ", romaji: "hya", vietnamesePronunciation: "hya", row: "yoon", mnemonic: "Hi + ya nhỏ" },
+      { hiragana: "ひゅ", romaji: "hyu", vietnamesePronunciation: "hyu", row: "yoon", mnemonic: "Hi + yu nhỏ" },
+      { hiragana: "ひょ", romaji: "hyo", vietnamesePronunciation: "hyo", row: "yoon", mnemonic: "Hi + yo nhỏ" },
+      { hiragana: "みゃ", romaji: "mya", vietnamesePronunciation: "mya", row: "yoon", mnemonic: "Mi + ya nhỏ" },
+      { hiragana: "みゅ", romaji: "myu", vietnamesePronunciation: "myu", row: "yoon", mnemonic: "Mi + yu nhỏ" },
+      { hiragana: "みょ", romaji: "myo", vietnamesePronunciation: "myo", row: "yoon", mnemonic: "Mi + yo nhỏ" },
+      { hiragana: "りゃ", romaji: "rya", vietnamesePronunciation: "rya", row: "yoon", mnemonic: "Ri + ya nhỏ" },
+      { hiragana: "りゅ", romaji: "ryu", vietnamesePronunciation: "ryu", row: "yoon", mnemonic: "Ri + yu nhỏ" },
+      { hiragana: "りょ", romaji: "ryo", vietnamesePronunciation: "ryo", row: "yoon", mnemonic: "Ri + yo nhỏ" },
+      { hiragana: "ぎゃ", romaji: "gya", vietnamesePronunciation: "gya", row: "yoon", mnemonic: "Gi + ya nhỏ" },
+      { hiragana: "ぎゅ", romaji: "gyu", vietnamesePronunciation: "gyu", row: "yoon", mnemonic: "Gi + yu nhỏ" },
+      { hiragana: "ぎょ", romaji: "gyo", vietnamesePronunciation: "gyo", row: "yoon", mnemonic: "Gi + yo nhỏ" },
+      { hiragana: "じゃ", romaji: "ja", vietnamesePronunciation: "ja", row: "yoon", mnemonic: "Ji + ya nhỏ" },
+      { hiragana: "じゅ", romaji: "ju", vietnamesePronunciation: "ju", row: "yoon", mnemonic: "Ji + yu nhỏ" },
+      { hiragana: "じょ", romaji: "jo", vietnamesePronunciation: "jo", row: "yoon", mnemonic: "Ji + yo nhỏ" },
+      { hiragana: "びゃ", romaji: "bya", vietnamesePronunciation: "bya", row: "yoon", mnemonic: "Bi + ya nhỏ" },
+      { hiragana: "びゅ", romaji: "byu", vietnamesePronunciation: "byu", row: "yoon", mnemonic: "Bi + yu nhỏ" },
+      { hiragana: "びょ", romaji: "byo", vietnamesePronunciation: "byo", row: "yoon", mnemonic: "Bi + yo nhỏ" },
+      { hiragana: "ぴゃ", romaji: "pya", vietnamesePronunciation: "pya", row: "yoon", mnemonic: "Pi + ya nhỏ" },
+      { hiragana: "ぴゅ", romaji: "pyu", vietnamesePronunciation: "pyu", row: "yoon", mnemonic: "Pi + yu nhỏ" },
+      { hiragana: "ぴょ", romaji: "pyo", vietnamesePronunciation: "pyo", row: "yoon", mnemonic: "Pi + yo nhỏ" }
+    ]
   }
 };
 
