@@ -72,6 +72,19 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
 }
 
 /**
+ * Ensure the client is authenticated (anonymously) to avoid permission issues
+ */
+export async function ensureAuthenticated(): Promise<void> {
+  if (!auth.currentUser) {
+    try {
+      await signInAnonymously(auth);
+    } catch (e) {
+      console.warn("Auto anonymous sign-in failed, proceeding with fallback:", e);
+    }
+  }
+}
+
+/**
  * Handle anonymous authentication with a seamless local-UID fallback 
  * if the operation is restricted on the Firebase console.
  */
@@ -100,6 +113,7 @@ export async function saveProgressToCloud(
   completedLessons: number[]
 ): Promise<boolean> {
   try {
+    await ensureAuthenticated();
     const userDocRef = doc(db, "user_progress", userId);
     await setDoc(userDocRef, {
       userId,
@@ -109,7 +123,8 @@ export async function saveProgressToCloud(
     });
     return true;
   } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, `user_progress/${userId}`);
+    console.warn("Could not save progress to Cloud, progress is saved locally:", error);
+    return false;
   }
 }
 
@@ -118,19 +133,21 @@ export async function saveProgressToCloud(
  */
 export async function loadProgressFromCloud(userId: string): Promise<CloudProgress | null> {
   try {
+    await ensureAuthenticated();
     const userDocRef = doc(db, "user_progress", userId);
     const docSnap = await getDoc(userDocRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
       return {
-        unlockedLessons: data.unlockedLessons || [1],
+        unlockedLessons: data.unlockedLessons || [0],
         completedLessons: data.completedLessons || [],
         lastUpdated: data.lastUpdated || ""
       };
     }
     return null;
   } catch (error) {
-    handleFirestoreError(error, OperationType.GET, `user_progress/${userId}`);
+    console.warn("Could not load progress from Cloud, using local progress:", error);
+    return null;
   }
 }
 
@@ -139,6 +156,7 @@ export async function loadProgressFromCloud(userId: string): Promise<CloudProgre
  */
 export async function getLessonsFromCloud(): Promise<Lesson[]> {
   try {
+    await ensureAuthenticated();
     const colRef = collection(db, "japanese_lessons");
     const querySnapshot = await getDocs(colRef);
     const lessons: Lesson[] = [];
@@ -147,7 +165,8 @@ export async function getLessonsFromCloud(): Promise<Lesson[]> {
     });
     return lessons;
   } catch (error) {
-    handleFirestoreError(error, OperationType.GET, "japanese_lessons");
+    console.warn("Could not fetch lessons from Cloud, using built-in local lessons:", error);
+    return [];
   }
 }
 
@@ -156,13 +175,34 @@ export async function getLessonsFromCloud(): Promise<Lesson[]> {
  */
 export async function seedLessonsToCloud(lessons: Lesson[]): Promise<boolean> {
   try {
+    await ensureAuthenticated();
     for (const lesson of lessons) {
       const docRef = doc(db, "japanese_lessons", String(lesson.id));
       await setDoc(docRef, lesson);
     }
     return true;
   } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, "japanese_lessons");
+    console.warn("Could not seed lessons to Cloud, lessons saved locally:", error);
+    return false;
+  }
+}
+
+function getLocalAccounts(): Record<string, string> {
+  try {
+    const raw = localStorage.getItem("japanese_course_local_accounts");
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveLocalAccount(username: string, password: string): void {
+  try {
+    const accounts = getLocalAccounts();
+    accounts[username.trim().toLowerCase()] = password;
+    localStorage.setItem("japanese_course_local_accounts", JSON.stringify(accounts));
+  } catch (e) {
+    console.error("Failed to save local account:", e);
   }
 }
 
@@ -170,8 +210,11 @@ export async function seedLessonsToCloud(lessons: Lesson[]): Promise<boolean> {
  * Register a custom account (username / password) in Firestore
  */
 export async function registerCustomAccount(username: string, password: string): Promise<boolean> {
+  const uName = username.trim().toLowerCase();
+  saveLocalAccount(uName, password);
+
   try {
-    const uName = username.trim().toLowerCase();
+    await ensureAuthenticated();
     const userRef = doc(db, "course_accounts", uName);
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
@@ -183,8 +226,12 @@ export async function registerCustomAccount(username: string, password: string):
       createdAt: new Date().toISOString()
     });
     return true;
-  } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, `course_accounts/${username}`);
+  } catch (error: any) {
+    console.warn("Firestore write failed for registerCustomAccount, falling back to local storage:", error);
+    if (error instanceof Error && error.message.includes("Tài khoản đã tồn tại")) {
+      throw error;
+    }
+    return true;
   }
 }
 
@@ -192,11 +239,11 @@ export async function registerCustomAccount(username: string, password: string):
  * Verify custom account credentials
  */
 export async function verifyCustomAccount(username: string, password: string): Promise<boolean> {
-  try {
-    const uName = username.trim().toLowerCase();
-    
-    // Auto-create default account "sinh" / "123456" if not present in DB
-    if (uName === "sinh" && password === "123456") {
+  const uName = username.trim().toLowerCase();
+  
+  if (uName === "sinh" && password === "123456") {
+    try {
+      await ensureAuthenticated();
       const userRef = doc(db, "course_accounts", "sinh");
       const docSnap = await getDoc(userRef);
       if (!docSnap.exists()) {
@@ -206,21 +253,41 @@ export async function verifyCustomAccount(username: string, password: string): P
           createdAt: new Date().toISOString()
         });
       }
-      return true;
-    }
-
-    const userRef = doc(db, "course_accounts", uName);
-    const docSnap = await getDoc(userRef);
-    if (!docSnap.exists()) {
-      throw new Error("Tài khoản không tồn tại. Vui lòng đăng ký tài khoản mới!");
-    }
-    const data = docSnap.data();
-    if (data.password !== password) {
-      throw new Error("Mật khẩu không đúng. Vui lòng kiểm tra lại!");
+    } catch (e) {
+      console.warn("Could not sync default user 'sinh' to Firestore, continuing with local:", e);
     }
     return true;
-  } catch (error) {
-    handleFirestoreError(error, OperationType.GET, `course_accounts/${username}`);
   }
+
+  try {
+    await ensureAuthenticated();
+    const userRef = doc(db, "course_accounts", uName);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (data.password === password) {
+        saveLocalAccount(uName, password);
+        return true;
+      } else {
+        throw new Error("Mật khẩu không đúng. Vui lòng kiểm tra lại!");
+      }
+    }
+  } catch (error: any) {
+    console.warn("Firestore authentication failed or permission denied, checking local storage fallback:", error);
+    if (error instanceof Error && error.message.includes("Mật khẩu không đúng")) {
+      throw error;
+    }
+  }
+
+  const localAccounts = getLocalAccounts();
+  if (localAccounts[uName]) {
+    if (localAccounts[uName] === password) {
+      return true;
+    } else {
+      throw new Error("Mật khẩu không đúng. Vui lòng kiểm tra lại!");
+    }
+  }
+
+  throw new Error("Tài khoản không tồn tại hoặc lỗi kết nối. Vui lòng đăng ký tài khoản mới!");
 }
 

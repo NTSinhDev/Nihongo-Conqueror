@@ -663,15 +663,14 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
     setCompletedLessons(localCompleted);
 
     const loadLessonsAndSync = async () => {
-      // 1. Fetch or seed lessons from Firestore
+      // 1. Fetch lessons from Firestore (Using local default lessons as fallback if empty/offline without overwriting the Cloud)
       try {
         setLessonsLoading(true);
         const cloudLessons = await getLessonsFromCloud();
         if (cloudLessons && cloudLessons.length > 0) {
           setLessons(cloudLessons.sort((a, b) => a.id - b.id));
         } else {
-          // If empty in cloud, seed them
-          await seedLessonsToCloud(N5_LESSONS);
+          // Keep local default lessons in UI but do NOT write/overwrite anything to Cloud automatically
           setLessons(N5_LESSONS);
         }
       } catch (e) {
