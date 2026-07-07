@@ -61,22 +61,39 @@ interface GridDimensions {
   rows: number;
 }
 
-const getGridDimensions = (totalTiles: number): GridDimensions => {
-  if (totalTiles <= 4) return { cols: 2, rows: 2 };
-  if (totalTiles <= 6) return { cols: 3, rows: 2 };
-  if (totalTiles <= 10) return { cols: 5, rows: 2 };
-  if (totalTiles <= 12) return { cols: 4, rows: 3 };
-  if (totalTiles <= 16) return { cols: 4, rows: 4 };
-  if (totalTiles <= 20) return { cols: 5, rows: 4 };
-  if (totalTiles <= 24) return { cols: 6, rows: 4 };
-  if (totalTiles <= 30) return { cols: 6, rows: 5 };
-  if (totalTiles <= 32) return { cols: 8, rows: 4 };
-  if (totalTiles <= 36) return { cols: 6, rows: 6 };
-  if (totalTiles <= 40) return { cols: 8, rows: 5 };
-  if (totalTiles <= 48) return { cols: 8, rows: 6 };
-  if (totalTiles <= 52) return { cols: 10, rows: 5 };
-  if (totalTiles <= 60) return { cols: 10, rows: 6 };
-  return { cols: 8, rows: 8 }; // 64 tiles fallback
+const getGridDimensions = (totalTiles: number, isMobile: boolean): GridDimensions => {
+  if (isMobile) {
+    if (totalTiles <= 4) return { cols: 2, rows: 2 };
+    if (totalTiles <= 6) return { cols: 2, rows: 3 };
+    if (totalTiles <= 8) return { cols: 2, rows: 4 };
+    if (totalTiles <= 10) return { cols: 2, rows: 5 };
+    if (totalTiles <= 12) return { cols: 3, rows: 4 };
+    if (totalTiles <= 16) return { cols: 4, rows: 4 };
+    if (totalTiles <= 20) return { cols: 4, rows: 5 };
+    if (totalTiles <= 24) return { cols: 4, rows: 6 };
+    if (totalTiles <= 30) return { cols: 5, rows: 6 };
+    if (totalTiles <= 36) return { cols: 6, rows: 6 };
+    if (totalTiles <= 48) return { cols: 6, rows: 8 };
+    if (totalTiles <= 60) return { cols: 6, rows: 10 };
+    return { cols: 8, rows: 8 }; // 64 tiles fallback
+  } else {
+    if (totalTiles <= 4) return { cols: 2, rows: 2 };
+    if (totalTiles <= 6) return { cols: 3, rows: 2 };
+    if (totalTiles <= 8) return { cols: 4, rows: 2 };
+    if (totalTiles <= 10) return { cols: 5, rows: 2 };
+    if (totalTiles <= 12) return { cols: 4, rows: 3 };
+    if (totalTiles <= 16) return { cols: 4, rows: 4 };
+    if (totalTiles <= 20) return { cols: 5, rows: 4 };
+    if (totalTiles <= 24) return { cols: 6, rows: 4 };
+    if (totalTiles <= 30) return { cols: 6, rows: 5 };
+    if (totalTiles <= 32) return { cols: 8, rows: 4 };
+    if (totalTiles <= 36) return { cols: 6, rows: 6 };
+    if (totalTiles <= 40) return { cols: 8, rows: 5 };
+    if (totalTiles <= 48) return { cols: 8, rows: 6 };
+    if (totalTiles <= 52) return { cols: 10, rows: 5 };
+    if (totalTiles <= 60) return { cols: 10, rows: 6 };
+    return { cols: 8, rows: 8 }; // 64 tiles fallback
+  }
 };
 
 interface TileSizing {
@@ -87,7 +104,35 @@ interface TileSizing {
   gapClass: string;
 }
 
-const getTileSizing = (totalTiles: number): TileSizing => {
+const getTileSizing = (totalTiles: number, isMobile: boolean): TileSizing => {
+  if (isMobile) {
+    if (totalTiles <= 8) {
+      return {
+        hiraSize: "text-xl sm:text-3xl md:text-5xl",
+        romajiSize: "text-[11px] sm:text-xs md:text-base",
+        paddings: "p-1 sm:p-2",
+        showLabels: false,
+        gapClass: "gap-1.5 sm:gap-4",
+      };
+    }
+    if (totalTiles <= 16) {
+      return {
+        hiraSize: "text-lg sm:text-2xl md:text-3xl",
+        romajiSize: "text-[10px] sm:text-xs md:text-sm",
+        paddings: "p-1 sm:p-1.5",
+        showLabels: false,
+        gapClass: "gap-1 sm:gap-3",
+      };
+    }
+    return {
+      hiraSize: "text-sm sm:text-lg md:text-xl",
+      romajiSize: "text-[8px] sm:text-[9px] md:text-xs",
+      paddings: "p-0.5 sm:p-1.5",
+      showLabels: false,
+      gapClass: "gap-0.5 sm:gap-1.5",
+    };
+  }
+
   if (totalTiles <= 8) {
     return {
       hiraSize: "text-2xl sm:text-4xl md:text-5xl",
@@ -134,6 +179,88 @@ const getTileSizing = (totalTiles: number): TileSizing => {
   };
 };
 
+const getDynamicTextClass = (
+  value: string,
+  type: "hiragana" | "romaji",
+  totalTiles: number,
+  isMobile: boolean
+): string => {
+  const isHighDensity = totalTiles > 24;
+  const isMediumDensity = totalTiles > 12;
+
+  if (type === "hiragana") {
+    const len = value.length;
+    if (len === 1) {
+      if (isMobile) {
+        if (isHighDensity) return "text-base sm:text-lg md:text-xl font-black text-rose-600";
+        if (isMediumDensity) return "text-xl sm:text-2xl md:text-3xl font-black text-rose-600";
+        return "text-3xl sm:text-4xl md:text-5xl font-black text-rose-600";
+      } else {
+        if (isHighDensity) return "text-xl sm:text-2xl md:text-3xl font-black text-rose-600";
+        if (isMediumDensity) return "text-3xl sm:text-4xl md:text-5xl font-black text-rose-600";
+        return "text-5xl sm:text-6xl md:text-7xl font-black text-rose-600";
+      }
+    } else if (len === 2) {
+      if (isMobile) {
+        if (isHighDensity) return "text-[11px] sm:text-xs md:text-sm font-extrabold tracking-tight text-stone-900";
+        if (isMediumDensity) return "text-sm sm:text-base md:text-lg font-extrabold tracking-tight text-stone-900";
+        return "text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-stone-900";
+      } else {
+        if (isHighDensity) return "text-sm sm:text-base md:text-lg font-extrabold tracking-tight text-stone-900";
+        if (isMediumDensity) return "text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-stone-900";
+        return "text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-stone-900";
+      }
+    } else {
+      if (isMobile) {
+        if (isHighDensity) return "text-[9px] sm:text-[10px] md:text-xs font-bold tracking-tighter leading-none text-stone-900";
+        if (isMediumDensity) return "text-[11px] sm:text-xs md:text-sm font-bold tracking-tighter leading-none text-stone-900";
+        return "text-base sm:text-lg md:text-xl font-bold tracking-tight text-stone-900";
+      } else {
+        if (isHighDensity) return "text-xs sm:text-sm md:text-base font-bold tracking-tighter text-stone-900";
+        if (isMediumDensity) return "text-base sm:text-lg md:text-xl font-bold tracking-tighter text-stone-900";
+        return "text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-stone-900";
+      }
+    }
+  } else {
+    // Romaji / translation / meaning
+    const len = value.length;
+    if (len <= 2) {
+      // Single/double romaji like "yu", "ta", "ji" -> MAKE THEM VERY LARGE & PROMIMENT
+      if (isMobile) {
+        if (isHighDensity) return "text-xs sm:text-sm font-black tracking-wider uppercase text-stone-700";
+        if (isMediumDensity) return "text-sm sm:text-base font-black tracking-wider uppercase text-stone-700";
+        return "text-2xl sm:text-3xl font-black tracking-widest uppercase text-stone-800";
+      } else {
+        if (isHighDensity) return "text-sm sm:text-base md:text-lg font-black tracking-wider uppercase text-stone-700";
+        if (isMediumDensity) return "text-lg sm:text-xl md:text-2xl font-black tracking-wider uppercase text-stone-700";
+        return "text-4xl sm:text-5xl md:text-6xl font-black tracking-widest uppercase text-stone-800";
+      }
+    } else if (len <= 5) {
+      // "yama", "kaze", "yuki", etc.
+      if (isMobile) {
+        if (isHighDensity) return "text-[9px] sm:text-[10px] font-bold leading-tight text-stone-700";
+        if (isMediumDensity) return "text-[11px] sm:text-xs font-bold leading-tight text-stone-700";
+        return "text-base sm:text-lg md:text-xl font-bold leading-tight text-stone-800 italic";
+      } else {
+        if (isHighDensity) return "text-xs sm:text-sm md:text-base font-bold text-stone-700";
+        if (isMediumDensity) return "text-sm sm:text-base md:text-lg font-bold text-stone-700";
+        return "text-2xl sm:text-3xl md:text-4xl font-bold text-stone-800 italic";
+      }
+    } else {
+      // Long romaji or phrases
+      if (isMobile) {
+        if (isHighDensity) return "text-[8px] sm:text-[9px] font-semibold tracking-tighter leading-none text-stone-605";
+        if (isMediumDensity) return "text-[9px] sm:text-[11px] font-semibold tracking-tighter leading-none text-stone-605";
+        return "text-xs sm:text-sm md:text-base font-semibold tracking-tight text-stone-700 leading-tight";
+      } else {
+        if (isHighDensity) return "text-xs sm:text-sm font-semibold tracking-tighter text-stone-605";
+        if (isMediumDensity) return "text-xs sm:text-sm md:text-base font-semibold tracking-tighter text-stone-605";
+        return "text-base sm:text-lg md:text-xl font-semibold tracking-tight text-stone-700";
+      }
+    }
+  }
+};
+
 export default function MatchingGame({ activeCharPool, characterSet }: Properties) {
   const [level, setLevel] = useState<number>(() => {
     const saved = localStorage.getItem("matching_game_player_level");
@@ -156,6 +283,17 @@ export default function MatchingGame({ activeCharPool, characterSet }: Propertie
     const saved = localStorage.getItem("matching_game_max_cleared");
     return saved ? parseInt(saved, 10) : 0;
   });
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -573,8 +711,8 @@ export default function MatchingGame({ activeCharPool, characterSet }: Propertie
       ) : (
         /* The Card Matrix Grid based on level layout scale */
         (() => {
-          const { cols, rows } = getGridDimensions(tiles.length);
-          const sizing = getTileSizing(tiles.length);
+          const { cols, rows } = getGridDimensions(tiles.length, isMobile);
+          const sizing = getTileSizing(tiles.length, isMobile);
           return (
             <div className="space-y-4">
               
@@ -620,36 +758,43 @@ export default function MatchingGame({ activeCharPool, characterSet }: Propertie
                         className={`flex flex-col items-center justify-center ${sizing.paddings} rounded-xl sm:rounded-2xl border-2 transition-all select-none text-center w-full h-full min-h-0 min-w-0 ${cardStyles}`}
                       >
                         {isVocabSplit ? (
-                          <div className="flex flex-col items-center justify-center leading-tight select-none w-full max-w-full">
-                            <span 
-                              className={`block font-extrabold text-stone-850 leading-tight w-full truncate ${
-                                tiles.length > 48 
-                                  ? "text-[9px] sm:text-[11px]" 
-                                  : tiles.length > 24 
-                                    ? "text-[10px] sm:text-xs" 
-                                    : "text-xs sm:text-sm md:text-base"
-                              }`}
-                            >
-                              {tile.value.split(" - ")[0]}
-                            </span>
-                            {tiles.length <= 48 && (
-                              <span 
-                                className={`block text-stone-500 font-medium whitespace-normal line-clamp-2 leading-tight w-full mt-0.5 ${
-                                  tiles.length > 24 
-                                    ? "text-[7.5px] sm:text-[9.5px]" 
-                                    : "text-[9.5px] sm:text-xs"
-                                }`}
-                              >
-                                {tile.value.split(" - ")[1]}
-                              </span>
-                            )}
-                          </div>
+                          (() => {
+                            const romajiPart = tile.value.split(" - ")[0];
+                            const meaningPart = tile.value.split(" - ")[1];
+                            
+                            // Dynamically determine romaji part text size using our helper
+                            const romajiSizeClass = getDynamicTextClass(romajiPart, "romaji", tiles.length, isMobile);
+                            
+                            let meaningSizeClass = "text-[9.5px] sm:text-xs";
+                            if (tiles.length > 24) {
+                              meaningSizeClass = "text-[7.5px] sm:text-[9.5px]";
+                            } else if (meaningPart.length > 12) {
+                              meaningSizeClass = "text-[8.5px] sm:text-[10.5px]";
+                            }
+
+                            return (
+                              <div className="flex flex-col items-center justify-center leading-tight select-none w-full max-w-full px-1">
+                                <span 
+                                  className={`block font-extrabold leading-tight w-full whitespace-normal break-words ${romajiSizeClass}`}
+                                >
+                                  {romajiPart}
+                                </span>
+                                {tiles.length <= 48 && (
+                                  <span 
+                                    className={`block text-stone-500 font-medium whitespace-normal line-clamp-2 leading-tight w-full mt-0.5 ${meaningSizeClass}`}
+                                  >
+                                    {meaningPart}
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()
                         ) : (
                           <span
-                            className={`block tracking-normal select-none leading-normal w-full truncate ${
+                            className={`block tracking-normal select-none leading-normal w-full whitespace-normal break-words ${
                               tile.type === "hiragana"
-                                ? `font-serif-jp ${sizing.hiraSize} font-black text-stone-900`
-                                : `font-sans ${sizing.romajiSize} font-bold text-stone-700 px-0.5`
+                                ? `font-serif-jp ${getDynamicTextClass(tile.value, "hiragana", tiles.length, isMobile)}`
+                                : `font-sans ${getDynamicTextClass(tile.value, "romaji", tiles.length, isMobile)} px-0.5`
                             }`}
                           >
                             {tile.value}

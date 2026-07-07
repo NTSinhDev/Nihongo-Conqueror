@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /user_progress/{userId} {
+      allow read, write: if true;
+    }
+
+    match /japanese_lessons/{lessonId} {
+      allow read, write: if true;
+    }
+
+    match /course_accounts/{username} {
+      allow read, write: if true;
+    }
+  }
+}

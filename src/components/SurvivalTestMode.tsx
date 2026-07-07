@@ -16,6 +16,7 @@ import {
   BookOpen,
   Headphones,
   Eye,
+  Heart,
 } from "lucide-react";
 
 interface Properties {
@@ -53,8 +54,13 @@ type TestType = "reading" | "listening" | "vocabulary";
 
 export default function SurvivalTestMode({ selectedGroups, activeCharPool, characterSet }: Properties) {
   const [testType, setTestType] = useState<TestType>("reading");
-  const [gameState, setGameState] = useState<"setup" | "running" | "completed">("setup");
+  const [gameState, setGameState] = useState<"setup" | "running" | "completed" | "failed">("setup");
   const [progressMap, setProgressMap] = useState<Record<string, ItemProgress>>({});
+  
+  // Hearts/Lives configuration
+  const [enableHearts, setEnableHearts] = useState<boolean>(true);
+  const [heartsLimit, setHeartsLimit] = useState<number>(3); // default 3 hearts
+  const [heartsLeft, setHeartsLeft] = useState<number>(3);
   
   // The current active test pool derived from selections and test type
   const [activeTestPool, setActiveTestPool] = useState<TestItem[]>([]);
@@ -128,13 +134,16 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
     setSelectedAnswerId(null);
     setHasAnswered(false);
     
+    // Reset hearts limit for active session
+    setHeartsLeft(heartsLimit);
+    
     // Generate first question using the derived pool and map
     generateQuestion(pool, initialMap);
   };
 
   const getChoiceItem = (item: any): ChoiceItem => {
-    const id = item.japanese || item.hiragana || item.id;
-    const display = item.japanese || item.hiragana || item.display;
+    const id = item.japanese || item.hiragana || item.katakana || item.id;
+    const display = item.japanese || item.hiragana || item.katakana || item.display;
     const romaji = item.romaji || item.correctRomaji;
     const meaning = item.vietnameseMeaning || item.vietnameseLabel || (item.vietnamesePronunciation ? `phát âm /${item.vietnamesePronunciation}/` : "");
     return { id, display, romaji, meaning };
@@ -171,19 +180,46 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
     choicesSet.add(correctChoice.id);
 
     // Get suitable distractors
+    const fallbackCandidates = characterSet === "katakana" ? ALL_KATAKANA : ALL_HIRAGANA;
     const candidates = testType === "vocabulary" 
       ? JAPANESE_VOCABULARY 
-      : (activeCharPool.length >= 4 ? activeCharPool : ALL_HIRAGANA);
+      : (activeCharPool.length >= 4 ? activeCharPool : fallbackCandidates);
 
     // Limit to the available candidates size or max 4 options
     const maxChoices = Math.min(4, candidates.length);
+    let attempts = 0;
 
-    while (choicesSet.size < maxChoices) {
+    while (choicesSet.size < maxChoices && attempts < 150) {
+      attempts++;
       const distractor = candidates[Math.floor(Math.random() * candidates.length)];
       const mappedDistractor = getChoiceItem(distractor);
-      if (!choicesSet.has(mappedDistractor.id)) {
+      
+      // Strict duplicate detection checks:
+      const isDuplicate = choicesList.some((existing) => {
+        const idMatch = existing.id === mappedDistractor.id;
+        const displayMatch = existing.display === mappedDistractor.display;
+        const romajiMatch = existing.romaji.trim().toLowerCase() === mappedDistractor.romaji.trim().toLowerCase();
+        const meaningMatch = testType === "vocabulary" && 
+          existing.meaning.trim().toLowerCase() === mappedDistractor.meaning.trim().toLowerCase();
+        
+        return idMatch || displayMatch || romajiMatch || meaningMatch;
+      });
+
+      if (!isDuplicate && !choicesSet.has(mappedDistractor.id)) {
         choicesList.push(mappedDistractor);
         choicesSet.add(mappedDistractor.id);
+      }
+    }
+
+    // Fallback: Relax constraint if we couldn't fetch enough unique candidates due to pool size
+    if (choicesSet.size < maxChoices) {
+      for (const dist of candidates) {
+        if (choicesSet.size >= maxChoices) break;
+        const mappedDistractor = getChoiceItem(dist);
+        if (!choicesSet.has(mappedDistractor.id)) {
+          choicesList.push(mappedDistractor);
+          choicesSet.add(mappedDistractor.id);
+        }
       }
     }
 
@@ -218,6 +254,7 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
       totalWrong: 0,
     };
 
+    let isGameOver = false;
     if (isResponseCorrect) {
       sounds.playSuccess();
       const updatedStreak = currentStats.consecutiveCorrect + 1;
@@ -231,18 +268,35 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
       };
     } else {
       sounds.playFailure();
+      // Speak correct pronunciation immediately when they make a mistake so they learn it on the spot
+      if (currentQuestion.speakText) {
+        speakJapanese(currentQuestion.speakText);
+      }
       // Reset streak of this word/char to 0
       updatedMap[itemKey] = {
         ...currentStats,
         consecutiveCorrect: 0,
         totalWrong: currentStats.totalWrong + 1,
       };
+
+      if (enableHearts) {
+        const nextHearts = heartsLeft - 1;
+        setHeartsLeft(nextHearts);
+        if (nextHearts <= 0) {
+          isGameOver = true;
+        }
+      }
     }
 
     setProgressMap(updatedMap);
 
-    // Auto next logic
-    if (isResponseCorrect && autoNext) {
+    // Auto next or Game Over logic
+    if (isGameOver) {
+      const timer = setTimeout(() => {
+        setGameState("failed");
+      }, 1800);
+      return () => clearTimeout(timer);
+    } else if (isResponseCorrect && autoNext) {
       const timer = setTimeout(() => {
         generateQuestion(activeTestPool, updatedMap);
       }, 1500);
@@ -479,6 +533,54 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
             )}
           </div>
 
+          {/* Heart/Lives option input */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 bg-rose-50/25 border border-rose-100/50 rounded-2xl">
+            <div className="space-y-1">
+              <label className="flex items-center gap-2 text-sm font-bold text-stone-800 cursor-pointer select-none">
+                <input
+                  id="checkbox-enable-hearts-limit"
+                  type="checkbox"
+                  checked={enableHearts}
+                  onChange={(e) => {
+                    sounds.playClick();
+                    setEnableHearts(e.target.checked);
+                  }}
+                  className="rounded border-stone-350 text-rose-600 focus:ring-rose-400 w-4 h-4"
+                />
+                <span>❤️ Giới hạn mạng sống (Số tim cho phép sai)</span>
+              </label>
+              <p className="text-[11px] text-stone-400 pl-6">
+                Khi hết tim, bạn sẽ thất bại thử thách ngay lập tức mà không thể hoàn thành bài thi
+              </p>
+            </div>
+
+            {enableHearts && (
+              <div className="flex items-center gap-2 pl-6 sm:pl-0">
+                <span className="text-xs text-stone-500 font-medium font-sans">Số mạng sống:</span>
+                <div className="flex items-center gap-1 bg-white border border-stone-200 p-1 rounded-xl">
+                  {[1, 2, 3, 5].map((h) => (
+                    <button
+                      key={h}
+                      type="button"
+                      id={`btn-setup-hearts-${h}`}
+                      onClick={() => {
+                        sounds.playClick();
+                        setHeartsLimit(h);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all flex items-center gap-1 ${
+                        heartsLimit === h
+                          ? "bg-rose-500 text-white shadow-xs"
+                          : "bg-transparent text-stone-600 hover:bg-stone-100"
+                      }`}
+                    >
+                      {h} <Heart className="w-3 h-3 fill-current" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Details / Stats for chosen mode */}
           <div className="bg-stone-50 border border-stone-150 rounded-2xl p-5 text-left space-y-3">
             <span className="block text-[10px] text-stone-400 font-extrabold uppercase tracking-wide">
@@ -490,12 +592,14 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
                 <p>• 🧩 Danh sách nguồn: <strong className="text-stone-800">{JAPANESE_VOCABULARY.length} từ vựng Tiếng Nhật giao tiếp thông dụng</strong></p>
                 <p>• 🏆 Cách trả lời: <strong className="text-stone-850">Ghép nghĩa Tiếng Việt (Romaji được tuyệt đối ẩn lúc lướt đáp án)</strong></p>
                 <p>• 🔥 Độ khó: <strong className="text-red-600 text-xs">Cực hạn</strong> {enableTimer && <strong className="text-rose-500 font-mono">({timerLimit}s đếm ngược)</strong>}</p>
+                <p>• ❤️ Giới hạn tim: <strong className={enableHearts ? "text-rose-600 font-bold" : "text-stone-500 font-bold"}>{enableHearts ? `${heartsLimit} mạng sống (cho phép sai ${heartsLimit - 1} lần)` : "Không giới hạn (Vô cực)"}</strong></p>
               </div>
             ) : (
               <div className="text-xs space-y-1.5 text-stone-600">
-                <p>• 🧩 Số chữ cái đã chọn: <strong className="text-stone-800">{activeCharPool.length || ALL_HIRAGANA.length} chữ cái Hiragana</strong> {activeCharPool.length === 0 && <span className="text-[10px] text-stone-400 font-semibold italic">(Mặc định chọn toàn bộ bảng chữ)</span>}</p>
+                <p>• 🧩 Số chữ cái đã chọn: <strong className="text-stone-800">{activeCharPool.length || ALL_HIRAGANA.length} chữ cái {characterSet === "katakana" ? "Katakana" : "Hiragana"}</strong> {activeCharPool.length === 0 && <span className="text-[10px] text-stone-400 font-semibold italic">(Mặc định chọn toàn bộ bảng chữ)</span>}</p>
                 <p>• 🏆 Điểm đạt chuẩn: <strong className="text-emerald-600">Chuỗi 5 câu đúng liên tục cho từng chữ cái một</strong></p>
                 <p>• 🔊 Hỗ trợ âm thanh: <strong className="text-stone-850">{testType === "reading" ? "Không tự động nói (Chỉ nói khi bấm nút)" : "Có, tự động phát âm ngay khi chuyển câu"}</strong></p>
+                <p>• ❤️ Giới hạn tim: <strong className={enableHearts ? "text-rose-600 font-bold" : "text-stone-500 font-bold"}>{enableHearts ? `${heartsLimit} mạng sống (cho phép sai ${heartsLimit - 1} lần)` : "Không giới hạn (Vô cực)"}</strong></p>
               </div>
             )}
           </div>
@@ -522,10 +626,32 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
             
             {/* Answer Stats Info & Time countdown */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 sm:pb-4 border-b border-stone-100 gap-2 sm:gap-3">
-              <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+              <div className="flex items-center justify-start w-full sm:w-auto gap-3.5 flex-wrap">
                 <span className="text-xs font-mono font-bold text-stone-400 shrink-0">
                   Lượt bấm: <span id="span-total-clicks" className="text-stone-700">{totalQuestionsAsked}</span>
                 </span>
+
+                {/* Hearts limit indicator */}
+                {enableHearts && (
+                  <div className="flex items-center gap-1 shrink-0 bg-rose-50/70 border border-rose-100 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-bold text-rose-600 font-sans">Mạng:</span>
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: heartsLimit }).map((_, i) => {
+                        const isLost = i >= heartsLeft;
+                        return (
+                          <Heart
+                            key={i}
+                            className={`w-3 h-3 transition-colors ${
+                              isLost 
+                                ? "text-stone-300 fill-none" 
+                                : "text-rose-500 fill-rose-500"
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Countdown indicator */}
                 {enableTimer && (
@@ -887,6 +1013,59 @@ export default function SurvivalTestMode({ selectedGroups, activeCharPool, chara
               className="px-6 py-3 bg-stone-800 hover:bg-stone-750 text-stone-300 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer"
             >
               Chọn chế độ khác
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* COMPLETED FAILED SCREEN */}
+      {gameState === "failed" && (
+        <div className="bg-stone-900 text-white rounded-3xl p-8 text-center max-w-2xl mx-auto py-12 shadow-md relative overflow-hidden">
+          
+          <div className="absolute right-0 bottom-0 translate-x-8 translate-y-8 w-44 h-44 bg-rose-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="absolute left-0 top-0 -translate-x-8 -translate-y-8 w-44 h-44 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div id="failed-decor-podium" className="inline-block p-4 bg-rose-500/10 text-rose-500 rounded-full mb-6 scale-110 border border-rose-500/20">
+            <XCircle className="w-10 h-10 fill-rose-500/10" />
+          </div>
+
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Kỳ Thi Thất Bại! ❤️‍🩹</h3>
+          <p className="text-stone-400 text-xs mt-2 max-w-md mx-auto leading-relaxed">
+            Bạn đã dùng hết tất cả số mạng sống được chọn trước đó. Đừng nản lòng, luyện tập nhiều sẽ giúp phản xạ nhanh hơn!
+          </p>
+
+          <div className="my-8 max-w-sm mx-auto bg-stone-950 rounded-2xl p-5 border border-stone-850 text-left space-y-3.5">
+            <span className="block text-[9px] text-stone-500 uppercase tracking-widest font-black">Người hùng chiến đấu</span>
+            <div className="flex justify-between text-xs">
+              <span className="text-stone-400">Chế độ luyện:</span>
+              <strong className="text-white">
+                {testType === "reading" ? "Đọc nhận diện chữ" : testType === "listening" ? "Luyện nghe tiếng Nhật" : "Từ vựng bản xứ"}
+              </strong>
+            </div>
+            <div className="flex justify-between text-xs border-t border-stone-900 pt-3">
+              <span className="text-stone-400">Tổng số lượt bấm:</span>
+              <strong className="text-white font-mono">{totalQuestionsAsked} lượt bấm</strong>
+            </div>
+            <div className="flex justify-between text-xs border-t border-stone-900 pt-3">
+              <span className="text-stone-400">Đã thuộc sâu:</span>
+              <strong className="text-rose-550 font-mono">{passedCount} / {totalItemsCount} nội dung</strong>
+            </div>
+          </div>
+
+          <div className="flex justify-center gap-3">
+            <button
+              id="btn-failed-restart-survival"
+              onClick={startSurvivalTest}
+              className="px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold shadow-sm transition-all shrink-0 cursor-pointer"
+            >
+              Thử lại lần nữa
+            </button>
+            <button
+              id="btn-failed-to-setup"
+              onClick={handleRestart}
+              className="px-6 py-3 bg-stone-800 hover:bg-stone-750 text-stone-300 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer"
+            >
+              Thay đổi cấu hình
             </button>
           </div>
         </div>

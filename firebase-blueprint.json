@@ -1,0 +1,98 @@
+{
+  "entities": {
+    "user_progress": {
+      "title": "User Progress",
+      "description": "User learning progress, including unlocked and completed lessons.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The unique identifier of the user (or local fallback UID)"
+        },
+        "unlockedLessons": {
+          "type": "array",
+          "description": "List of unlocked lesson IDs"
+        },
+        "completedLessons": {
+          "type": "array",
+          "description": "List of completed lesson IDs"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "ISO 8601 string of the last update timestamp"
+        }
+      },
+      "required": ["userId", "unlockedLessons", "completedLessons", "lastUpdated"]
+    },
+    "japanese_lessons": {
+      "title": "Japanese Lessons",
+      "description": "Static content of the Japanese course lessons.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Lesson ID number"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the lesson"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the lesson topic"
+        },
+        "level": {
+          "type": "string",
+          "description": "JLPT Level, e.g. N5"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category or textbook mapping"
+        },
+        "grammar": {
+          "type": "object",
+          "description": "Grammar patterns, explanation, and examples"
+        },
+        "words": {
+          "type": "array",
+          "description": "List of vocabulary words in this lesson"
+        }
+      },
+      "required": ["id", "title", "description", "level", "category", "grammar", "words"]
+    },
+    "course_accounts": {
+      "title": "Course Accounts",
+      "description": "Custom registered accounts for the Japanese course.",
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "The custom registered username"
+        },
+        "password": {
+          "type": "string",
+          "description": "The raw/hashed password"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO 8601 string of when the account was registered"
+        }
+      },
+      "required": ["username", "password", "createdAt"]
+    }
+  },
+  "firestore": {
+    "user_progress/{userId}": {
+      "schema": "user_progress",
+      "description": "Stores user lessons progression mapped by userId"
+    },
+    "japanese_lessons/{lessonId}": {
+      "schema": "japanese_lessons",
+      "description": "Stores details of individual lessons"
+    },
+    "course_accounts/{username}": {
+      "schema": "course_accounts",
+      "description": "Stores custom accounts info"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "name": "Hiragana Katakana",
-  "description": "Ung dung hoc bang chu cai Hiragana, Katakana va am ghep phan xa nguon.",
+  "name": "Nihongo Conqueror",
+  "description": "Ung dung hoc bang chu cai Hiragana, Katakana va am ghep phan xa nhanh.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

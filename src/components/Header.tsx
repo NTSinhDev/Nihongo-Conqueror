@@ -51,10 +51,13 @@ export default function Header({ activeCount, totalCount, characterSet }: Proper
             <Cherry className="w-5 h-5 fill-rose-100" />
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <h1 className="text-lg font-bold tracking-tight text-stone-850">
-                {characterSet === "hiragana" ? "Hiragana Ryusei" : "Katakana Ryusei"}
+                Nihongo Conqueror
               </h1>
+              <span className="text-[10px] bg-stone-100 text-stone-600 font-semibold px-2 py-0.5 rounded-full border border-stone-200 uppercase">
+                {characterSet === "hiragana" ? "Hiragana" : "Katakana"}
+              </span>
               <span className="text-[10px] bg-rose-50 text-rose-600 font-bold px-1.5 py-0.5 rounded-full border border-rose-100 uppercase">
                 v2.1
               </span>
