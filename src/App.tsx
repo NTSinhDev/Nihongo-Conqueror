@@ -7,6 +7,8 @@ import BasicJapaneseCourse from "./components/BasicJapaneseCourse";
 import { HIRAGANA_GROUPS, ALL_HIRAGANA } from "./data/hiragana";
 import { KATAKANA_GROUPS, ALL_KATAKANA } from "./data/katakana";
 import { sounds } from "./utils/audio";
+import { getLessonsFromCloud, getCasualVocabFromCloud } from "./utils/firebase";
+import { VocabularyWord } from "./data/vocabulary";
 import {
   Flame,
   Layers,
@@ -54,8 +56,84 @@ export default function App() {
   // Track if mobile sidebar drawer is open
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  // Filter text to quickly search character definitions
-  const [searchQuery, setSearchQuery] = useState("");
+  // Database word search state
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [searchActiveQuery, setSearchActiveQuery] = useState("");
+  const [vocabSearchResults, setVocabSearchResults] = useState<Array<{
+    word: VocabularyWord;
+    lessonTitle?: string;
+    lessonId?: number;
+  }>>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearchSubmit = async (queryStr: string) => {
+    const trimmed = queryStr.trim();
+    if (!trimmed) {
+      setSearchActiveQuery("");
+      setVocabSearchResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    setSearchActiveQuery(trimmed);
+    try {
+      const q = trimmed.toLowerCase();
+      // Fetch all lessons from Firestore
+      const lessons = await getLessonsFromCloud();
+      // Fetch all casual vocabulary from Firestore
+      const casualVocab = await getCasualVocabFromCloud();
+
+      const results: Array<{
+        word: VocabularyWord;
+        lessonTitle?: string;
+        lessonId?: number;
+      }> = [];
+
+      // 1. Search lessons
+      lessons.forEach((lesson) => {
+        if (lesson.words && Array.isArray(lesson.words)) {
+          lesson.words.forEach((w) => {
+            if (
+              w.japanese.toLowerCase().includes(q) ||
+              (w.romaji && w.romaji.toLowerCase().includes(q)) ||
+              w.vietnameseMeaning.toLowerCase().includes(q)
+            ) {
+              const exists = results.some(r => r.word.japanese.trim() === w.japanese.trim());
+              if (!exists) {
+                results.push({
+                  word: w,
+                  lessonTitle: lesson.title,
+                  lessonId: lesson.id
+                });
+              }
+            }
+          });
+        }
+      });
+
+      // 2. Search casual vocabulary
+      casualVocab.forEach((w) => {
+        if (
+          w.japanese.toLowerCase().includes(q) ||
+          (w.romaji && w.romaji.toLowerCase().includes(q)) ||
+          w.vietnameseMeaning.toLowerCase().includes(q)
+        ) {
+          const exists = results.some(r => r.word.japanese.trim() === w.japanese.trim());
+          if (!exists) {
+            results.push({
+              word: w
+            });
+          }
+        }
+      });
+
+      setVocabSearchResults(results);
+    } catch (error) {
+      console.error("Search failed:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const activeCharPool = useMemo(() => {
     const pool = [];
@@ -86,19 +164,6 @@ export default function App() {
   const handleSelectNone = () => {
     setSelectedGroups([]);
   };
-
-  // Search filtered results helper
-  const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    const query = searchQuery.toLowerCase().trim();
-    const sourcePool = characterSet === "hiragana" ? ALL_HIRAGANA : ALL_KATAKANA;
-    return sourcePool.filter(
-      (c) =>
-        c.hiragana.includes(query) ||
-        c.romaji.includes(query) ||
-        c.vietnamesePronunciation.includes(query)
-    );
-  }, [searchQuery, characterSet]);
 
   const totalChars = characterSet === "hiragana" ? ALL_HIRAGANA.length : ALL_KATAKANA.length;
 
@@ -337,9 +402,14 @@ export default function App() {
             <input
               id="input-quick-search-dashboard"
               type="text"
-              placeholder="Tra cứu chữ cái, romaji..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Nhấn Enter để tìm từ vựng..."
+              value={searchInputValue}
+              onChange={(e) => setSearchInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearchSubmit(searchInputValue);
+                }
+              }}
               className="w-full bg-stone-100 text-stone-850 placeholder:text-stone-400 rounded-xl py-1.5 pl-8 pr-3 text-xs font-semibold focus:ring-2 focus:ring-rose-200 focus:bg-white focus:outline-none transition-all shadow-3xs border border-transparent focus:border-stone-250"
             />
             <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" />
@@ -349,35 +419,58 @@ export default function App() {
         {/* Content Workspace Area */}
         <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-7xl w-full mx-auto flex-1 min-w-0 overflow-hidden">
           
-          {/* Quick Search Results Dropdown-style result row */}
-          {searchQuery && (
+          {/* Database Word Search Results */}
+          {searchActiveQuery && (
             <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm animate-fadeIn">
-              <div className="flex items-center justify-between mb-3 border-b border-stone-100 pb-2">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1">
-                  <Search className="w-3.5 h-3.5" /> Kết quả tra cứu nhanh ({searchResults.length} ký tự tìm thấy)
+              <div className="flex items-center justify-between mb-4 border-b border-stone-100 pb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1.5">
+                  <Search className="w-3.5 h-3.5" /> Kết quả tìm kiếm từ vựng từ cơ sở dữ liệu ({vocabSearchResults.length} từ tìm thấy)
                 </h3>
                 <button 
-                  onClick={() => setSearchQuery("")}
+                  onClick={() => {
+                    setSearchInputValue("");
+                    setSearchActiveQuery("");
+                    setVocabSearchResults([]);
+                  }}
                   className="text-xs font-bold text-stone-400 hover:text-stone-600 font-mono"
                 >
                   XÓA BỎ
                 </button>
               </div>
-              {searchResults.length === 0 ? (
-                <p className="text-xs text-stone-400">Không tìm thấy âm vị nào khớp với từ khóa của bạn.</p>
+
+              {isSearching ? (
+                <div className="flex items-center gap-2 text-xs text-stone-500 py-4 font-semibold">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Đang truy vấn từ cơ sở dữ liệu đám mây...
+                </div>
+              ) : vocabSearchResults.length === 0 ? (
+                <p className="text-xs text-stone-400 py-2">Không tìm thấy từ vựng nào trong cơ sở dữ liệu khớp với "{searchActiveQuery}".</p>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {searchResults.map((char) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {vocabSearchResults.map((res, idx) => (
                     <div
-                      id={`search-res-dash-${char.hiragana}`}
-                      key={char.hiragana}
-                      className="p-3 border border-stone-150 rounded-xl bg-stone-50 flex items-center gap-3 shadow-3xs"
+                      id={`search-res-db-${encodeURIComponent(res.word.japanese)}`}
+                      key={`${res.word.japanese}-${idx}`}
+                      className="p-4 border border-stone-150 rounded-xl bg-stone-50 flex flex-col justify-between shadow-3xs hover:border-stone-250 transition-all animate-fadeIn"
                     >
-                      <span className="font-serif-jp text-2.5xl font-black text-rose-600">{char.hiragana}</span>
-                      <div>
-                        <span className="block font-mono text-xs font-bold text-stone-850 lowercase">{char.romaji}</span>
-                        <span className="text-[10px] text-stone-400 font-medium">/{char.vietnamesePronunciation}/</span>
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="space-y-1">
+                          <span className="font-serif-jp text-2xl font-black text-rose-600 break-all">{res.word.japanese}</span>
+                          <span className="block font-mono text-xs font-bold text-stone-500 lowercase">/{res.word.romaji}/</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-semibold text-stone-850 block">{res.word.vietnameseMeaning}</span>
+                          {res.word.englishMeaning && (
+                            <span className="text-[11px] text-stone-400 block mt-0.5 italic">({res.word.englishMeaning})</span>
+                          )}
+                        </div>
                       </div>
+
+                      {res.lessonTitle && (
+                        <div className="mt-3 pt-2.5 border-t border-stone-200 flex items-center gap-1.5 text-xs text-stone-500 font-semibold">
+                          <BookOpen className="w-3.5 h-3.5 text-stone-400" />
+                          <span>Thuộc bài học: <strong className="text-stone-700 font-bold">"{res.lessonTitle}"</strong></span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

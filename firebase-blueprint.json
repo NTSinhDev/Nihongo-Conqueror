@@ -56,6 +56,10 @@
         "words": {
           "type": "array",
           "description": "List of vocabulary words in this lesson"
+        },
+        "categorizedVocab": {
+          "type": "array",
+          "description": "AI-categorized vocabulary groups"
         }
       },
       "required": ["id", "title", "description", "level", "category", "grammar", "words"]
@@ -79,6 +83,30 @@
         }
       },
       "required": ["username", "password", "createdAt"]
+    },
+    "casual_vocab": {
+      "title": "Casual Vocabulary",
+      "description": "Casual or transient vocabulary words that do not belong to any specific lesson.",
+      "type": "object",
+      "properties": {
+        "japanese": {
+          "type": "string",
+          "description": "Kanji/Hiragana/Katakana phrase"
+        },
+        "romaji": {
+          "type": "string",
+          "description": "Romaji pronunciation"
+        },
+        "vietnameseMeaning": {
+          "type": "string",
+          "description": "Vietnamese meaning"
+        },
+        "englishMeaning": {
+          "type": "string",
+          "description": "Optional English meaning"
+        }
+      },
+      "required": ["japanese", "vietnameseMeaning"]
     }
   },
   "firestore": {
@@ -93,6 +121,10 @@
     "course_accounts/{username}": {
       "schema": "course_accounts",
       "description": "Stores custom accounts info"
+    },
+    "casual_vocab/{wordId}": {
+      "schema": "casual_vocab",
+      "description": "Stores casual vocabulary words"
     }
   }
 }

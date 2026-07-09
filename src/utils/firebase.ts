@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 import firebaseConfig from "../../firebase-applet-config.json";
 import { Lesson } from "../data/lessons";
+import { VocabularyWord } from "../data/vocabulary";
 
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
@@ -187,6 +188,26 @@ export async function seedLessonsToCloud(lessons: Lesson[]): Promise<boolean> {
   }
 }
 
+/**
+ * Save AI-categorized vocabulary to Firestore for a specific lesson
+ */
+export async function saveCategorizedVocabToCloud(
+  lessonId: number,
+  categorizedVocab: any[]
+): Promise<boolean> {
+  try {
+    await ensureAuthenticated();
+    const docRef = doc(db, "japanese_lessons", String(lessonId));
+    await updateDoc(docRef, {
+      categorizedVocab
+    });
+    return true;
+  } catch (error) {
+    console.warn("Could not save categorized vocab to Cloud:", error);
+    return false;
+  }
+}
+
 function getLocalAccounts(): Record<string, string> {
   try {
     const raw = localStorage.getItem("japanese_course_local_accounts");
@@ -289,5 +310,81 @@ export async function verifyCustomAccount(username: string, password: string): P
   }
 
   throw new Error("Tài khoản không tồn tại hoặc lỗi kết nối. Vui lòng đăng ký tài khoản mới!");
+}
+
+/**
+ * Fetch all casual/transient vocabulary from Firestore
+ */
+export async function getCasualVocabFromCloud(): Promise<VocabularyWord[]> {
+  try {
+    await ensureAuthenticated();
+    const colRef = collection(db, "casual_vocab");
+    const querySnapshot = await getDocs(colRef);
+    const words: VocabularyWord[] = [];
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data && data.japanese) {
+        words.push({
+          japanese: data.japanese,
+          romaji: data.romaji || "",
+          vietnameseMeaning: data.vietnameseMeaning || "",
+          englishMeaning: data.englishMeaning || ""
+        });
+      }
+    });
+    return words;
+  } catch (error) {
+    console.warn("Could not fetch casual vocab from Cloud:", error);
+    return [];
+  }
+}
+
+/**
+ * Save or update a single casual/transient vocabulary word in Firestore
+ */
+export async function saveCasualWordToCloud(word: VocabularyWord): Promise<boolean> {
+  try {
+    await ensureAuthenticated();
+    // Use encodeURIComponent to make document ID safe across firestore systems
+    const docId = encodeURIComponent(word.japanese.trim());
+    const docRef = doc(db, "casual_vocab", docId);
+    await setDoc(docRef, {
+      japanese: word.japanese.trim(),
+      romaji: word.romaji ? word.romaji.trim() : "",
+      vietnameseMeaning: word.vietnameseMeaning.trim(),
+      englishMeaning: word.englishMeaning ? word.englishMeaning.trim() : ""
+    });
+    return true;
+  } catch (error) {
+    console.warn("Could not save casual word to Cloud:", error);
+    return false;
+  }
+}
+
+/**
+ * Seed casual vocabulary to Firestore (from local data list if Firestore is empty)
+ */
+export async function seedCasualVocabToCloud(words: VocabularyWord[]): Promise<boolean> {
+  try {
+    await ensureAuthenticated();
+    
+    // Check if we already have casual words
+    const existing = await getCasualVocabFromCloud();
+    if (existing.length > 0) {
+      console.log("Casual vocab already seeded. Count:", existing.length);
+      return true;
+    }
+
+    console.log(`Seeding first 100 casual vocabulary words to Firestore...`);
+    // Seed in chunks or sequentially to respect quotas and timing
+    const chunk = words.slice(0, 100);
+    for (const w of chunk) {
+      await saveCasualWordToCloud(w);
+    }
+    return true;
+  } catch (error) {
+    console.warn("Could not seed casual vocab to Cloud:", error);
+    return false;
+  }
 }
 

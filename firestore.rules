@@ -12,5 +12,9 @@ service cloud.firestore {
     match /course_accounts/{username} {
       allow read, write: if true;
     }
+
+    match /casual_vocab/{wordId} {
+      allow read, write: if true;
+    }
   }
 }

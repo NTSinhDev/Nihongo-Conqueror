@@ -15,6 +15,7 @@ export interface Lesson {
   category: string;
   grammar: LessonGrammar;
   words: VocabularyWord[];
+  categorizedVocab?: any[];
 }
 
 export const N5_LESSONS: Lesson[] = [

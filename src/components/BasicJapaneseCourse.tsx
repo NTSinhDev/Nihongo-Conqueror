@@ -8,7 +8,7 @@ import {
   getCompletedLessons,
   saveCompleteLesson
 } from "../data/lessons";
-import { VocabularyWord } from "../data/vocabulary";
+import { VocabularyWord, JAPANESE_VOCABULARY } from "../data/vocabulary";
 import { 
   BookOpen, 
   CheckCircle, 
@@ -44,7 +44,12 @@ import {
   MoreVertical,
   User,
   LogIn,
-  LogOut
+  LogOut,
+  Trash2,
+  ArrowRightLeft,
+  List,
+  RefreshCw,
+  Languages
 } from "lucide-react";
 import { sounds } from "../utils/audio";
 import { 
@@ -54,7 +59,9 @@ import {
   getLessonsFromCloud,
   seedLessonsToCloud,
   verifyCustomAccount,
-  registerCustomAccount
+  registerCustomAccount,
+  saveCategorizedVocabToCloud,
+  seedCasualVocabToCloud
 } from "../utils/firebase";
 
 // Smart confusable generator for distraction generation
@@ -528,6 +535,30 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   
+  // --- Vocabulary Editing States ---
+  const [isEditingVocab, setIsEditingVocab] = useState<boolean>(false);
+  const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
+  const [movingWordIndex, setMovingWordIndex] = useState<number | null>(null);
+  const [deletingWordIndex, setDeletingWordIndex] = useState<number | null>(null);
+  const [moveTargetLessonId, setMoveTargetLessonId] = useState<number | null>(null);
+  
+  // --- AI Auto-Categorize States ---
+  const [vocabViewMode, setVocabViewMode] = useState<"list" | "ai">("list");
+  const [isCategorizingByAi, setIsCategorizingByAi] = useState<boolean>(false);
+  const [aiCategorizeError, setAiCategorizeError] = useState<string | null>(null);
+  const [selectedAiModel, setSelectedAiModel] = useState<string>("gemini-3.5-flash");
+  
+  // --- AI Auto-Translate States ---
+  const [isTranslatingEn, setIsTranslatingEn] = useState<boolean>(false);
+  const [translationError, setTranslationError] = useState<string | null>(null);
+  const [translationSuccess, setTranslationSuccess] = useState<string | null>(null);
+  
+  // Temporary fields for editing
+  const [editJp, setEditJp] = useState<string>("");
+  const [editRomaji, setEditRomaji] = useState<string>("");
+  const [editVn, setEditVn] = useState<string>("");
+  const [editEn, setEditEn] = useState<string>("");
+  
   // Tab-based lesson learning structure
   // "vocab" | "flashcard" | "grammar" | "practice" | "choukai" | "kaiwa" | "reading"
   const [studySubMode, setStudySubMode] = useState<"vocab" | "flashcard" | "grammar" | "practice" | "choukai" | "kaiwa" | "reading">("vocab");
@@ -684,6 +715,13 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
       if (isLoggedIn && username) {
         await triggerProgressSync(username);
       }
+
+      // 3. Sync/Seed local vocabulary list to Firestore casual_vocab
+      try {
+        await seedCasualVocabToCloud(JAPANESE_VOCABULARY);
+      } catch (e) {
+        console.error("Could not sync local vocabulary list to Firestore:", e);
+      }
     };
 
     loadLessonsAndSync();
@@ -811,6 +849,12 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
     setFlashcardIndex(0);
     setIsCardFlipped(false);
     
+    // Reset Vocab edit states
+    setIsEditingVocab(false);
+    setEditingWordIndex(null);
+    setMovingWordIndex(null);
+    setMoveTargetLessonId(null);
+    
     // Reset Practice / Exam states
     setExamQuestions([]);
     setEssayQuestions([]);
@@ -839,6 +883,10 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
   const handleBackToSyllabus = () => {
     sounds.playClick();
     setSelectedLesson(null);
+    setIsEditingVocab(false);
+    setEditingWordIndex(null);
+    setMovingWordIndex(null);
+    setMoveTargetLessonId(null);
   };
 
   const handleImportJson = async () => {
@@ -1008,6 +1056,228 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
     }
   };
 
+  // --- Vocabulary Word Management Handlers ---
+  const handleUpdateVocabWord = async (wIdx: number) => {
+    if (!selectedLesson) return;
+    sounds.playClick();
+    
+    if (!editJp.trim() || !editVn.trim()) {
+      alert("Vui lòng nhập đầy đủ các trường bắt buộc (tiếng Nhật và nghĩa tiếng Việt).");
+      return;
+    }
+    
+    try {
+      const updatedWord: VocabularyWord = {
+        ...selectedLesson.words[wIdx],
+        japanese: editJp.trim(),
+        romaji: editRomaji.trim(),
+        vietnameseMeaning: editVn.trim(),
+        englishMeaning: editEn.trim() || undefined
+      };
+      
+      const updatedWords = selectedLesson.words.map((w, idx) => idx === wIdx ? updatedWord : w);
+      const updatedLesson = {
+        ...selectedLesson,
+        words: updatedWords
+      };
+      
+      const updatedLessons = lessons.map(les => les.id === selectedLesson.id ? updatedLesson : les);
+      
+      await seedLessonsToCloud(updatedLessons);
+      
+      setLessons(updatedLessons);
+      setSelectedLesson(updatedLesson);
+      setEditingWordIndex(null);
+      await saveCategorizedVocabToCloud(selectedLesson.id, []);
+      sounds.playSuccess();
+    } catch (err: any) {
+      console.error(err);
+      alert("Đã xảy ra lỗi khi lưu từ vựng: " + (err.message || String(err)));
+    }
+  };
+
+  const handleDeleteVocabWord = async (wIdx: number) => {
+    if (!selectedLesson) return;
+    sounds.playClick();
+    
+    try {
+      const updatedWords = selectedLesson.words.filter((_, idx) => idx !== wIdx);
+      const updatedLesson = {
+        ...selectedLesson,
+        words: updatedWords
+      };
+      
+      const updatedLessons = lessons.map(les => les.id === selectedLesson.id ? updatedLesson : les);
+      
+      await seedLessonsToCloud(updatedLessons);
+      
+      setLessons(updatedLessons);
+      setSelectedLesson(updatedLesson);
+      setDeletingWordIndex(null);
+      await saveCategorizedVocabToCloud(selectedLesson.id, []);
+      sounds.playSuccess();
+    } catch (err: any) {
+      console.error(err);
+      alert("Đã xảy ra lỗi khi xóa từ vựng: " + (err.message || String(err)));
+    }
+  };
+
+  const handleMoveVocabWord = async (wIdx: number) => {
+    if (!selectedLesson || moveTargetLessonId === null) return;
+    sounds.playClick();
+    
+    try {
+      const wordToMove = selectedLesson.words[wIdx];
+      const targetLesson = lessons.find(l => l.id === moveTargetLessonId);
+      if (!targetLesson) {
+        alert("Không tìm thấy bài học đích để di chuyển.");
+        return;
+      }
+      
+      // Remove from current lesson
+      const updatedCurrentWords = selectedLesson.words.filter((_, idx) => idx !== wIdx);
+      const updatedCurrentLesson = {
+        ...selectedLesson,
+        words: updatedCurrentWords
+      };
+      
+      // Add to target lesson
+      const updatedTargetWords = [...targetLesson.words, wordToMove];
+      const updatedTargetLesson = {
+        ...targetLesson,
+        words: updatedTargetWords
+      };
+      
+      // Update the main lessons list
+      const updatedLessons = lessons.map(l => {
+        if (l.id === selectedLesson.id) return updatedCurrentLesson;
+        if (l.id === targetLesson.id) return updatedTargetLesson;
+        return l;
+      });
+      
+      await seedLessonsToCloud(updatedLessons);
+      
+      setLessons(updatedLessons);
+      setSelectedLesson(updatedCurrentLesson);
+      setMovingWordIndex(null);
+      setMoveTargetLessonId(null);
+      await saveCategorizedVocabToCloud(selectedLesson.id, []);
+      if (moveTargetLessonId !== null) await saveCategorizedVocabToCloud(moveTargetLessonId, []);
+      sounds.playSuccess();
+    } catch (err: any) {
+      console.error(err);
+      alert("Đã xảy ra lỗi khi di chuyển từ vựng: " + (err.message || String(err)));
+    }
+  };
+
+  const handleCategorizeByAi = async () => {
+    if (!selectedLesson) return;
+    sounds.playClick();
+    setIsCategorizingByAi(true);
+    setAiCategorizeError(null);
+    
+    try {
+      const response = await fetch("/api/vocab/categorize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ 
+          words: selectedLesson.words,
+          model: selectedAiModel
+        })
+      });
+      
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Không thể phân loại từ vựng bằng AI.");
+      }
+      
+      const data = await response.json();
+      if (data.categorized && Array.isArray(data.categorized)) {
+        await saveCategorizedVocabToCloud(selectedLesson.id, data.categorized);
+        const updatedLesson = { ...selectedLesson, categorizedVocab: data.categorized };
+        setSelectedLesson(updatedLesson);
+        setLessons(lessons.map(l => l.id === selectedLesson.id ? updatedLesson : l));
+        
+        // Auto-update model to the one that succeeded if fallback occurred
+        if (data.activeModel && data.activeModel !== selectedAiModel) {
+          setSelectedAiModel(data.activeModel);
+        }
+        
+        sounds.playSuccess();
+      } else {
+        throw new Error("Phản hồi từ AI không đúng định dạng mong đợi.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setAiCategorizeError(err.message || String(err));
+      sounds.playFailure();
+    } finally {
+      setIsCategorizingByAi(false);
+    }
+  };
+
+  const handleTranslateEnglishByAi = async () => {
+    if (!selectedLesson) return;
+    sounds.playClick();
+    setIsTranslatingEn(true);
+    setTranslationError(null);
+    setTranslationSuccess(null);
+    
+    try {
+      const response = await fetch("/api/vocab/translate-english", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ 
+          words: selectedLesson.words,
+          model: selectedAiModel
+        })
+      });
+      
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Không thể dịch từ vựng bằng AI.");
+      }
+      
+      const data = await response.json();
+      if (data.words && Array.isArray(data.words)) {
+        const updatedLesson = { 
+          ...selectedLesson, 
+          words: data.words,
+          categorizedVocab: undefined
+        };
+        const updatedLessons = lessons.map(l => l.id === selectedLesson.id ? updatedLesson : l);
+        
+        await seedLessonsToCloud(updatedLessons);
+        await saveCategorizedVocabToCloud(selectedLesson.id, []);
+        
+        setSelectedLesson(updatedLesson);
+        setLessons(updatedLessons);
+        
+        if (data.activeModel && data.activeModel !== selectedAiModel) {
+          setSelectedAiModel(data.activeModel);
+        }
+        
+        if (data.updatedCount > 0) {
+          setTranslationSuccess(`Bổ sung thành công ${data.updatedCount} nghĩa tiếng Anh bằng AI (${data.activeModel})!`);
+        } else {
+          setTranslationSuccess("Toàn bộ từ vựng đã có nghĩa tiếng Anh đầy đủ.");
+        }
+        sounds.playSuccess();
+      } else {
+        throw new Error("Phản hồi dịch thuật từ AI không đúng định dạng.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setTranslationError(err.message || String(err));
+      sounds.playFailure();
+    } finally {
+      setIsTranslatingEn(false);
+    }
+  };
 
 
   // Generate Choukai Listening Question
@@ -1494,6 +1764,27 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                       <span>Import JSON từ vựng</span>
                     </button>
 
+                    {selectedLesson && (
+                      <button
+                        onClick={() => {
+                          sounds.playClick();
+                          setIsActionsMenuOpen(false);
+                          setIsEditingVocab(!isEditingVocab);
+                          setStudySubMode("vocab"); // Switch to vocab tab to edit
+                          setEditingWordIndex(null);
+                          setMovingWordIndex(null);
+                        }}
+                        className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                          isEditingVocab 
+                            ? "bg-rose-50 text-rose-600 font-extrabold" 
+                            : "text-stone-700 hover:bg-stone-50 hover:text-stone-900"
+                        }`}
+                      >
+                        <Edit3 className="w-4 h-4 text-rose-500" />
+                        <span>{isEditingVocab ? "Hủy chỉnh sửa từ vựng" : "Chỉnh sửa từ vựng"}</span>
+                      </button>
+                    )}
+
                     <button
                       onClick={() => {
                         sounds.playClick();
@@ -1702,15 +1993,510 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
           {/* 1. TAB: TỪ VỰNG */}
           {studySubMode === "vocab" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-stone-50 p-3 rounded-xl border border-stone-150">
                 <div>
-                  <h3 className="text-sm font-extrabold text-stone-850">Từ vựng chính của bài ({selectedLesson.words.length} từ)</h3>
-                  <p className="text-xs text-stone-400 mt-0.5">Bấm biểu tượng loa để nghe giọng đọc bản xứ.</p>
+                  <h3 className="text-sm font-extrabold text-stone-850 flex items-center gap-2 flex-wrap">
+                    <span>Từ vựng chính của bài ({selectedLesson.words.length} từ)</span>
+                    {isEditingVocab && (
+                      <span className="text-[9px] bg-rose-100 text-rose-700 font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse">Chế độ chỉnh sửa</span>
+                    )}
+                  </h3>
+                  <p className="text-xs text-stone-400 mt-0.5">
+                    {isEditingVocab 
+                      ? "Nhấn vào các nút chức năng bên phải mỗi từ để sửa, xóa hoặc di chuyển sang bài khác." 
+                      : "Bấm biểu tượng loa để nghe giọng đọc bản xứ."}
+                  </p>
                 </div>
+                {isEditingVocab ? (
+                  <button
+                    onClick={() => {
+                      sounds.playClick();
+                      setIsEditingVocab(false);
+                      setEditingWordIndex(null);
+                      setMovingWordIndex(null);
+                    }}
+                    className="text-xs font-bold text-stone-700 bg-white hover:bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-4xs shrink-0 self-start sm:self-auto"
+                  >
+                    Hoàn thành
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-xl border border-stone-200 shadow-4xs shrink-0 self-start sm:self-auto">
+                    <button
+                      onClick={() => {
+                        sounds.playClick();
+                        setVocabViewMode("list");
+                      }}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                        vocabViewMode === "list"
+                          ? "bg-white text-rose-600 shadow-5xs font-extrabold"
+                          : "text-stone-500 hover:text-stone-850"
+                      }`}
+                    >
+                      <List className="w-3.5 h-3.5" /> Danh sách gốc
+                    </button>
+                    <button
+                      onClick={() => {
+                        sounds.playClick();
+                        setVocabViewMode("ai");
+                      }}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                        vocabViewMode === "ai"
+                          ? "bg-white text-rose-600 shadow-5xs font-extrabold"
+                          : "text-stone-500 hover:text-stone-850"
+                      }`}
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" /> AI Phân loại
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto pr-1 scrollbar-thin">
-                {selectedLesson.words.map((word, wIdx) => {
+              {/* AI English Translation Quick Banner */}
+              {!isEditingVocab && (
+                <div className="bg-gradient-to-r from-indigo-50/40 to-blue-50/20 border border-indigo-100 rounded-2xl p-4 shadow-4xs space-y-3">
+                  {isTranslatingEn ? (
+                    <div className="flex flex-col sm:flex-row items-center gap-3 py-2 text-center sm:text-left">
+                      <div className="relative shrink-0">
+                        <div className="w-9 h-9 rounded-full border-3 border-stone-200 border-t-indigo-600 animate-spin"></div>
+                        <Languages className="w-4 h-4 text-indigo-600 absolute top-2.5 left-2.5 animate-pulse" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-xs font-extrabold text-stone-850">Gemini đang dịch thuật từ vựng...</h4>
+                        <p className="text-[11px] text-stone-500 mt-0.5">Bổ sung nghĩa tiếng Anh thiếu cho các từ vựng sử dụng mô hình {selectedAiModel}. Vui lòng chờ giây lát.</p>
+                      </div>
+                    </div>
+                  ) : translationError ? (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-1">
+                      <div className="flex items-center gap-2.5 text-center sm:text-left">
+                        <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                          <X className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-bold text-stone-850">Lỗi dịch thuật bằng AI</h4>
+                          <p className="text-[11px] text-rose-600 leading-snug">{translationError}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <button
+                          onClick={() => setTranslationError(null)}
+                          className="px-2.5 py-1 text-[11px] font-bold text-stone-500 hover:text-stone-700 bg-white border border-stone-200 rounded-lg transition-all"
+                        >
+                          Đóng
+                        </button>
+                        <button
+                          onClick={handleTranslateEnglishByAi}
+                          className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[11px] font-bold transition-all flex items-center gap-1 shadow-4xs"
+                        >
+                          <RefreshCw className="w-3 h-3 animate-spin" /> Thử lại
+                        </button>
+                      </div>
+                    </div>
+                  ) : translationSuccess ? (
+                    <div className="flex items-center justify-between gap-3 py-1 bg-emerald-50/50 border border-emerald-100 px-3 py-2 rounded-xl">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                          <Check className="w-4 h-4" />
+                        </div>
+                        <p className="text-xs font-bold text-emerald-800">{translationSuccess}</p>
+                      </div>
+                      <button
+                        onClick={() => setTranslationSuccess(null)}
+                        className="text-emerald-700 hover:text-emerald-950 text-xs font-bold shrink-0 px-2 py-1"
+                      >
+                        Đóng
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 mt-0.5">
+                          <Languages className="w-5 h-5" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <h4 className="text-xs font-extrabold text-indigo-900 flex items-center gap-1.5">
+                            <span>Bổ sung nghĩa tiếng Anh bằng AI</span>
+                            <span className="text-[9px] bg-indigo-100 text-indigo-800 font-mono font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider">Trợ lý dịch thuật</span>
+                          </h4>
+                          <p className="text-[11px] text-stone-500 leading-normal max-w-xl">
+                            {selectedLesson.words.filter(w => !w.englishMeaning || w.englishMeaning.trim() === "").length > 0 ? (
+                              <span>Phát hiện có <strong>{selectedLesson.words.filter(w => !w.englishMeaning || w.englishMeaning.trim() === "").length} từ vựng</strong> chưa có nghĩa tiếng Anh trong bài học này. Sử dụng AI để tự động dịch và bổ sung ngay giúp bài học đầy đủ ngữ liệu.</span>
+                            ) : (
+                              <span>✨ Tuyệt vời! Toàn bộ <strong>{selectedLesson.words.length} từ vựng</strong> trong bài học này đều đã được trang bị nghĩa tiếng Anh đầy đủ và chuẩn xác.</span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 w-full md:w-auto justify-end shrink-0">
+                        {selectedLesson.words.filter(w => !w.englishMeaning || w.englishMeaning.trim() === "").length > 0 ? (
+                          <button
+                            onClick={handleTranslateEnglishByAi}
+                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5 transform active:scale-95"
+                          >
+                            <Sparkles className="w-3.5 h-3.5 text-indigo-200" /> Bổ sung nghĩa tiếng Anh (AI)
+                          </button>
+                        ) : (
+                          <button
+                            onClick={handleTranslateEnglishByAi}
+                            className="px-3.5 py-1.5 bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                            title="Dịch lại toàn bộ để cập nhật hoặc sửa chữa"
+                          >
+                            <RefreshCw className="w-3 h-3" /> Dịch lại bằng AI
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {vocabViewMode === "ai" && !isEditingVocab ? (
+                <div className="space-y-4">
+                  {/* AI Model Selector */}
+                  <div className="bg-stone-50/75 border border-stone-200/80 rounded-2xl p-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 shadow-4xs">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-rose-500 font-mono bg-rose-50 px-1.5 py-0.5 rounded">Cấu hình AI Agent</span>
+                        {isCategorizingByAi && (
+                          <span className="text-[9px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded animate-pulse">Đang hoạt động</span>
+                        )}
+                      </div>
+                      <h4 className="text-xs font-extrabold text-stone-850">Chọn Trợ lý Trí tuệ Nhân tạo phục vụ</h4>
+                      <p className="text-[11px] text-stone-500 leading-normal max-w-md">Các mô hình khác nhau mang lại độ chi tiết, tốc độ phản hồi và sự phân loại bối cảnh ngữ cảnh khác nhau cho bài học này.</p>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full lg:w-auto shrink-0">
+                      {[
+                        { id: "gemini-3.5-flash", name: "Gemini 3.5 Flash", desc: "Mặc định, cân bằng nhất", badges: "Nhanh & Tối ưu" },
+                        { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash", desc: "Tối ưu hóa phân loại nhanh", badges: "Mới nhất" },
+                        { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro", desc: "Phân tích ngữ cảnh sâu sắc", badges: "Cực kỳ thông minh" },
+                        { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro", desc: "Phản hồi chuẩn học thuật", badges: "Tin cậy" }
+                      ].map((m) => (
+                        <button
+                          key={m.id}
+                          onClick={() => {
+                            sounds.playClick();
+                            setSelectedAiModel(m.id);
+                          }}
+                          disabled={isCategorizingByAi}
+                          className={`p-2.5 text-xs font-bold rounded-xl border transition-all text-left relative flex flex-col justify-between h-[76px] ${
+                            selectedAiModel === m.id
+                              ? "bg-white border-rose-500 shadow-3xs ring-2 ring-rose-500/10 cursor-default"
+                              : isCategorizingByAi 
+                                ? "bg-stone-50 border-stone-200/50 opacity-50 cursor-not-allowed text-stone-400"
+                                : "bg-white/40 border-stone-200/80 hover:border-stone-300 hover:bg-white text-stone-600"
+                          }`}
+                        >
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-1 justify-between">
+                              <span className={`text-[11px] font-black ${selectedAiModel === m.id ? "text-rose-600" : "text-stone-800"}`}>{m.name}</span>
+                              <span className={`text-[8px] px-1 py-0.2 rounded font-medium ${selectedAiModel === m.id ? "bg-rose-50 text-rose-600" : "bg-stone-100 text-stone-500"}`}>{m.badges}</span>
+                            </div>
+                            <p className="text-[9px] text-stone-400 font-medium leading-snug">{m.desc}</p>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-auto pt-1 border-t border-stone-50 w-full">
+                            <span className={`w-1.5 h-1.5 rounded-full ${selectedAiModel === m.id ? "bg-rose-500 animate-pulse" : "bg-stone-300"}`}></span>
+                            <span className="text-[8px] uppercase tracking-wider text-stone-400 font-semibold">{selectedAiModel === m.id ? "Đang chọn" : "Bấm để chọn"}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* AI Loading State */}
+                  {isCategorizingByAi && (
+                    <div className="p-8 rounded-2xl border border-rose-100 bg-rose-50/10 flex flex-col items-center justify-center text-center gap-4 min-h-[300px]">
+                      <div className="relative">
+                        <div className="w-12 h-12 rounded-full border-4 border-stone-200 border-t-rose-600 animate-spin"></div>
+                        <Sparkles className="w-5 h-5 text-amber-500 absolute top-3.5 left-3.5 animate-pulse" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-stone-850 animate-pulse">Gemini đang phân tích và sắp xếp từ vựng...</h4>
+                        <p className="text-xs text-stone-500 mt-1 max-w-sm">
+                          AI đang phân loại nghĩa tiếng Nhật, tiếng Anh và tiếng Việt để gán vào các chủ đề bài học phù hợp nhất.
+                        </p>
+                      </div>
+                      <div className="text-[11px] font-mono text-stone-400 bg-stone-100 px-3 py-1 rounded-full">
+                        Mô hình đang chạy: {selectedAiModel}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* AI Error State */}
+                  {aiCategorizeError && !isCategorizingByAi && (
+                    <div className="p-6 rounded-2xl border border-rose-100 bg-rose-50/35 text-center space-y-3">
+                      <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+                        <X className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-stone-850">Không thể phân loại bằng trí tuệ nhân tạo</h4>
+                        <p className="text-xs text-stone-500 mt-1 leading-relaxed">{aiCategorizeError}</p>
+                      </div>
+                      <button
+                        onClick={handleCategorizeByAi}
+                        className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-all shadow-3xs inline-flex items-center gap-1 mx-auto"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Thử lại bằng AI
+                      </button>
+                    </div>
+                  )}
+
+                  {/* AI Empty Cache State - Intro & Prompt */}
+                  {!selectedLesson.categorizedVocab && !isCategorizingByAi && !aiCategorizeError && (
+                    <div className="p-8 rounded-2xl border border-stone-200 bg-stone-50/50 flex flex-col items-center justify-center text-center gap-4 min-h-[300px]">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center shadow-md animate-bounce">
+                        <Sparkles className="w-5 h-5" />
+                      </div>
+                      <div className="max-w-md">
+                        <h4 className="text-base font-black text-stone-850">Phân loại từ vựng tự động bằng AI</h4>
+                        <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+                          Nhờ sức mạnh của trí tuệ nhân tạo Gemini, toàn bộ <strong>{selectedLesson.words.length} từ vựng</strong> trong bài học này sẽ được phân tích, sắp xếp logic thành các nhóm chủ đề hoặc bối cảnh sử dụng thực tế giúp bạn học nhanh gấp đôi!
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleCategorizeByAi}
+                        className="px-5 py-2.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-2 transform active:scale-95 mx-auto"
+                      >
+                        <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" /> Sắp xếp từ vựng ngay
+                      </button>
+                    </div>
+                  )}
+
+                  {/* AI Categorized Success State */}
+                  {selectedLesson.categorizedVocab && !isCategorizingByAi && (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between bg-amber-50/30 border border-amber-100 p-3 rounded-xl">
+                        <span className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+                          <Sparkles className="w-4 h-4 text-amber-500" />
+                          Đã sắp xếp thành công {selectedLesson.categorizedVocab.length} chủ đề bằng AI
+                        </span>
+                        <button
+                          onClick={handleCategorizeByAi}
+                          className="text-[11px] font-bold text-stone-500 hover:text-stone-800 flex items-center gap-1 px-2.5 py-1 rounded-lg border border-stone-200 bg-white transition-all hover:bg-stone-50"
+                          title="Phân loại lại từ vựng"
+                        >
+                          <RefreshCw className="w-3 h-3" /> Phân loại lại
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {selectedLesson.categorizedVocab.map((group, gIdx) => (
+                          <div 
+                            key={gIdx}
+                            className="p-5 rounded-2xl border border-stone-200 bg-white hover:border-stone-300 transition-all shadow-4xs space-y-3 flex flex-col justify-between"
+                          >
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between gap-2 flex-wrap">
+                                <span className="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">
+                                  {group.context || "Chủ đề thực tế"}
+                                </span>
+                              </div>
+                              <h4 className="text-sm font-black text-stone-850 mt-1 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>
+                                {group.categoryName}
+                              </h4>
+                              <p className="text-xs text-stone-500 leading-relaxed">
+                                {group.categoryDescription}
+                              </p>
+                            </div>
+
+                            <div className="border-t border-stone-100 pt-3 space-y-2">
+                              {group.words.map((word: any, wIdx: number) => (
+                                <div 
+                                  key={wIdx}
+                                  className="flex items-center justify-between p-2 rounded-lg bg-stone-50 hover:bg-stone-100/75 transition-all text-stone-800"
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <button
+                                      onClick={() => speakJapanese(word.japanese)}
+                                      className="w-7 h-7 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center border border-rose-100 shrink-0 transition-all"
+                                    >
+                                      <Volume2 className="w-3.5 h-3.5" />
+                                    </button>
+                                    <div className="min-w-0">
+                                      <div className="flex items-baseline gap-1.5 flex-wrap">
+                                        <span className="font-serif-jp font-bold text-stone-850 text-sm">
+                                          {word.japanese}
+                                        </span>
+                                        <span className="text-[10px] text-stone-400 font-mono font-medium lowercase">
+                                          /{word.romaji}/
+                                        </span>
+                                      </div>
+                                      <span className="text-xs text-stone-600 block leading-tight">
+                                        {word.vietnameseMeaning}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto pr-1 scrollbar-thin">
+                  {selectedLesson.words.map((word, wIdx) => {
+                  const isEditingThis = editingWordIndex === wIdx;
+                  const isMovingThis = movingWordIndex === wIdx;
+                  const isDeletingThis = deletingWordIndex === wIdx;
+
+                  if (isEditingThis) {
+                    return (
+                      <div 
+                        key={wIdx}
+                        className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/5 flex flex-col gap-3 transition-all shadow-3xs"
+                      >
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Tiếng Nhật (JP)</label>
+                            <input 
+                              type="text" 
+                              value={editJp}
+                              onChange={(e) => setEditJp(e.target.value)}
+                              className="w-full text-xs border border-stone-200 rounded-lg p-2 font-serif-jp bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                              placeholder="Ví dụ: わたし"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Romaji</label>
+                            <input 
+                              type="text" 
+                              value={editRomaji}
+                              onChange={(e) => setEditRomaji(e.target.value)}
+                              className="w-full text-xs border border-stone-200 rounded-lg p-2 font-mono bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                              placeholder="Ví dụ: watashi"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Nghĩa tiếng Việt</label>
+                            <input 
+                              type="text" 
+                              value={editVn}
+                              onChange={(e) => setEditVn(e.target.value)}
+                              className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                              placeholder="Ví dụ: Tôi"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Nghĩa tiếng Anh (English)</label>
+                            <input 
+                              type="text" 
+                              value={editEn}
+                              onChange={(e) => setEditEn(e.target.value)}
+                              className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                              placeholder="Để trống nếu không có"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-rose-100">
+                          <button
+                            onClick={() => {
+                              sounds.playClick();
+                              setEditingWordIndex(null);
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <X className="w-3.5 h-3.5" /> Hủy
+                          </button>
+                          <button
+                            onClick={() => handleUpdateVocabWord(wIdx)}
+                            className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <Check className="w-3.5 h-3.5" /> Lưu lại
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  if (isMovingThis) {
+                    return (
+                      <div 
+                        key={wIdx}
+                        className="p-4 rounded-xl border-2 border-amber-500 bg-amber-50/5 flex flex-col gap-3 transition-all shadow-3xs"
+                      >
+                        <div>
+                          <p className="text-xs font-bold text-stone-850">
+                            Di chuyển từ <strong className="font-serif-jp text-rose-600 font-extrabold">{word.japanese}</strong> sang bài học khác:
+                          </p>
+                          <p className="text-[11px] text-stone-400 mt-0.5">Từ vựng sẽ được chuyển khỏi bài này sang bài mới chọn.</p>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <select 
+                            value={moveTargetLessonId ?? ""}
+                            onChange={(e) => setMoveTargetLessonId(e.target.value === "" ? null : Number(e.target.value))}
+                            className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-amber-500"
+                          >
+                            <option value="">-- Chọn bài học đích --</option>
+                            {lessons.filter(l => l.id !== selectedLesson.id).map(l => (
+                              <option key={l.id} value={l.id}>{l.title}</option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-amber-100">
+                          <button
+                            onClick={() => {
+                              sounds.playClick();
+                              setMovingWordIndex(null);
+                              setMoveTargetLessonId(null);
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <X className="w-3.5 h-3.5" /> Hủy
+                          </button>
+                          <button
+                            onClick={() => handleMoveVocabWord(wIdx)}
+                            disabled={moveTargetLessonId === null}
+                            className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <Check className="w-3.5 h-3.5" /> Di chuyển
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  if (isDeletingThis) {
+                    return (
+                      <div 
+                        key={wIdx}
+                        className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/5 flex flex-col gap-3 transition-all shadow-3xs animate-fadeIn"
+                      >
+                        <div>
+                          <p className="text-xs font-bold text-stone-850">
+                            Bạn có chắc chắn muốn xóa từ vựng <strong className="font-serif-jp text-rose-600 font-extrabold">{word.japanese}</strong> khỏi bài học này không?
+                          </p>
+                          <p className="text-[11px] text-stone-400 mt-0.5">Thao tác này sẽ đồng bộ ngay lên đám mây Firestore.</p>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-rose-100">
+                          <button
+                            onClick={() => {
+                              sounds.playClick();
+                              setDeletingWordIndex(null);
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <X className="w-3.5 h-3.5" /> Hủy
+                          </button>
+                          <button
+                            onClick={() => handleDeleteVocabWord(wIdx)}
+                            className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" /> Đồng ý xóa
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   return (
                     <div 
                       key={wIdx}
@@ -1723,7 +2509,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                       >
                         <Volume2 className="w-4.5 h-4.5" />
                       </button>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2 flex-wrap">
                           <span className="font-serif-jp font-black text-stone-850 text-base">
                             {word.japanese}
@@ -1741,10 +2527,59 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                           </span>
                         )}
                       </div>
+
+                      {isEditingVocab && (
+                        <div className="flex items-center gap-1 shrink-0 ml-auto border-l border-stone-150 pl-3">
+                          <button
+                            onClick={() => {
+                              sounds.playClick();
+                              setEditingWordIndex(wIdx);
+                              setMovingWordIndex(null);
+                              setDeletingWordIndex(null);
+                              setEditJp(word.japanese);
+                              setEditRomaji(word.romaji || "");
+                              setEditVn(word.vietnameseMeaning);
+                              setEditEn(word.englishMeaning || "");
+                            }}
+                            className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 transition-all"
+                            title="Sửa từ vựng"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          
+                          <button
+                            onClick={() => {
+                              sounds.playClick();
+                              setMovingWordIndex(wIdx);
+                              setEditingWordIndex(null);
+                              setDeletingWordIndex(null);
+                              setMoveTargetLessonId(null);
+                            }}
+                            className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-800 transition-all"
+                            title="Di chuyển sang bài học khác"
+                          >
+                            <ArrowRightLeft className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              sounds.playClick();
+                              setDeletingWordIndex(wIdx);
+                              setEditingWordIndex(null);
+                              setMovingWordIndex(null);
+                            }}
+                            className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-800 transition-all"
+                            title="Xóa từ vựng"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
+              )}
             </motion.div>
           )}
 
