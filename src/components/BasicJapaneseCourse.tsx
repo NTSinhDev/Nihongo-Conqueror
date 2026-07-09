@@ -1227,7 +1227,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
     if (!selectedLesson) return;
     sounds.playClick();
     
-    const shuffledWords = [...selectedLesson.words].sort(() => Math.random() - 0.5).slice(0, 10);
+    const shuffledWords = [...selectedLesson.words].sort(() => Math.random() - 0.5);
     const craftedQuestions = shuffledWords.map((word) => {
       const type = Math.random() > 0.5 ? "vn-to-jp" : "jp-to-vn";
       let options: string[] = [];
@@ -1285,7 +1285,8 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
       setExamIndex(prev => prev + 1);
     } else {
       setExamFinished(true);
-      if (examScore >= 8) {
+      const passingScore = Math.ceil(examQuestions.length * 0.8);
+      if (examScore >= passingScore) {
         handlePassLessonExam();
       }
     }
@@ -1406,7 +1407,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
 
   return (
-    <div className="bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-xs min-h-[500px] w-full max-w-full min-w-0 overflow-hidden">
+    <div className="bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-xs min-h-[500px] w-full max-w-full min-w-0 overflow-hidden mobile-card-constraint">
       
       {/* Course Top Title & Actions Header */}
       {!lessonsLoading && (
@@ -1647,7 +1648,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
         </div>
       ) : (
         /* STUDY CLASSROOM (Sảnh học bài được chọn) */
-        <div className="py-4 space-y-6">
+        <div className="py-4 space-y-6 w-full max-w-full min-w-0 overflow-hidden">
           
           {/* Breadcrumb controls */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-stone-50 p-3 rounded-xl border border-stone-150">
@@ -1667,33 +1668,35 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
           </div>
 
           {/* Sub-modes Study Tab controls (Mỗi bài gồm 7 phần) */}
-          <div className="flex border-b border-stone-200 gap-1 overflow-x-auto shrink-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-200 pb-1.5 snap-x snap-mandatory">
-            {[
-              { id: "vocab", label: "Từ vựng", icon: BookMarked },
-              { id: "flashcard", label: "Flashcard", icon: Sparkles },
-              { id: "grammar", label: "Ngữ pháp", icon: Lightbulb },
-              { id: "practice", label: "Bài tập & Thi", icon: Award },
-              { id: "choukai", label: "Nghe Choukai", icon: Volume2 },
-              { id: "kaiwa", label: "Hội thoại Kaiwa", icon: MessageSquare },
-              { id: "reading", label: "Đọc topic", icon: BookOpenCheck },
-            ].map((tab) => {
-              const isActive = studySubMode === tab.id;
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => { sounds.playClick(); setStudySubMode(tab.id as any); }}
-                  className={`px-3 sm:px-4 py-2.5 text-xs font-bold border-b-2 transition-all shrink-0 flex items-center gap-1.5 snap-start ${
-                    isActive
-                      ? "border-rose-600 text-rose-600 font-extrabold bg-rose-50/20"
-                      : "border-transparent text-stone-400 hover:text-stone-700 hover:border-stone-200"
-                  }`}
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+          <div className="w-full min-w-0 overflow-hidden border-b border-stone-200 layout-constraint">
+            <div className="flex gap-1 overflow-x-auto shrink-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-200 pb-1.5 snap-x snap-mandatory w-full max-w-full min-w-0 tabs-scroll-constraint">
+              {[
+                { id: "vocab", label: "Từ vựng", icon: BookMarked },
+                { id: "flashcard", label: "Flashcard", icon: Sparkles },
+                { id: "grammar", label: "Ngữ pháp", icon: Lightbulb },
+                { id: "practice", label: "Bài tập & Thi", icon: Award },
+                { id: "choukai", label: "Nghe Choukai", icon: Volume2 },
+                { id: "kaiwa", label: "Hội thoại Kaiwa", icon: MessageSquare },
+                { id: "reading", label: "Đọc topic", icon: BookOpenCheck },
+              ].map((tab) => {
+                const isActive = studySubMode === tab.id;
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => { sounds.playClick(); setStudySubMode(tab.id as any); }}
+                    className={`px-3 sm:px-4 py-2.5 text-xs font-bold border-b-2 transition-all shrink-0 flex items-center gap-1.5 snap-start ${
+                      isActive
+                        ? "border-rose-600 text-rose-600 font-extrabold bg-rose-50/20"
+                        : "border-transparent text-stone-400 hover:text-stone-700 hover:border-stone-200"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* 1. TAB: TỪ VỰNG */}
@@ -1732,6 +1735,11 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                         <span className="text-xs text-stone-600 font-semibold block mt-0.5">
                           {word.vietnameseMeaning}
                         </span>
+                        {word.englishMeaning && (
+                          <span className="text-[11px] text-stone-400 font-medium block mt-0.5">
+                            🇬🇧 English: {word.englishMeaning}
+                          </span>
+                        )}
                       </div>
                     </div>
                   );
@@ -1771,19 +1779,24 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                     <span className="font-mono text-xs text-stone-400 lowercase font-medium">
                       /{selectedLesson.words[flashcardIndex].romaji}/
                     </span>
-                    <span className="text-[10px] text-stone-400 mt-4 uppercase tracking-widest font-mono">Chạm để xem nghĩa Việt</span>
+                    <span className="text-[10px] text-stone-400 mt-4 uppercase tracking-widest font-mono">Chạm để xem ý nghĩa</span>
                   </div>
 
                   {/* Back Face */}
                   <div className="absolute inset-0 w-full h-full rounded-2xl border border-stone-200 bg-stone-900 text-white shadow-xs flex flex-col justify-center items-center p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
                     <span className="text-[10px] uppercase font-bold text-stone-500 tracking-wider font-mono block mb-2">
-                      Ý nghĩa tiếng Việt
+                      Ý nghĩa từ vựng
                     </span>
-                    <h3 className="text-2xl font-extrabold text-white text-center px-4 mb-4">
+                    <h3 className="text-2xl font-extrabold text-white text-center px-4 mb-2">
                       {selectedLesson.words[flashcardIndex].vietnameseMeaning}
                     </h3>
+                    {selectedLesson.words[flashcardIndex].englishMeaning && (
+                      <h4 className="text-sm font-bold text-stone-300 text-center px-4 mb-4">
+                        🇬🇧 {selectedLesson.words[flashcardIndex].englishMeaning}
+                      </h4>
+                    )}
                     {selectedLesson.words[flashcardIndex].mnemonic && (
-                      <p className="text-xs text-stone-400 italic text-center px-6 max-w-xs leading-relaxed">
+                      <p className="text-xs text-stone-400 italic text-center px-6 max-w-xs leading-relaxed mt-2">
                         💡 Mẹo nhớ: {selectedLesson.words[flashcardIndex].mnemonic}
                       </p>
                     )}
@@ -1939,7 +1952,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                         <div className="space-y-1.5">
                           <h4 className="text-sm font-extrabold text-stone-850">1. Trắc nghiệm từ vựng</h4>
                           <p className="text-[11.5px] text-stone-400 leading-relaxed font-semibold">
-                            Gồm 10 câu trắc nghiệm ngẫu nhiên kiểm tra nghĩa hai chiều Nhật - Việt. Yêu cầu đạt tối thiểu <strong>8/10</strong> câu đúng để vượt ải.
+                            Gồm {selectedLesson.words.length} câu trắc nghiệm ngẫu nhiên kiểm tra nghĩa hai chiều Nhật - Việt. Yêu cầu đạt tối thiểu <strong>{Math.ceil(selectedLesson.words.length * 0.8)}/{selectedLesson.words.length}</strong> câu đúng để vượt ải.
                           </p>
                         </div>
                       </div>
@@ -2002,7 +2015,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
                       <span className="text-xs font-extrabold text-stone-700 font-mono">
-                        {practiceType === "vocab-exam" && `BÀI THI TRẮC NGHIỆM TỪ VỰNG: CÂU ${examIndex + 1} / 10`}
+                        {practiceType === "vocab-exam" && `BÀI THI TRẮC NGHIỆM TỪ VỰNG: CÂU ${examIndex + 1} / ${examQuestions.length}`}
                         {practiceType === "essay-exam" && `BÀI THI TỰ LUẬN NGỮ PHÁP: CÂU ${essayIndex + 1} / 5`}
                         {practiceType === "jlpt-exam" && `ĐỀ THI MẪU JLPT N5: CÂU ${jlptIndex + 1} / ${jlptQuestions.length}`}
                       </span>
@@ -2022,20 +2035,20 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                       <div className="flex items-center justify-between text-xs px-1">
                         <span className="text-stone-400 font-mono font-bold uppercase tracking-wider">Tiến trình bài thi</span>
                         <span className="text-rose-600 font-bold bg-rose-50 border border-rose-100 px-2.5 py-1 rounded-xl">
-                          ⭐ Điểm số: {examScore} / 10
+                          ⭐ Điểm số: {examScore} / {examQuestions.length}
                         </span>
                       </div>
 
                       {examFinished ? (
                         <div className="bg-stone-50 border border-stone-200 rounded-2xl p-8 text-center space-y-5 shadow-3xs">
-                          {examScore >= 8 ? (
+                          {examScore >= Math.ceil(examQuestions.length * 0.8) ? (
                             <div className="space-y-4 animate-fadeIn">
                               <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto border border-emerald-100 text-emerald-500">
                                 <Award className="w-8 h-8" />
                               </div>
                               <h3 className="text-base font-extrabold text-stone-850">Chúc mừng! Bạn đã ĐẠT bài thi trắc nghiệm từ vựng!</h3>
                               <p className="text-xs text-stone-400 leading-relaxed max-w-sm mx-auto">
-                                Kết quả chính xác: <strong className="text-stone-700">{examScore} / 10</strong> câu. Lộ trình bài tiếp theo đã được mở khóa thăng tiến!
+                                Kết quả chính xác: <strong className="text-stone-700">{examScore} / {examQuestions.length}</strong> câu. Lộ trình bài tiếp theo đã được mở khóa thăng tiến!
                               </p>
                             </div>
                           ) : (
@@ -2045,7 +2058,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                               </div>
                               <h3 className="text-base font-extrabold text-stone-850">Chưa đạt điểm đỗ yêu cầu</h3>
                               <p className="text-xs text-stone-400 leading-relaxed max-w-sm mx-auto">
-                                Kết quả đạt được <strong className="text-stone-700">{examScore} / 10</strong> câu. Cần tối thiểu <strong className="text-stone-700">8 / 10</strong> câu để thông qua bài học này.
+                                Kết quả đạt được <strong className="text-stone-700">{examScore} / {examQuestions.length}</strong> câu. Cần tối thiểu <strong className="text-stone-700">{Math.ceil(examQuestions.length * 0.8)} / {examQuestions.length}</strong> câu để thông qua bài học này.
                               </p>
                             </div>
                           )}

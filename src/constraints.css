@@ -1,0 +1,37 @@
+/* 
+  Responsive Layout & Width Constraints Definition File
+  Ensures components are perfectly bounded on both Mobile and Desktop viewports.
+*/
+
+@theme {
+  --breakpoint-mobile-xs: 320px;
+  --breakpoint-mobile-sm: 360px;
+  --breakpoint-mobile-md: 400px;
+  --breakpoint-mobile-lg: 480px;
+}
+
+/* Enforce strict width bounds for cards on mobile viewports */
+@media (max-width: 639px) {
+  .mobile-card-constraint {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    min-width: 0 !important;
+    overflow-hidden: clip !important;
+  }
+}
+
+/* Base constraints to prevent horizontal layout leakage */
+.layout-constraint {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tabs-scroll-constraint {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
