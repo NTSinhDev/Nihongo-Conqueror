@@ -347,7 +347,7 @@ export default function App() {
         </header>
 
         {/* Content Workspace Area */}
-        <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-7xl w-full mx-auto flex-1">
+        <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-7xl w-full mx-auto flex-1 min-w-0 overflow-hidden">
           
           {/* Quick Search Results Dropdown-style result row */}
           {searchQuery && (
@@ -386,11 +386,11 @@ export default function App() {
           )}
 
           {/* ----------------- TAB WORKSPACE ROUTING ----------------- */}
-          <div className="transition-all duration-200">
+          <div className="transition-all duration-200 w-full max-w-full min-w-0 overflow-hidden">
             
             {/* TAB: MINNA NO NIHONGO 1 */}
             {activeTab === "minna-1" && (
-              <div className="space-y-6">
+              <div className="space-y-6 w-full max-w-full min-w-0 overflow-hidden">
                 <BasicJapaneseCourse activeLevel={activeLevel} onLevelChange={setActiveLevel} />
               </div>
             )}

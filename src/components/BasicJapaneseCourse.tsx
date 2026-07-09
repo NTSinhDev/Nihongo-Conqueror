@@ -1406,11 +1406,11 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
 
   return (
-    <div className="bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-xs min-h-[500px]">
+    <div className="bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-xs min-h-[500px] w-full max-w-full min-w-0 overflow-hidden">
       
       {/* Course Top Title & Actions Header */}
       {!lessonsLoading && (
-        <div className="flex items-center justify-between border-b border-stone-100 pb-4 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4 mb-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-500 shadow-4xs">
               <GraduationCap className="w-5 h-5" />
@@ -1421,98 +1421,100 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
             </div>
           </div>
 
-          {/* User Auth Info Indicator */}
-          <div className="flex items-center gap-3 ml-auto mr-3">
-            {isLoggedIn ? (
-              <div className="flex items-center gap-2">
-                <div className="text-right hidden sm:block">
-                  <p className="text-[9px] text-stone-400 font-bold font-mono uppercase tracking-wider">HỌC VIÊN</p>
-                  <p className="text-xs font-bold text-rose-600 flex items-center gap-1 justify-end">
-                    <User className="w-3 h-3" /> @{username}
-                  </p>
+          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+            {/* User Auth Info Indicator */}
+            <div className="flex items-center gap-3">
+              {isLoggedIn ? (
+                <div className="flex items-center gap-2">
+                  <div className="text-right">
+                    <p className="text-[9px] text-stone-400 font-bold font-mono uppercase tracking-wider leading-none">HỌC VIÊN</p>
+                    <p className="text-xs font-bold text-rose-600 flex items-center gap-1 justify-end mt-0.5">
+                      <User className="w-3 h-3" /> @{username}
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-1.5 text-xs font-bold text-stone-500 hover:text-rose-600 border border-stone-200 hover:border-rose-100 bg-stone-50 hover:bg-rose-50 px-2.5 py-1.5 rounded-xl transition-all"
+                    title="Đăng xuất tài khoản"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span className="hidden xs:inline">Đăng xuất</span>
+                  </button>
                 </div>
+              ) : (
                 <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-1.5 text-xs font-bold text-stone-500 hover:text-rose-600 border border-stone-200 hover:border-rose-100 bg-stone-50 hover:bg-rose-50 px-2.5 py-1.5 rounded-xl transition-all"
-                  title="Đăng xuất tài khoản"
+                  onClick={() => {
+                    sounds.playClick();
+                    setAuthModalError(null);
+                    setAuthModalSuccess(null);
+                    setIsLoginModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-extrabold text-white bg-rose-600 hover:bg-rose-700 px-3.5 py-1.5 rounded-xl transition-all shadow-4xs"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span className="hidden xs:inline">Đăng xuất</span>
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Đăng nhập</span>
                 </button>
-              </div>
-            ) : (
+              )}
+            </div>
+
+            {/* Three Dots Menu Container */}
+            <div className="relative">
               <button
-                onClick={() => {
-                  sounds.playClick();
-                  setAuthModalError(null);
-                  setAuthModalSuccess(null);
-                  setIsLoginModalOpen(true);
-                }}
-                className="flex items-center gap-1.5 text-xs font-extrabold text-white bg-rose-600 hover:bg-rose-700 px-3.5 py-1.5 rounded-xl transition-all shadow-4xs"
+                onClick={() => { sounds.playClick(); setIsActionsMenuOpen(!isActionsMenuOpen); }}
+                className="p-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 hover:text-stone-800 transition-all shadow-4xs flex items-center justify-center"
+                title="Thêm thao tác"
               >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>Đăng nhập</span>
+                <MoreVertical className="w-4 h-4" />
               </button>
-            )}
-          </div>
 
-          {/* Three Dots Menu Container */}
-          <div className="relative">
-            <button
-              onClick={() => { sounds.playClick(); setIsActionsMenuOpen(!isActionsMenuOpen); }}
-              className="p-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 hover:text-stone-800 transition-all shadow-4xs flex items-center justify-center"
-              title="Thêm thao tác"
-            >
-              <MoreVertical className="w-4 h-4" />
-            </button>
-
-            {isActionsMenuOpen && (
-              <>
-                {/* Overlay to close menu */}
-                <div 
-                  className="fixed inset-0 z-30" 
-                  onClick={() => setIsActionsMenuOpen(false)}
-                />
-                
-                <div className="absolute right-0 mt-1.5 w-56 bg-white border border-stone-200 rounded-xl shadow-md p-1.5 z-40 animate-fadeIn">
-                  <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-2.5 py-1.5 border-b border-stone-100 font-mono">Tùy chọn giáo trình</p>
+              {isActionsMenuOpen && (
+                <>
+                  {/* Overlay to close menu */}
+                  <div 
+                    className="fixed inset-0 z-30" 
+                    onClick={() => setIsActionsMenuOpen(false)}
+                  />
                   
-                  <button
-                    onClick={() => {
-                      sounds.playClick();
-                      setIsActionsMenuOpen(false);
-                      setImportTargetLessonId(selectedLesson?.id ?? lessons[0]?.id ?? 0);
-                      setImportSuccess(null);
-                      setImportError(null);
-                      setIsImportModalOpen(true);
-                    }}
-                    className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition-all flex items-center gap-2"
-                  >
-                    <FileJson className="w-4 h-4 text-rose-500" />
-                    <span>Import JSON từ vựng</span>
-                  </button>
+                  <div className="absolute right-0 mt-1.5 w-56 bg-white border border-stone-200 rounded-xl shadow-md p-1.5 z-40 animate-fadeIn">
+                    <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-2.5 py-1.5 border-b border-stone-100 font-mono">Tùy chọn giáo trình</p>
+                    
+                    <button
+                      onClick={() => {
+                        sounds.playClick();
+                        setIsActionsMenuOpen(false);
+                        setImportTargetLessonId(selectedLesson?.id ?? lessons[0]?.id ?? 0);
+                        setImportSuccess(null);
+                        setImportError(null);
+                        setIsImportModalOpen(true);
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition-all flex items-center gap-2"
+                    >
+                      <FileJson className="w-4 h-4 text-rose-500" />
+                      <span>Import JSON từ vựng</span>
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      sounds.playClick();
-                      setIsActionsMenuOpen(false);
-                      if (window.confirm("Bạn có chắc chắn muốn đặt lại toàn bộ tiến độ học tập không? Thao tác này không thể hoàn tác.")) {
-                        localStorage.removeItem("japanese_course_unlocked_lessons");
-                        localStorage.removeItem("japanese_course_completed_lessons");
-                        setUnlockedLessons([0]);
-                        setCompletedLessons([]);
-                        setSelectedLesson(null);
-                        window.location.reload();
-                      }
-                    }}
-                    className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold text-rose-600 hover:bg-rose-50 transition-all flex items-center gap-2"
-                  >
-                    <RotateCcw className="w-4 h-4 text-rose-500" />
-                    <span>Đặt lại toàn bộ tiến trình</span>
-                  </button>
-                </div>
-              </>
-            )}
+                    <button
+                      onClick={() => {
+                        sounds.playClick();
+                        setIsActionsMenuOpen(false);
+                        if (window.confirm("Bạn có chắc chắn muốn đặt lại toàn bộ tiến độ học tập không? Thao tác này không thể hoàn tác.")) {
+                          localStorage.removeItem("japanese_course_unlocked_lessons");
+                          localStorage.removeItem("japanese_course_completed_lessons");
+                          setUnlockedLessons([0]);
+                          setCompletedLessons([]);
+                          setSelectedLesson(null);
+                          window.location.reload();
+                        }
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold text-rose-600 hover:bg-rose-50 transition-all flex items-center gap-2"
+                    >
+                      <RotateCcw className="w-4 h-4 text-rose-500" />
+                      <span>Đặt lại toàn bộ tiến trình</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -1665,7 +1667,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
           </div>
 
           {/* Sub-modes Study Tab controls (Mỗi bài gồm 7 phần) */}
-          <div className="flex border-b border-stone-200 gap-1 overflow-x-auto shrink-0 scrollbar-none pb-0.5">
+          <div className="flex border-b border-stone-200 gap-1 overflow-x-auto shrink-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-200 pb-1.5 snap-x snap-mandatory">
             {[
               { id: "vocab", label: "Từ vựng", icon: BookMarked },
               { id: "flashcard", label: "Flashcard", icon: Sparkles },
@@ -1681,7 +1683,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                 <button
                   key={tab.id}
                   onClick={() => { sounds.playClick(); setStudySubMode(tab.id as any); }}
-                  className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-all shrink-0 flex items-center gap-1.5 ${
+                  className={`px-3 sm:px-4 py-2.5 text-xs font-bold border-b-2 transition-all shrink-0 flex items-center gap-1.5 snap-start ${
                     isActive
                       ? "border-rose-600 text-rose-600 font-extrabold bg-rose-50/20"
                       : "border-transparent text-stone-400 hover:text-stone-700 hover:border-stone-200"
@@ -1798,9 +1800,10 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                     setIsCardFlipped(false);
                     setFlashcardIndex((prev) => (prev - 1 + selectedLesson.words.length) % selectedLesson.words.length);
                   }}
-                  className="px-4 py-2.5 bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition-all"
+                  className="px-3 sm:px-4 py-2.5 bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 shrink-0"
                 >
-                  ← Từ trước
+                  <span>←</span>
+                  <span className="hidden xs:inline">Từ trước</span>
                 </button>
 
                 <button
@@ -1809,10 +1812,10 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                     sounds.playClick();
                     speakJapanese(selectedLesson.words[flashcardIndex].japanese);
                   }}
-                  className="w-11 h-11 rounded-full bg-rose-50 text-rose-500 border border-rose-100 hover:bg-rose-100 flex items-center justify-center transition-all"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-rose-50 text-rose-500 border border-rose-100 hover:bg-rose-100 flex items-center justify-center transition-all shrink-0"
                   title="Nghe phát âm"
                 >
-                  <Volume2 className="w-5.5 h-5.5" />
+                  <Volume2 className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5" />
                 </button>
 
                 <button
@@ -1822,9 +1825,10 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                     setIsCardFlipped(false);
                     setFlashcardIndex((prev) => (prev + 1) % selectedLesson.words.length);
                   }}
-                  className="px-4 py-2.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold transition-all"
+                  className="px-3 sm:px-4 py-2.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 shrink-0"
                 >
-                  Từ tiếp theo →
+                  <span className="hidden xs:inline">Từ tiếp theo</span>
+                  <span>→</span>
                 </button>
               </div>
             </motion.div>
@@ -1832,45 +1836,45 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
           {/* 3. TAB: NGỮ PHÁP */}
           {studySubMode === "grammar" && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              <div className="bg-stone-50 border border-stone-200 rounded-2xl p-5 sm:p-6 space-y-4 shadow-3xs">
-                <h3 className="text-sm font-extrabold uppercase tracking-wide text-stone-850 flex items-center gap-1.5">
-                  <Lightbulb className="w-4.5 h-4.5 text-amber-500 fill-amber-100" /> Cấu trúc Ngữ pháp chính thức của bài học
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 w-full max-w-full min-w-0 overflow-hidden">
+              <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-3xs">
+                <h3 className="text-sm font-extrabold uppercase tracking-wide text-stone-850 flex items-center gap-1.5 flex-wrap">
+                  <Lightbulb className="w-4.5 h-4.5 text-amber-500 fill-amber-100 shrink-0" /> Cấu trúc Ngữ pháp chính thức của bài học
                 </h3>
                 
                 <div className="bg-white border border-stone-150 rounded-xl p-4 shadow-4xs">
                   <span className="block font-mono text-stone-500 text-[10px] uppercase font-bold tracking-wider mb-1">
                     Mẫu câu cốt lõi
                   </span>
-                  <h4 className="text-base sm:text-lg font-black text-rose-600 font-serif-jp">
+                  <h4 className="text-base sm:text-lg font-black text-rose-600 font-serif-jp break-all">
                     {selectedLesson.grammar.pattern}
                   </h4>
                 </div>
 
                 <div className="space-y-2">
                   <span className="text-xs font-bold text-stone-700 block">Ý nghĩa & Cách dùng chi tiết:</span>
-                  <p className="text-xs text-stone-500 leading-relaxed font-semibold">
+                  <p className="text-xs text-stone-500 leading-relaxed font-semibold break-words">
                     {selectedLesson.grammar.explanation}
                   </p>
                 </div>
 
                 <div className="bg-rose-50/40 rounded-xl p-4 border border-rose-100 flex items-start gap-3">
                   <CornerDownRight className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <span className="text-xs font-bold text-rose-800 block">Ví dụ trực quan:</span>
-                    <div className="flex items-center gap-2 mt-1">
-                      <p className="text-base font-black text-stone-800 font-serif-jp">
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <p className="text-base font-black text-stone-800 font-serif-jp break-all">
                         {selectedLesson.grammar.example}
                       </p>
                       <button
                         onClick={() => speakJapanese(selectedLesson.grammar.example)}
-                        className="p-1 rounded-full text-rose-500 hover:bg-rose-100 transition-all border border-transparent hover:border-rose-200"
+                        className="p-1 rounded-full text-rose-500 hover:bg-rose-100 transition-all border border-transparent hover:border-rose-200 shrink-0"
                         title="Nghe phát âm ví dụ"
                       >
                         <Volume2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                    <p className="text-xs text-stone-500 italic mt-0.5">
+                    <p className="text-xs text-stone-500 italic mt-0.5 break-words">
                       Dịch nghĩa: {selectedLesson.grammar.exampleMeaning}
                     </p>
                   </div>
@@ -1878,7 +1882,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
               </div>
 
               {/* Extra Practice Generation */}
-              <div className="bg-white border border-stone-200 rounded-2xl p-5 space-y-4 shadow-4xs">
+              <div className="bg-white border border-stone-200 rounded-2xl p-4 sm:p-5 space-y-4 shadow-4xs">
                 <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest">Ví dụ giao tiếp mở rộng thực hành</h4>
                 <div className="space-y-3 divide-y divide-stone-100">
                   {selectedLesson.words.slice(0, 3).map((word, index) => {
@@ -1891,17 +1895,17 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
                     return (
                       <div key={index} className={`pt-3 ${index === 0 ? "pt-0" : ""} flex items-center justify-between gap-4`}>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-serif-jp font-black text-stone-850 text-sm">{customPattern}</span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-serif-jp font-black text-stone-850 text-sm break-all">{customPattern}</span>
                             <button
                               onClick={() => speakJapanese(customPattern)}
-                              className="p-1 rounded-full text-stone-400 hover:text-rose-600 hover:bg-stone-100"
+                              className="p-1 rounded-full text-stone-400 hover:text-rose-600 hover:bg-stone-100 shrink-0"
                             >
                               <Volume2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
-                          <span className="text-xs text-stone-400 font-medium block mt-0.5">{customMeaning}</span>
+                          <span className="text-xs text-stone-400 font-medium block mt-0.5 break-words">{customMeaning}</span>
                         </div>
                       </div>
                     );
@@ -2536,7 +2540,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                 </div>
                 
                 {/* Role play picker */}
-                <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-stone-200 shrink-0">
+                <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-stone-200 shrink-0 max-w-full justify-center">
                   <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider pl-1.5">Vai của bạn:</span>
                   {(["none", "A", "B"] as const).map((role) => {
                     return (
@@ -2560,7 +2564,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
               </div>
 
               {/* Dialgoue Chat Interface */}
-              <div className="bg-white border border-stone-200 rounded-2xl p-4 sm:p-6 space-y-4 max-h-[450px] overflow-y-auto shadow-4xs scrollbar-thin">
+              <div className="bg-white border border-stone-200 rounded-2xl p-3 sm:p-6 space-y-4 max-h-[450px] overflow-y-auto shadow-4xs scrollbar-thin">
                 {currentDialogueLines.map((line, idx) => {
                   const isA = line.speaker.includes("A") || line.speaker === "Tanaka" || line.speaker === "Miller" && idx === 0 || line.speaker === "Miller" && idx === 2;
                   const isUserTurn = (rolePlayMode === "A" && isA) || (rolePlayMode === "B" && !isA);
@@ -2578,7 +2582,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                         {line.speaker} {isUserTurn && "👉 (Đến lượt BẠN đọc)"}
                       </span>
                       
-                      <div className={`max-w-[85%] rounded-2xl p-4 flex gap-3 shadow-4xs border ${
+                      <div className={`max-w-[92%] sm:max-w-[85%] rounded-2xl p-3 sm:p-4 flex gap-2.5 sm:gap-3 shadow-4xs border ${
                         isA 
                           ? "bg-stone-50 border-stone-150 text-stone-800 rounded-tl-sm" 
                           : "bg-rose-50 border-rose-100 text-rose-950 rounded-tr-sm"
@@ -2596,10 +2600,10 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                           {isUserTurn && rolePlayMode !== "none" ? <VolumeX className="w-4 h-4 text-stone-300" /> : <Volume2 className="w-4 h-4" />}
                         </button>
 
-                        <div>
-                          <p className="font-serif-jp font-black text-sm sm:text-base leading-relaxed">{line.voice}</p>
-                          <p className="text-[10px] font-mono text-stone-400 lowercase mt-0.5">/{line.romaji}/</p>
-                          <p className="text-xs text-stone-500 mt-1.5 border-t border-stone-100/50 pt-1 font-medium">{line.meaning}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-serif-jp font-black text-sm sm:text-base leading-relaxed break-words">{line.voice}</p>
+                          <p className="text-[10px] font-mono text-stone-400 lowercase mt-0.5 break-words">/{line.romaji}/</p>
+                          <p className="text-xs text-stone-500 mt-1.5 border-t border-stone-100/50 pt-1 font-medium break-words">{line.meaning}</p>
                         </div>
                       </div>
                     </div>
@@ -2620,26 +2624,26 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                         setIsDialoguePlayingAll(true);
                       }
                     }}
-                    className={`px-5 py-3 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shadow-3xs ${
+                    className={`px-4 sm:px-5 py-3 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shadow-3xs ${
                       isDialoguePlayingAll ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-rose-600 hover:bg-rose-700 text-white"
                     }`}
                   >
                     <PlayCircle className="w-4.5 h-4.5" />
-                    <span>{isDialoguePlayingAll ? "Tạm dừng phát tất cả" : "Tự động phát toàn bộ hội thoại"}</span>
+                    <span>{isDialoguePlayingAll ? "Tạm dừng phát tất cả" : <><span className="hidden xs:inline">Tự động phát </span>toàn bộ</>}</span>
                   </button>
                 ) : (
                   <div className="flex gap-2 items-center w-full sm:w-max">
                     <button
                       onClick={() => { sounds.playClick(); setCurrentDialogueIndex(0); setIsDialoguePlayingAll(false); }}
-                      className="px-4 py-2.5 bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition-all shadow-4xs"
+                      className="px-3 sm:px-4 py-2.5 bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition-all shadow-4xs"
                     >
                       Bắt đầu lại
                     </button>
                     <button
                       onClick={handleDialogueNextStep}
-                      className="flex-1 sm:flex-none px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center justify-center gap-1.5"
+                      className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center justify-center gap-1.5"
                     >
-                      <span>Đã nói xong - Câu tiếp theo</span>
+                      <span><span className="hidden xs:inline">Đã nói xong - </span>Câu tiếp theo</span>
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -2653,22 +2657,25 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
               
               {/* Document Topic reading text box */}
-              <div className="bg-stone-50 border border-stone-200 rounded-2xl p-6 sm:p-8 space-y-4 shadow-4xs">
+              <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 sm:p-6 md:p-8 space-y-4 shadow-4xs">
                 <div className="flex justify-between items-center border-b border-stone-200 pb-3 flex-wrap gap-2">
                   <h3 className="font-bold text-sm text-stone-850 flex items-center gap-1.5">
                     <BookOpenCheck className="w-4.5 h-4.5 text-rose-500" /> Bài đọc: {currentReadingTopic.title}
                   </h3>
                   
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-1.5 items-center">
                     <button
                       onClick={() => {
                         sounds.playClick();
                         speakJapanese(currentReadingTopic.content);
                       }}
-                      className="px-3 py-1.5 bg-white border border-stone-200 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-4xs"
+                      className="px-2.5 sm:px-3 py-1.5 bg-white border border-stone-200 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-4xs shrink-0"
                     >
                       <Volume2 className="w-3.5 h-3.5 text-rose-500" />
-                      <span>Nghe toàn bài đọc</span>
+                      <span>
+                        <span className="hidden sm:inline">Nghe toàn bài đọc</span>
+                        <span className="sm:hidden">Nghe bài</span>
+                      </span>
                     </button>
                     
                     <button
@@ -2676,14 +2683,19 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                         sounds.playClick();
                         setShowReadingTranslation(!showReadingTranslation);
                       }}
-                      className="px-3 py-1.5 bg-white border border-stone-200 hover:bg-stone-100 rounded-lg text-xs font-bold transition-all shadow-4xs"
+                      className="px-2.5 sm:px-3 py-1.5 bg-white border border-stone-200 hover:bg-stone-100 rounded-lg text-xs font-bold transition-all shadow-4xs shrink-0"
                     >
-                      {showReadingTranslation ? "Ẩn bản dịch" : "Xem bản dịch tiếng Việt"}
+                      {showReadingTranslation ? "Ẩn dịch" : (
+                        <>
+                          <span className="hidden sm:inline">Xem bản dịch tiếng Việt</span>
+                          <span className="sm:hidden">Xem dịch</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
 
-                <p className="font-serif-jp font-black text-base sm:text-lg leading-loose text-stone-800 tracking-wide text-justify select-text bg-white p-5 rounded-xl border border-stone-150 shadow-4xs">
+                <p className="font-serif-jp font-black text-sm sm:text-base md:text-lg leading-loose text-stone-800 tracking-wide text-justify select-text bg-white p-4 sm:p-5 rounded-xl border border-stone-150 shadow-4xs break-words">
                   {currentReadingTopic.content}
                 </p>
 
@@ -2691,7 +2703,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                   <motion.div 
                     initial={{ opacity: 0, y: -5 }} 
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-4 bg-amber-50/40 border border-amber-100 rounded-xl text-xs sm:text-sm text-stone-600 leading-relaxed font-semibold"
+                    className="p-4 bg-amber-50/40 border border-amber-100 rounded-xl text-xs sm:text-sm text-stone-600 leading-relaxed font-semibold break-words"
                   >
                     {currentReadingTopic.vietnamese}
                   </motion.div>
