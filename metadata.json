@@ -1,6 +1,6 @@
 {
   "name": "Nihongo Conqueror",
-  "description": "Ung dung hoc bang chu cai Hiragana, Katakana va am ghep phan xa nhanh.",
+  "description": "Ung dung giup ban master tieng Nhat.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
