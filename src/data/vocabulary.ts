@@ -3,22 +3,23 @@ export interface VocabularyWord {
   romaji: string;         // Romaji pronunciation
   vietnameseMeaning: string;  // Vietnamese meaning
   mnemonic?: string;
+  englishMeaning?: string; // Optional English meaning
 }
 
 export const MINNA_LESSON_1: VocabularyWord[] = [
-  { japanese: "わたし", romaji: "Watashi", vietnameseMeaning: "Tôi", mnemonic: "Xưng hô ngôi thứ nhất số ít (chỉ bản thân)" },
-  { japanese: "あなた", romaji: "Anata", vietnameseMeaning: "Anh/chị, ông/bà, bạn", mnemonic: "Ngôi thứ II số ít (gọi đối phương)" },
-  { japanese: "あの ひと", romaji: "Ano hito", vietnameseMeaning: "Người kia, người đó, anh kia, chị kia", mnemonic: "Chỉ người đứng ở đằng xa xa" },
-  { japanese: "あの かた", romaji: "Ano kata", vietnameseMeaning: "Vị kia, vị đó (lịch sự)", mnemonic: "Cách nói tôn trọng cao cấp của あの ひと" },
-  { japanese: "～さん", romaji: "~san", vietnameseMeaning: "Anh, chị, ông, bà", mnemonic: "Hậu tố thêm vào sau tên để thể hiện lịch sự" },
-  { japanese: "～ちゃん", romaji: "~chan", vietnameseMeaning: "Bé (gọi thân mật cho trẻ em/con gái)", mnemonic: "Dùng cho trẻ em hoặc người thân thay cho ～さん" },
-  { japanese: "～じん", romaji: "~jin", vietnameseMeaning: "Người ~ (quốc tịch)", mnemonic: "Chỉ quốc tịch nước nào, ví dụ: アメリカじん" },
-  { japanese: "せんせい", romaji: "Sensei", vietnameseMeaning: "Thầy cô giáo", mnemonic: "Không dùng khi tự xưng giới thiệu nghề nghiệp mình" },
-  { japanese: "きょうし", romaji: "Kyoushi", vietnameseMeaning: "Giáo viên, nghề nhà giáo", mnemonic: "Dùng để mô tả nghề nghiệp tự giới thiệu" },
-  { japanese: "がくせい", romaji: "Gakusei", vietnameseMeaning: "Học sinh, sinh viên", mnemonic: "Người theo học tại trường học" },
-  { japanese: "かいしゃいん", romaji: "Kaishain", vietnameseMeaning: "Nhân viên công ty", mnemonic: "Làm việc công ty nói chung" },
-  { japanese: "しゃいん", romaji: "Shain", vietnameseMeaning: "Nhân viên công ty ~", mnemonic: "Dùng kèm tên công ty, ví dụ: IMCの しゃいん" },
-  { japanese: "ぎんこういん", romaji: "Ginkouin", vietnameseMeaning: "Nhân viên ngân hàng", mnemonic: "Làm việc tại hệ thống ngân hàng" },
+  { japanese: "わたし", romaji: "Watashi", vietnameseMeaning: "Tôi", mnemonic: "Xưng hô ngôi thứ nhất số ít (chỉ bản thân)", englishMeaning: "I, me" },
+  { japanese: "あなた", romaji: "Anata", vietnameseMeaning: "Anh/chị, ông/bà, bạn", mnemonic: "Ngôi thứ II số ít (gọi đối phương)", englishMeaning: "you" },
+  { japanese: "あの ひと", romaji: "Ano hito", vietnameseMeaning: "Người kia, người đó, anh kia, chị kia", mnemonic: "Chỉ người đứng ở đằng xa xa", englishMeaning: "that person" },
+  { japanese: "あの かた", romaji: "Ano kata", vietnameseMeaning: "Vị kia, vị đó (lịch sự)", mnemonic: "Cách nói tôn trọng cao cấp của あの ひと", englishMeaning: "that person (polite)" },
+  { japanese: "～さん", romaji: "~san", vietnameseMeaning: "Anh, chị, ông, bà", mnemonic: "Hậu tố thêm vào sau tên để thể hiện lịch sự", englishMeaning: "Mr., Ms., Mrs." },
+  { japanese: "～ちゃん", romaji: "~chan", vietnameseMeaning: "Bé (gọi thân mật cho trẻ em/con gái)", mnemonic: "Dùng cho trẻ em hoặc người thân thay cho ～さん", englishMeaning: "suffix for children" },
+  { japanese: "～じん", romaji: "~jin", vietnameseMeaning: "Người ~ (quốc tịch)", mnemonic: "Chỉ quốc tịch nước nào, ví dụ: アメリカじん", englishMeaning: "nationality suffix" },
+  { japanese: "せんせい", romaji: "Sensei", vietnameseMeaning: "Thầy cô giáo", mnemonic: "Không dùng khi tự xưng giới thiệu nghề nghiệp mình", englishMeaning: "teacher, doctor" },
+  { japanese: "きょうし", romaji: "Kyoushi", vietnameseMeaning: "Giáo viên, nghề nhà giáo", mnemonic: "Dùng để mô tả nghề nghiệp tự giới thiệu", englishMeaning: "instructor, teacher" },
+  { japanese: "がくせい", romaji: "Gakusei", vietnameseMeaning: "Học sinh, sinh viên", mnemonic: "Người theo học tại trường học", englishMeaning: "student" },
+  { japanese: "かいしゃいん", romaji: "Kaishain", vietnameseMeaning: "Nhân viên công ty", mnemonic: "Làm việc công ty nói chung", englishMeaning: "company employee" },
+  { japanese: "しゃいん", romaji: "Shain", vietnameseMeaning: "Nhân viên công ty ~", mnemonic: "Dùng kèm tên công ty, ví dụ: IMCの しゃいん", englishMeaning: "employee of ~" },
+  { japanese: "ぎんこういん", romaji: "Ginkouin", vietnameseMeaning: "Nhân viên ngân hàng", mnemonic: "Làm việc tại hệ thống ngân hàng", englishMeaning: "bank employee" },
   { japanese: "いしゃ", romaji: "Isha", vietnameseMeaning: "Bác sĩ", mnemonic: "Nghề y cứu chữa người bệnh" },
   { japanese: "けんきゅうしゃ", romaji: "Kenkyuusha", vietnameseMeaning: "Nhà nghiên cứu", mnemonic: "Làm việc nghiên cứu học thuật khoa học" },
   { japanese: "だいがく", romaji: "Daigaku", vietnameseMeaning: "Đại học, trường đại học", mnemonic: "Trường giáo dục bậc cao đống đô" },
