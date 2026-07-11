@@ -4,6 +4,7 @@ import SurvivalTestMode from "./components/SurvivalTestMode";
 import FlashcardMode from "./components/FlashcardMode";
 import MatchingGame from "./components/MatchingGame";
 import BasicJapaneseCourse from "./components/BasicJapaneseCourse";
+import KanjiLearning from "./components/KanjiLearning";
 import { HIRAGANA_GROUPS, ALL_HIRAGANA } from "./data/hiragana";
 import { KATAKANA_GROUPS, ALL_KATAKANA } from "./data/katakana";
 import { sounds } from "./utils/audio";
@@ -28,6 +29,7 @@ import {
   BookmarkCheck,
   Sliders,
   Settings,
+  PenTool,
 } from "lucide-react";
 
 export default function App() {
@@ -45,7 +47,8 @@ export default function App() {
   // Track the active working view tab (management portal items)
   // "alphabet-test" -> Kiểm tra bảng chữ cái
   // "minna-1" -> Minna no Nihongo 1
-  const [activeTab, setActiveTab] = useState<"alphabet-test" | "minna-1">("minna-1");
+  // "kanji" -> Học Kanji
+  const [activeTab, setActiveTab] = useState<"alphabet-test" | "minna-1" | "kanji">("minna-1");
 
   // Track the selected Minna no Nihongo level
   const [activeLevel, setActiveLevel] = useState<"N5" | "N4" | "N3" | "N2" | "N1">("N5");
@@ -168,7 +171,7 @@ export default function App() {
   const totalChars = characterSet === "hiragana" ? ALL_HIRAGANA.length : ALL_KATAKANA.length;
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 selection:bg-rose-100 selection:text-rose-900 flex font-sans">
+    <div className="min-h-screen bg-stone-50 text-stone-900 selection:bg-rose-100 selection:text-rose-900 flex font-sans w-full max-w-full overflow-x-hidden">
       
       {/* ----------------- DESKTOP SIDEBAR ----------------- */}
       <aside className="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 bg-stone-900 text-stone-100 border-r border-stone-800 z-30 justify-between">
@@ -246,6 +249,24 @@ export default function App() {
                   <span>Kiểm tra bảng chữ cái</span>
                 </div>
                 <ChevronRight className={`w-3.5 h-3.5 transition-transform ${activeTab === "alphabet-test" ? "rotate-90" : ""}`} />
+              </button>
+              <button
+                id="sidebar-menu-kanji"
+                onClick={() => {
+                  sounds.playClick();
+                  setActiveTab("kanji");
+                }}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                  activeTab === "kanji"
+                    ? "bg-rose-600 text-white shadow-xs"
+                    : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <PenTool className="w-4 h-4" />
+                  <span>Học Kanji</span>
+                </div>
+                <ChevronRight className={`w-3.5 h-3.5 transition-transform ${activeTab === "kanji" ? "rotate-90" : ""}`} />
               </button>
             </div>
           </div>
@@ -353,6 +374,21 @@ export default function App() {
                   <CheckSquare className="w-4 h-4" />
                   <span>Kiểm tra bảng chữ cái</span>
                 </button>
+                <button
+                  onClick={() => {
+                    sounds.playClick();
+                    setActiveTab("kanji");
+                    setIsMobileSidebarOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${
+                    activeTab === "kanji"
+                      ? "bg-rose-600 text-white"
+                      : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
+                  }`}
+                >
+                  <PenTool className="w-4 h-4" />
+                  <span>Học Kanji</span>
+                </button>
               </div>
             </div>
 
@@ -385,20 +421,23 @@ export default function App() {
             </button>
 
             {/* Dynamic Page Header Title */}
-            <div>
+            <div className="min-w-0">
               <span className="hidden sm:inline text-[9px] font-bold text-rose-600 uppercase tracking-widest font-mono">
-                {activeTab === "minna-1" ? `GIÁO TRÌNH MINNA ${activeLevel}` : activeTab === "alphabet-test" ? "LUYỆN TẬP PHẢN XẠ" : "THẺ FLASHCARD"}
+                {activeTab === "minna-1" ? `GIÁO TRÌNH MINNA ${activeLevel}` : activeTab === "alphabet-test" ? "LUYỆN TẬP PHẢN XẠ" : activeTab === "kanji" ? "HỌC KANJI CƠ BẢN" : "THẺ FLASHCARD"}
               </span>
-              <h2 className="text-sm sm:text-base font-extrabold text-stone-800 flex items-center gap-1.5 select-none">
-                {activeTab === "minna-1" && `📖 Minna no Nihongo (Bài học ${activeLevel})`}
-                {activeTab === "alphabet-test" && "🎯 Kiểm tra & Phản xạ bảng chữ cái"}
-                {activeTab === "flashcard" && "🎴 Flashcard & Hướng dẫn vẽ nét"}
+              <h2 className="text-xs sm:text-sm md:text-base font-extrabold text-stone-800 flex items-center gap-1.5 select-none min-w-0">
+                <span className="truncate block max-w-[130px] xs:max-w-[180px] sm:max-w-none">
+                  {activeTab === "minna-1" && `📖 Minna no Nihongo (Bài học ${activeLevel})`}
+                  {activeTab === "alphabet-test" && "🎯 Kiểm tra & Phản xạ bảng chữ cái"}
+                  {activeTab === "kanji" && "📖 Học Kanji Cơ Bản"}
+                  {activeTab === "flashcard" && "🎴 Flashcard & Hướng dẫn vẽ nét"}
+                </span>
               </h2>
             </div>
           </div>
 
           {/* Quick Search Bar */}
-          <div className="w-40 sm:w-64 relative">
+          <div className="w-28 xs:w-36 sm:w-64 relative shrink-0">
             <input
               id="input-quick-search-dashboard"
               type="text"
@@ -645,6 +684,13 @@ export default function App() {
                   />
                 </div>
 
+              </div>
+            )}
+
+            {/* TAB: HỌC KANJI */}
+            {activeTab === "kanji" && (
+              <div className="space-y-6 w-full max-w-full min-w-0 overflow-hidden">
+                <KanjiLearning />
               </div>
             )}
           </div>

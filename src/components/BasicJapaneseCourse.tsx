@@ -49,7 +49,8 @@ import {
   ArrowRightLeft,
   List,
   RefreshCw,
-  Languages
+  Languages,
+  PlusCircle
 } from "lucide-react";
 import { sounds } from "../utils/audio";
 import { 
@@ -580,6 +581,17 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
   const [singleRomaji, setSingleRomaji] = useState("");
   const [singleVietnamese, setSingleVietnamese] = useState("");
 
+  // New fields for custom topic (lesson) creation & grammar import
+  const [importScope, setImportScope] = useState<"existing" | "new">("existing");
+  const [newLessonTitle, setNewLessonTitle] = useState("");
+  const [newLessonDesc, setNewLessonDesc] = useState("");
+  const [newLessonLevel, setNewLessonLevel] = useState<"N5" | "N4" | "N3" | "N2" | "N1">("N5");
+  const [newLessonCategory, setNewLessonCategory] = useState("");
+  const [newLessonGrammarPattern, setNewLessonGrammarPattern] = useState("");
+  const [newLessonGrammarExplanation, setNewLessonGrammarExplanation] = useState("");
+  const [newLessonGrammarExample, setNewLessonGrammarExample] = useState("");
+  const [newLessonGrammarExampleMeaning, setNewLessonGrammarExampleMeaning] = useState("");
+
   // --- Flashcard Tab States ---
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
@@ -897,7 +909,7 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
       let input = importJsonText.trim();
       if (!input) {
-        throw new Error("Vui lòng nhập dữ liệu JSON từ vựng.");
+        throw new Error("Vui lòng nhập dữ liệu JSON.");
       }
 
       // 1. Khử khối mã Markdown (```json ... ``` hoặc ``` ... ```) nếu người dùng copy thừa
@@ -925,62 +937,147 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
         throw new Error(`Định dạng JSON không hợp lệ: ${e.message}. Hãy chắc chắn rằng bạn không có dấu phẩy dư thừa ở phần tử cuối cùng.`);
       }
 
-      if (!parsedData || !Array.isArray(parsedData.words)) {
-        throw new Error("JSON phải có định dạng đối tượng chứa mảng 'words' (ví dụ: { \"words\": [...] }).");
-      }
-
-      const rawWords = parsedData.words;
-      if (rawWords.length === 0) {
-        throw new Error("Mảng 'words' rỗng, không có từ vựng nào để import.");
-      }
-
+      // Lọc và chuẩn hóa từ vựng
+      const rawWords = parsedData.words || [];
       const validatedWords: VocabularyWord[] = [];
       for (let i = 0; i < rawWords.length; i++) {
         const item = rawWords[i];
         if (!item.japanese || !item.vietnameseMeaning) {
-          throw new Error(`Từ vựng thứ ${i + 1} thiếu thuộc tính 'japanese' hoặc 'vietnameseMeaning'.`);
+          throw new Error(`Từ vựng thứ ${i + 1} trong danh sách thiếu thuộc tính 'japanese' hoặc 'vietnameseMeaning'.`);
         }
         validatedWords.push({
           japanese: String(item.japanese).trim(),
           romaji: item.romaji ? String(item.romaji).trim() : "",
-          vietnameseMeaning: String(item.vietnameseMeaning).trim()
+          vietnameseMeaning: String(item.vietnameseMeaning).trim(),
+          englishMeaning: item.englishMeaning ? String(item.englishMeaning).trim() : ""
         });
       }
 
-      const targetLesson = lessons.find(les => les.id === importTargetLessonId) || selectedLesson || lessons[0];
-      if (!targetLesson) {
-        throw new Error("Không tìm thấy bài học đích để import từ vựng.");
+      if (importScope === "existing") {
+        const targetLesson = lessons.find(les => les.id === importTargetLessonId) || selectedLesson || lessons[0];
+        if (!targetLesson) {
+          throw new Error("Không tìm thấy bài học đích để import từ vựng.");
+        }
+
+        // Lọc các từ vựng trùng lặp đã tồn tại sẵn trong bài học dựa trên thuộc tính 'japanese'
+        const existingJapanese = new Set(targetLesson.words.map(w => w.japanese));
+        const uniqueNewWords = validatedWords.filter(w => !existingJapanese.has(w.japanese));
+
+        // Kiểm tra xem có phần ngữ pháp (grammar) cần import bổ sung vào bài học không
+        let updatedGrammar = targetLesson.grammar;
+        let isGrammarUpdated = false;
+        if (parsedData.grammar && typeof parsedData.grammar === "object") {
+          const g = parsedData.grammar;
+          updatedGrammar = {
+            pattern: g.pattern || targetLesson.grammar?.pattern || "N/A",
+            explanation: g.explanation || targetLesson.grammar?.explanation || "Chưa có giải thích",
+            example: g.example || targetLesson.grammar?.example || "Chưa có ví dụ",
+            exampleMeaning: g.exampleMeaning || targetLesson.grammar?.exampleMeaning || "Chưa có nghĩa"
+          };
+          isGrammarUpdated = true;
+        }
+
+        if (uniqueNewWords.length === 0 && !isGrammarUpdated) {
+          throw new Error("Không phát hiện từ vựng mới hoặc thông tin ngữ pháp nào mới để tích hợp.");
+        }
+
+        const updatedWords = [...targetLesson.words, ...uniqueNewWords];
+        const updatedLesson = {
+          ...targetLesson,
+          words: updatedWords,
+          grammar: updatedGrammar
+        };
+
+        const updatedLessons = lessons.map(les => les.id === targetLesson.id ? updatedLesson : les);
+
+        // Lưu toàn bộ cấu trúc bài học lên Firestore
+        await seedLessonsToCloud(updatedLessons);
+
+        // Cập nhật lại state cục bộ để UI phản ánh ngay
+        setLessons(updatedLessons);
+        if (selectedLesson && selectedLesson.id === targetLesson.id) {
+          setSelectedLesson(updatedLesson);
+        }
+        
+        let successMsg = `Đã tích hợp thành công ${uniqueNewWords.length} từ vựng mới vào bài học "${targetLesson.title}"`;
+        if (isGrammarUpdated) {
+          successMsg += " và cập nhật cấu trúc ngữ pháp";
+        }
+        successMsg += " đồng bộ lên đám mây Firestore!";
+        setImportSuccess(successMsg);
+        setImportJsonText("");
+        sounds.playSuccess();
+      } else {
+        // Tạo CHỦ ĐỀ / BÀI HỌC mới hoàn toàn
+        const finalTitle = (parsedData.title || newLessonTitle || "").trim();
+        if (!finalTitle) {
+          throw new Error("Vui lòng cung cấp Tên chủ đề / Tên bài học mới (khai báo thuộc tính 'title' trong JSON hoặc điền tại ô nhập liệu).");
+        }
+
+        const finalDesc = (parsedData.description || newLessonDesc || "Học từ vựng và cấu trúc ngữ pháp thuộc chủ đề tự chọn mới.").trim();
+        const finalLevel = (parsedData.level || newLessonLevel || "N5") as any;
+        const finalCategory = (parsedData.category || newLessonCategory || "Chủ đề tự chọn").trim();
+
+        // Xử lý Ngữ pháp đi kèm
+        const g = parsedData.grammar || {};
+        const finalGrammar = {
+          pattern: g.pattern || newLessonGrammarPattern || "N/A",
+          explanation: g.explanation || newLessonGrammarExplanation || "Chưa có giải thích",
+          example: g.example || newLessonGrammarExample || "Chưa có ví dụ",
+          exampleMeaning: g.exampleMeaning || newLessonGrammarExampleMeaning || "Chưa có nghĩa"
+        };
+
+        // Tìm ID lớn nhất để tăng tự động
+        const maxId = lessons.reduce((max, les) => les.id > max ? les.id : max, 0);
+        const newId = maxId + 1;
+
+        const newLesson: Lesson = {
+          id: newId,
+          title: finalTitle,
+          description: finalDesc,
+          level: finalLevel,
+          category: finalCategory,
+          grammar: finalGrammar,
+          words: validatedWords
+        };
+
+        const updatedLessons = [...lessons, newLesson].sort((a, b) => a.id - b.id);
+
+        // Lưu lên đám mây Firestore
+        await seedLessonsToCloud(updatedLessons);
+
+        // Tự động mở khóa chủ đề này ngay lập tức để học viên học được luôn
+        const nextUnlocked = Array.from(new Set([...unlockedLessons, newId])).sort((a, b) => a - b);
+        setUnlockedLessons(nextUnlocked);
+        try {
+          localStorage.setItem("japanese_course_unlocked_lessons", JSON.stringify(nextUnlocked));
+        } catch (e) {
+          console.error("Lỗi lưu trữ tiến trình mở khóa:", e);
+        }
+
+        // Cập nhật state cục bộ
+        setLessons(updatedLessons);
+        setSelectedLesson(newLesson);
+        setStudySubMode("vocab");
+
+        setImportSuccess(`Đã tạo thành công chủ đề mới "${newLesson.title}" (Bài ${newId + 1}) với ${validatedWords.length} từ vựng và Ngữ pháp! Đang mở bài học để bạn khám phá...`);
+        
+        // Reset các trường
+        setImportJsonText("");
+        setNewLessonTitle("");
+        setNewLessonDesc("");
+        setNewLessonCategory("");
+        setNewLessonGrammarPattern("");
+        setNewLessonGrammarExplanation("");
+        setNewLessonGrammarExample("");
+        setNewLessonGrammarExampleMeaning("");
+
+        sounds.playSuccess();
+        setTimeout(() => {
+          setIsImportModalOpen(false);
+          setImportSuccess(null);
+        }, 3000);
       }
-
-      // Lọc các từ vựng trùng lặp đã tồn tại sẵn trong bài học dựa trên thuộc tính 'japanese'
-      const existingJapanese = new Set(targetLesson.words.map(w => w.japanese));
-      const uniqueNewWords = validatedWords.filter(w => !existingJapanese.has(w.japanese));
-
-      if (uniqueNewWords.length === 0) {
-        throw new Error("Tất cả từ vựng trong file JSON đã tồn tại trong bài học này rồi.");
-      }
-
-      const updatedWords = [...targetLesson.words, ...uniqueNewWords];
-      
-      const updatedLesson = {
-        ...targetLesson,
-        words: updatedWords
-      };
-
-      const updatedLessons = lessons.map(les => les.id === targetLesson.id ? updatedLesson : les);
-
-      // Lưu toàn bộ cấu trúc bài học lên Firestore
-      await seedLessonsToCloud(updatedLessons);
-
-      // Cập nhật lại state cục bộ để UI phản ánh ngay
-      setLessons(updatedLessons);
-      if (selectedLesson && selectedLesson.id === targetLesson.id) {
-        setSelectedLesson(updatedLesson);
-      }
-      
-      setImportSuccess(`Đã tích hợp thành công ${uniqueNewWords.length} từ vựng mới vào bài học "${targetLesson.title}" và đồng bộ lên đám mây Firestore!`);
-      setImportJsonText("");
-      sounds.playSuccess();
     } catch (err: any) {
       console.error(err);
       setImportError(err.message || "Đã xảy ra lỗi không mong muốn.");
@@ -3646,21 +3743,162 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
               {/* Body */}
               <div className="p-5 flex-1 overflow-y-auto space-y-4">
-                {/* Target Lesson Selection Dropdown */}
+                {/* 1. Chọn chế độ Import */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-stone-700 block">Chọn bài học đích để import:</label>
-                  <select
-                    value={importTargetLessonId ?? ""}
-                    onChange={(e) => setImportTargetLessonId(Number(e.target.value))}
-                    className="w-full border-2 border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
-                  >
-                    {lessons.map(les => (
-                      <option key={les.id} value={les.id}>
-                        Bài {les.id + 1}: {les.title} ({les.words.length} từ vựng)
-                      </option>
-                    ))}
-                  </select>
+                  <label className="text-xs font-bold text-stone-700 block">Chọn phạm vi Import:</label>
+                  <div className="grid grid-cols-2 gap-2 bg-stone-100 p-1 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => { sounds.playClick(); setImportScope("existing"); setImportError(null); setImportSuccess(null); }}
+                      className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        importScope === "existing"
+                          ? "bg-white text-stone-850 shadow-3xs"
+                          : "text-stone-500 hover:text-stone-850"
+                      }`}
+                    >
+                      Bài học hiện có
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { sounds.playClick(); setImportScope("new"); setImportError(null); setImportSuccess(null); }}
+                      className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        importScope === "new"
+                          ? "bg-white text-rose-600 shadow-3xs"
+                          : "text-stone-500 hover:text-stone-850"
+                      }`}
+                    >
+                      Tạo chủ đề mới hoàn toàn
+                    </button>
+                  </div>
                 </div>
+
+                {/* Chế độ: Bài học hiện có */}
+                {importScope === "existing" && (
+                  <div className="space-y-1.5 animate-fadeIn">
+                    <label className="text-xs font-bold text-stone-700 block">Chọn bài học đích để import:</label>
+                    <select
+                      value={importTargetLessonId ?? ""}
+                      onChange={(e) => setImportTargetLessonId(Number(e.target.value))}
+                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                    >
+                      {lessons.map(les => (
+                        <option key={les.id} value={les.id}>
+                          Bài {les.id + 1}: {les.title} ({les.words.length} từ vựng)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Chế độ: Tạo chủ đề mới */}
+                {importScope === "new" && (
+                  <div className="space-y-3 border border-stone-150 p-3.5 rounded-xl bg-stone-50/50 animate-fadeIn">
+                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-rose-600 border-b border-stone-200 pb-1.5 mb-2">
+                      <PlusCircle className="w-4 h-4" /> Thiết lập thông tin chủ đề mới
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-stone-700 block">Tên chủ đề <span className="text-rose-500">*</span></label>
+                        <input
+                          type="text"
+                          value={newLessonTitle}
+                          onChange={(e) => setNewLessonTitle(e.target.value)}
+                          placeholder="Ví dụ: Động vật, Mua sắm..."
+                          className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-stone-700 block">Danh mục chủ đề</label>
+                        <input
+                          type="text"
+                          value={newLessonCategory}
+                          onChange={(e) => setNewLessonCategory(e.target.value)}
+                          placeholder="Ví dụ: Đời sống, Từ vựng chuyên ngành"
+                          className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-stone-700 block">Trình độ JLPT</label>
+                        <select
+                          value={newLessonLevel}
+                          onChange={(e) => setNewLessonLevel(e.target.value as any)}
+                          className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                        >
+                          <option value="N5">N5 (Sơ cấp 1)</option>
+                          <option value="N4">N4 (Sơ cấp 2)</option>
+                          <option value="N3">N3 (Trung cấp)</option>
+                          <option value="N2">N2 (Thượng cấp 1)</option>
+                          <option value="N1">N1 (Thượng cấp 2)</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-stone-700 block">Mô tả ngắn chủ đề</label>
+                        <input
+                          type="text"
+                          value={newLessonDesc}
+                          onChange={(e) => setNewLessonDesc(e.target.value)}
+                          placeholder="Tóm tắt nội dung học..."
+                          className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Grammar block for New Topic */}
+                    <div className="border-t border-stone-200 pt-2.5 mt-2 space-y-2">
+                      <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider block">Cấu trúc Ngữ pháp kèm theo:</span>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div className="space-y-1">
+                          <label className="text-[11px] font-bold text-stone-700 block">Mẫu câu ngữ pháp</label>
+                          <input
+                            type="text"
+                            value={newLessonGrammarPattern}
+                            onChange={(e) => setNewLessonGrammarPattern(e.target.value)}
+                            placeholder="Ví dụ: ~たい です (Muốn làm gì đó)"
+                            className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[11px] font-bold text-stone-700 block">Giải thích ý nghĩa</label>
+                          <input
+                            type="text"
+                            value={newLessonGrammarExplanation}
+                            onChange={(e) => setNewLessonGrammarExplanation(e.target.value)}
+                            placeholder="Ví dụ: Dùng biểu thị mong muốn làm hành động..."
+                            className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div className="space-y-1">
+                          <label className="text-[11px] font-bold text-stone-700 block">Câu ví dụ (Tiếng Nhật)</label>
+                          <input
+                            type="text"
+                            value={newLessonGrammarExample}
+                            onChange={(e) => setNewLessonGrammarExample(e.target.value)}
+                            placeholder="Ví dụ: 日本へ行きたいです。"
+                            className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white font-serif-jp"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[11px] font-bold text-stone-700 block">Dịch nghĩa câu ví dụ</label>
+                          <input
+                            type="text"
+                            value={newLessonGrammarExampleMeaning}
+                            onChange={(e) => setNewLessonGrammarExampleMeaning(e.target.value)}
+                            placeholder="Ví dụ: Tôi muốn đi Nhật Bản."
+                            className="w-full border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500 bg-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Import Mode Tabs */}
                 <div className="flex border-b border-stone-200 gap-4 pt-1">
@@ -3692,27 +3930,59 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                 {importMethod === "json" && (
                   <div className="space-y-4 pt-1 animate-fadeIn">
                     <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-stone-500 uppercase tracking-wide font-mono block">Cấu trúc dữ liệu JSON mẫu:</label>
-                      <div className="bg-stone-900 text-stone-300 font-mono text-[10px] p-3 rounded-xl overflow-x-auto border border-stone-800 leading-normal max-h-[120px] select-all">
+                      <label className="text-[11px] font-bold text-stone-500 uppercase tracking-wide font-mono block">Cấu trúc JSON mẫu ({importScope === "new" ? "Toàn bộ chủ đề & Ngữ pháp" : "Bổ sung từ vựng & Ngữ pháp"}):</label>
+                      
+                      {importScope === "new" ? (
+                        <div className="bg-stone-900 text-stone-300 font-mono text-[9px] p-3 rounded-xl overflow-x-auto border border-stone-800 leading-normal max-h-[140px] select-all">
 {`{
+  "title": "Chủ đề Thời tiết",
+  "description": "Các từ vựng và ngữ pháp về khí hậu, thời tiết",
+  "level": "N5",
+  "category": "Thời tiết",
+  "grammar": {
+    "pattern": "~たい です (Muốn làm gì)",
+    "explanation": "Dùng biểu thị ý muốn...",
+    "example": "日本へ行きたいです。",
+    "exampleMeaning": "Tôi muốn đi Nhật."
+  },
   "words": [
-    { "japanese": "わたし", "romaji": "watashi", "vietnameseMeaning": "Tôi" },
-    { "japanese": "あなた", "romaji": "anata", "vietnameseMeaning": "Bạn, anh/chị" }
+    { "japanese": "はれ", "romaji": "hare", "vietnameseMeaning": "Nắng", "englishMeaning": "Sunny" },
+    { "japanese": "あめ", "romaji": "ame", "vietnameseMeaning": "Mưa", "englishMeaning": "Rain" }
   ]
 }`}
-                      </div>
+                        </div>
+                      ) : (
+                        <div className="bg-stone-900 text-stone-300 font-mono text-[9px] p-3 rounded-xl overflow-x-auto border border-stone-800 leading-normal max-h-[140px] select-all">
+{`{
+  "grammar": {
+    "pattern": "~たい です (Muốn làm gì)",
+    "explanation": "Dùng biểu thị ý muốn...",
+    "example": "日本へ行きたいです。",
+    "exampleMeaning": "Tôi muốn đi Nhật."
+  },
+  "words": [
+    { "japanese": "わたし", "romaji": "watashi", "vietnameseMeaning": "Tôi", "englishMeaning": "I" },
+    { "japanese": "あなた", "romaji": "anata", "vietnameseMeaning": "Bạn", "englishMeaning": "You" }
+  ]
+}`}
+                        </div>
+                      )}
+                      
                       <p className="text-[10px] text-stone-400 leading-normal">
-                        * Hệ thống sẽ tự động lọc trùng các từ vựng đã tồn tại sẵn trong bài học này (dựa vào phần chữ tiếng Nhật).
+                        * Bạn có thể dán toàn bộ cấu trúc đầy đủ ở trên, hệ thống sẽ tự phân tích và điền các trường cho bạn.
                       </p>
                     </div>
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-stone-700 block">Dán nội dung JSON vào đây:</label>
                       <textarea
-                        rows={8}
+                        rows={6}
                         value={importJsonText}
                         onChange={(e) => setImportJsonText(e.target.value)}
-                        placeholder='{"words": [{"japanese": "...", "romaji": "...", "vietnameseMeaning": "..."}]}'
+                        placeholder={importScope === "new"
+                          ? '{"title": "...", "grammar": {...}, "words": []}'
+                          : '{"words": [{"japanese": "...", "vietnameseMeaning": "..."}]}'
+                        }
                         className="w-full text-xs font-mono p-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none transition-all placeholder:text-stone-300 bg-stone-50/50"
                       />
                     </div>
