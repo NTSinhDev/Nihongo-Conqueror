@@ -62,7 +62,7 @@ export default function KanjiLearning() {
   };
 
   return (
-    <div className="space-y-6 w-full max-w-7xl mx-auto px-4 py-2 sm:px-6">
+    <div className="space-y-6 w-full max-w-7xl mx-auto px-4 py-2 sm:px-6 min-w-0 overflow-hidden">
       {/* HEADER BANNER */}
       <div className="bg-gradient-to-r from-rose-500 to-rose-600 rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden select-none">
         <div className="absolute right-0 top-0 bottom-0 opacity-10 flex items-center justify-center -mr-10">
@@ -198,13 +198,13 @@ export default function KanjiLearning() {
               {/* Readings Info */}
               {!hideReadings && (
                 <div className="bg-stone-50/80 rounded-xl p-3 space-y-1.5 text-xs border border-stone-100">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-wrap justify-between items-center gap-1">
                     <span className="text-stone-400 font-bold text-[10px] uppercase tracking-wider">Onyomi:</span>
-                    <span className="font-bold text-stone-700 font-serif-jp">{item.onYomi}</span>
+                    <span className="font-bold text-stone-700 font-serif-jp text-right">{item.onYomi}</span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-wrap justify-between items-center gap-1">
                     <span className="text-stone-400 font-bold text-[10px] uppercase tracking-wider">Kunyomi:</span>
-                    <span className="font-bold text-rose-600 font-serif-jp">{item.kunYomi}</span>
+                    <span className="font-bold text-rose-600 font-serif-jp text-right">{item.kunYomi}</span>
                   </div>
                 </div>
               )}
@@ -245,7 +245,7 @@ export default function KanjiLearning() {
           {/* Flashcard container with flip animation */}
           <div
             onClick={handleFlipCard}
-            className="w-full aspect-[4/3] bg-white rounded-3xl border-2 border-stone-200 shadow-sm p-8 flex flex-col items-center justify-center text-center cursor-pointer relative select-none hover:border-rose-400 transition-all duration-300 group"
+            className="w-full min-h-[280px] sm:min-h-[320px] bg-white rounded-3xl border-2 border-stone-200 shadow-sm py-8 px-4 sm:px-8 flex flex-col items-center justify-center text-center cursor-pointer relative select-none hover:border-rose-400 transition-all duration-300 group"
           >
             <div className="absolute top-4 right-4">
               <button

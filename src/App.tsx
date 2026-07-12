@@ -407,10 +407,10 @@ export default function App() {
       )}
 
       {/* ----------------- MAIN PANEL WORKSPACE ----------------- */}
-      <main className="flex-1 min-h-screen bg-stone-50 flex flex-col lg:pl-72 transition-all">
+      <main className="flex-1 min-h-screen bg-stone-50 flex flex-col lg:pl-72 transition-all min-w-0 w-full max-w-full overflow-x-hidden">
         
         {/* Top bar Header */}
-        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-8 py-4 flex items-center justify-between">
+        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-8 py-4 flex items-center justify-between min-w-0 w-full">
           <div className="flex items-center gap-3">
             {/* Hamburger Button (Mobile) */}
             <button
