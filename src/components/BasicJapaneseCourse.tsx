@@ -506,9 +506,44 @@ function generateJLPTQuestions(lesson: Lesson): {
 interface BasicJapaneseCourseProps {
   activeLevel?: "N5" | "N4" | "N3" | "N2" | "N1";
   onLevelChange?: (lvl: "N5" | "N4" | "N3" | "N2" | "N1") => void;
+  isLoggedIn?: boolean;
+  setIsLoggedIn?: (val: boolean) => void;
+  username?: string | null;
+  setUsername?: (val: string | null) => void;
+  userRole?: "admin" | "user" | null;
+  setUserRole?: (val: "admin" | "user" | null) => void;
+  isEditingVocab?: boolean;
+  setIsEditingVocab?: (val: boolean) => void;
+  isImportModalOpen?: boolean;
+  setIsImportModalOpen?: (val: boolean) => void;
+  isLessonBuilderOpen?: boolean;
+  setIsLessonBuilderOpen?: (val: boolean) => void;
+  isLoginModalOpen?: boolean;
+  setIsLoginModalOpen?: (val: boolean) => void;
+  selectedModel?: string;
+  setSelectedModel?: (val: string) => void;
 }
 
-export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLevelChange }: BasicJapaneseCourseProps = {}) {
+export default function BasicJapaneseCourse({ 
+  activeLevel: propActiveLevel, 
+  onLevelChange,
+  isLoggedIn: propIsLoggedIn,
+  setIsLoggedIn: propSetIsLoggedIn,
+  username: propUsername,
+  setUsername: propSetUsername,
+  userRole: propUserRole,
+  setUserRole: propSetUserRole,
+  isEditingVocab: propIsEditingVocab,
+  setIsEditingVocab: propSetIsEditingVocab,
+  isImportModalOpen: propIsImportModalOpen,
+  setIsImportModalOpen: propSetIsImportModalOpen,
+  isLessonBuilderOpen: propIsLessonBuilderOpen,
+  setIsLessonBuilderOpen: propSetIsLessonBuilderOpen,
+  isLoginModalOpen: propIsLoginModalOpen,
+  setIsLoginModalOpen: propSetIsLoginModalOpen,
+  selectedModel: propSelectedModel,
+  setSelectedModel: propSetSelectedModel,
+}: BasicJapaneseCourseProps = {}) {
   const [internalActiveLevel, setInternalActiveLevel] = useState<"N5" | "N4" | "N3" | "N2" | "N1">("N5");
   const activeLevel = propActiveLevel !== undefined ? propActiveLevel : internalActiveLevel;
   const setActiveLevel = onLevelChange !== undefined ? onLevelChange : setInternalActiveLevel;
@@ -518,14 +553,29 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
   const [user, setUser] = useState<any | null>(null);
   const [syncStatus, setSyncStatus] = useState<"idle" | "authenticating" | "syncing" | "synced" | "failed">("idle");
 
-  // --- Account / Auth States ---
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+  // --- Account / Auth States with parent synchronization & fallbacks ---
+  const [internalIsLoggedIn, setInternalIsLoggedIn] = useState<boolean>(() => {
     return localStorage.getItem("japanese_course_is_logged_in") === "true";
   });
-  const [username, setUsername] = useState<string | null>(() => {
+  const isLoggedIn = propIsLoggedIn !== undefined ? propIsLoggedIn : internalIsLoggedIn;
+  const setIsLoggedIn = propSetIsLoggedIn !== undefined ? propSetIsLoggedIn : setInternalIsLoggedIn;
+
+  const [internalUsername, setInternalUsername] = useState<string | null>(() => {
     return localStorage.getItem("japanese_course_username");
   });
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const username = propUsername !== undefined ? propUsername : internalUsername;
+  const setUsername = propSetUsername !== undefined ? propSetUsername : setInternalUsername;
+
+  const [internalUserRole, setInternalUserRole] = useState<"admin" | "user" | null>(() => {
+    return localStorage.getItem("japanese_course_user_role") as "admin" | "user" | null;
+  });
+  const userRole = propUserRole !== undefined ? propUserRole : internalUserRole;
+  const setUserRole = propSetUserRole !== undefined ? propSetUserRole : setInternalUserRole;
+
+  const [internalIsLoginModalOpen, setInternalIsLoginModalOpen] = useState(false);
+  const isLoginModalOpen = propIsLoginModalOpen !== undefined ? propIsLoginModalOpen : internalIsLoginModalOpen;
+  const setIsLoginModalOpen = propSetIsLoginModalOpen !== undefined ? propSetIsLoginModalOpen : setInternalIsLoginModalOpen;
+
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -536,18 +586,286 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
 
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   
-  // --- Vocabulary Editing States ---
-  const [isEditingVocab, setIsEditingVocab] = useState<boolean>(false);
+  // --- Vocabulary Editing States with parent synchronization & fallbacks ---
+  const [internalIsEditingVocab, setInternalIsEditingVocab] = useState<boolean>(false);
+  const isEditingVocab = propIsEditingVocab !== undefined ? propIsEditingVocab : internalIsEditingVocab;
+  const setIsEditingVocab = propSetIsEditingVocab !== undefined ? propSetIsEditingVocab : setInternalIsEditingVocab;
+
+  const [internalIsImportModalOpen, setInternalIsImportModalOpen] = useState<boolean>(false);
+  const isImportModalOpen = propIsImportModalOpen !== undefined ? propIsImportModalOpen : internalIsImportModalOpen;
+  const setIsImportModalOpen = propSetIsImportModalOpen !== undefined ? propSetIsImportModalOpen : setInternalIsImportModalOpen;
+
+  const [internalIsLessonBuilderOpen, setInternalIsLessonBuilderOpen] = useState<boolean>(false);
+  const isLessonBuilderOpen = propIsLessonBuilderOpen !== undefined ? propIsLessonBuilderOpen : internalIsLessonBuilderOpen;
+  const setIsLessonBuilderOpen = propSetIsLessonBuilderOpen !== undefined ? propSetIsLessonBuilderOpen : setInternalIsLessonBuilderOpen;
+
   const [editingWordIndex, setEditingWordIndex] = useState<number | null>(null);
   const [movingWordIndex, setMovingWordIndex] = useState<number | null>(null);
   const [deletingWordIndex, setDeletingWordIndex] = useState<number | null>(null);
   const [moveTargetLessonId, setMoveTargetLessonId] = useState<number | null>(null);
   
-  // --- AI Auto-Categorize States ---
+  // --- AI Auto-Categorize States with parent synchronization & fallbacks ---
   const [vocabViewMode, setVocabViewMode] = useState<"list" | "ai">("list");
   const [isCategorizingByAi, setIsCategorizingByAi] = useState<boolean>(false);
   const [aiCategorizeError, setAiCategorizeError] = useState<string | null>(null);
-  const [selectedAiModel, setSelectedAiModel] = useState<string>("gemini-3.5-flash");
+
+  const [internalSelectedAiModel, setInternalSelectedAiModel] = useState<string>("gemini-3.5-flash");
+  const selectedAiModel = propSelectedModel !== undefined ? propSelectedModel : internalSelectedAiModel;
+  const setSelectedAiModel = propSetSelectedModel !== undefined ? propSetSelectedModel : setInternalSelectedAiModel;
+
+  // --- Lesson Plan Builder States & Actions ---
+  const [builderTargetLessonId, setBuilderTargetLessonId] = useState<number>(0);
+  const [builderNewLessonTitle, setBuilderNewLessonTitle] = useState<string>("");
+  const [builderRawText, setBuilderRawText] = useState<string>("");
+  const [builderStep, setBuilderStep] = useState<number>(1); // 1: Input & Tokenize, 2: Review & Examples, 3: Quiz Generation, 4: Done & Save
+  const [builderLoading, setBuilderLoading] = useState<boolean>(false);
+  const [builderError, setBuilderError] = useState<string | null>(null);
+  const [builderSuccess, setBuilderSuccess] = useState<string | null>(null);
+  
+  const [builderWords, setBuilderWords] = useState<Array<{
+    japanese: string;
+    romaji: string;
+    vietnameseMeaning: string;
+    englishMeaning: string;
+    selected: boolean;
+    exampleJp?: string;
+    exampleRomaji?: string;
+    exampleVn?: string;
+  }>>([]);
+
+  const [builderQuiz, setBuilderQuiz] = useState<Array<{
+    question: string;
+    options: string[];
+    answerIndex: number;
+    explanation: string;
+    questionType: string;
+  }>>([]);
+
+  // Handler for Step 1: Phân tách & Điền nghĩa (Tokenize)
+  const handleBuilderTokenize = async () => {
+    if (!builderRawText.trim()) {
+      setBuilderError("Vui lòng nhập văn bản hoặc danh sách từ vựng tiếng Nhật!");
+      return;
+    }
+    setBuilderLoading(true);
+    setBuilderError(null);
+    try {
+      const response = await fetch("/api/lesson/tokenize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rawText: builderRawText, model: selectedAiModel }),
+      });
+      if (!response.ok) {
+        throw new Error(`Tokenization failed: Status ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      const parsedWords = (data.words || []).map((w: any) => ({
+        japanese: w.japanese || "",
+        romaji: w.romaji || "",
+        vietnameseMeaning: w.vietnameseMeaning || "",
+        englishMeaning: w.englishMeaning || "",
+        selected: true,
+      }));
+      if (parsedWords.length === 0) {
+        throw new Error("Không tìm thấy từ vựng hợp lệ trong văn bản.");
+      }
+      setBuilderWords(parsedWords);
+      setBuilderStep(2);
+    } catch (err: any) {
+      console.error(err);
+      setBuilderError(err.message || "Đã xảy ra lỗi khi phân tách từ vựng.");
+    } finally {
+      setBuilderLoading(false);
+    }
+  };
+
+  // Handler for Step 2: Đặt câu ví dụ tự động (Generate Examples)
+  const handleBuilderGenerateExamples = async () => {
+    const activeWords = builderWords.filter((w) => w.selected);
+    if (activeWords.length === 0) {
+      setBuilderError("Vui lòng chọn ít nhất một từ vựng để tạo ví dụ!");
+      return;
+    }
+    setBuilderLoading(true);
+    setBuilderError(null);
+    try {
+      const response = await fetch("/api/lesson/generate-examples", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          words: activeWords.map((w) => w.japanese),
+          model: selectedAiModel,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Example generation failed: Status ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      const examplesMap = data.examples || [];
+      const updatedWords = builderWords.map((w) => {
+        if (!w.selected) return w;
+        const matched = examplesMap.find(
+          (ex: any) => ex.japaneseWord?.trim() === w.japanese?.trim()
+        );
+        if (matched) {
+          return {
+            ...w,
+            exampleJp: matched.exampleJp || "",
+            exampleRomaji: matched.exampleRomaji || "",
+            exampleVn: matched.exampleVn || "",
+          };
+        }
+        return w;
+      });
+      setBuilderWords(updatedWords);
+      setBuilderStep(3);
+    } catch (err: any) {
+      console.error(err);
+      setBuilderError(err.message || "Đã xảy ra lỗi khi tạo ví dụ.");
+    } finally {
+      setBuilderLoading(false);
+    }
+  };
+
+  // Handler for Step 3: Tạo 5 câu hỏi ôn tập (Generate Review Quiz)
+  const handleBuilderGenerateQuiz = async () => {
+    const activeWords = builderWords.filter((w) => w.selected).map((w) => ({
+      japanese: w.japanese,
+      romaji: w.romaji,
+      vietnameseMeaning: w.vietnameseMeaning,
+      englishMeaning: w.englishMeaning,
+    }));
+    if (activeWords.length === 0) {
+      setBuilderError("Không có từ vựng nào được chọn để tạo câu hỏi!");
+      return;
+    }
+    setBuilderLoading(true);
+    setBuilderError(null);
+    try {
+      const response = await fetch("/api/lesson/generate-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          words: activeWords,
+          model: selectedAiModel,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Quiz generation failed: Status ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      setBuilderQuiz(data.questions || []);
+      setBuilderStep(4);
+    } catch (err: any) {
+      console.error(err);
+      setBuilderError(err.message || "Đã xảy ra lỗi khi tạo bộ câu hỏi ôn tập.");
+    } finally {
+      setBuilderLoading(false);
+    }
+  };
+
+  // Handler for Step 4: Hoàn thành & Lưu vào bài học
+  const handleBuilderSave = async () => {
+    setBuilderLoading(true);
+    setBuilderError(null);
+    try {
+      const activeWords = builderWords.filter((w) => w.selected);
+      const newVocabItems = activeWords.map((w) => ({
+        japanese: w.japanese,
+        romaji: w.romaji,
+        vietnameseMeaning: w.vietnameseMeaning,
+        englishMeaning: w.englishMeaning || "",
+        exampleJp: w.exampleJp || "",
+        exampleRomaji: w.exampleRomaji || "",
+        exampleVn: w.exampleVn || "",
+      }));
+
+      const newQuizQuestions = builderQuiz.map((q, qidx) => ({
+        id: qidx + 100, // Safe offset
+        question: q.question,
+        options: q.options,
+        answerIndex: q.answerIndex,
+        explanation: q.explanation,
+        questionType: q.questionType,
+      }));
+
+      let updatedLessons = [...lessons];
+
+      if (builderTargetLessonId === -1) {
+        // Create new Lesson
+        if (!builderNewLessonTitle.trim()) {
+          throw new Error("Vui lòng nhập tiêu đề cho bài học mới!");
+        }
+        const nextId = lessons.length > 0 ? Math.max(...lessons.map(l => l.id)) + 1 : 0;
+        const newLesson: Lesson = {
+          id: nextId,
+          title: builderNewLessonTitle.trim(),
+          description: `Bài học soạn tự động bằng AI về: ${activeWords.slice(0, 3).map(w => w.japanese).join(", ")}...`,
+          category: "Chủ đề tự soạn",
+          level: activeLevel,
+          words: newVocabItems,
+          grammar: {
+            pattern: `Ngữ pháp bài ${nextId + 1}`,
+            explanation: "Học cấu trúc thông qua ví dụ và câu trắc nghiệm.",
+            example: newVocabItems[0]?.exampleJp || "日本へ行きます。",
+            exampleMeaning: newVocabItems[0]?.exampleVn || "Tôi đi Nhật Bản.",
+          },
+        };
+        updatedLessons.push(newLesson);
+      } else {
+        // Add to existing Lesson
+        updatedLessons = lessons.map((l) => {
+          if (l.id === builderTargetLessonId) {
+            return {
+              ...l,
+              words: [...l.words, ...newVocabItems],
+            };
+          }
+          return l;
+        });
+      }
+
+      // Update local state
+      setLessons(updatedLessons);
+
+      // If logged in, save to Cloud
+      if (isLoggedIn && username) {
+        await seedLessonsToCloud(updatedLessons);
+        // Clear cached lessons to force fetch fresh next time
+        localStorage.removeItem("japanese_lessons_cache");
+      }
+
+      setBuilderSuccess("Chúc mừng! Giáo trình đã được cập nhật thành công!");
+      sounds.playSuccess();
+      
+      // Delay closing modal slightly so the user sees the success state
+      setTimeout(() => {
+        setIsLessonBuilderOpen(false);
+        // Reset states
+        setBuilderStep(1);
+        setBuilderRawText("");
+        setBuilderWords([]);
+        setBuilderQuiz([]);
+        setBuilderSuccess(null);
+        setBuilderNewLessonTitle("");
+      }, 1500);
+
+    } catch (err: any) {
+      console.error(err);
+      setBuilderError(err.message || "Đã xảy ra lỗi khi lưu giáo trình.");
+    } finally {
+      setBuilderLoading(false);
+    }
+  };
   
   // --- AI Auto-Translate States ---
   const [isTranslatingEn, setIsTranslatingEn] = useState<boolean>(false);
@@ -569,7 +887,6 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
   const [lessonsLoading, setLessonsLoading] = useState<boolean>(true);
 
   // --- Import Vocabulary JSON States ---
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [importJsonText, setImportJsonText] = useState("");
   const [importError, setImportError] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<string | null>(null);
@@ -1790,119 +2107,10 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-            {/* User Auth Info Indicator */}
-            <div className="flex items-center gap-3">
-              {isLoggedIn ? (
-                <div className="flex items-center gap-2">
-                  <div className="text-right">
-                    <p className="text-[9px] text-stone-400 font-bold font-mono uppercase tracking-wider leading-none">HỌC VIÊN</p>
-                    <p className="text-xs font-bold text-rose-600 flex items-center gap-1 justify-end mt-0.5">
-                      <User className="w-3 h-3" /> @{username}
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-1.5 text-xs font-bold text-stone-500 hover:text-rose-600 border border-stone-200 hover:border-rose-100 bg-stone-50 hover:bg-rose-50 px-2.5 py-1.5 rounded-xl transition-all"
-                    title="Đăng xuất tài khoản"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span className="hidden xs:inline">Đăng xuất</span>
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setAuthModalError(null);
-                    setAuthModalSuccess(null);
-                    setIsLoginModalOpen(true);
-                  }}
-                  className="flex items-center gap-1.5 text-xs font-extrabold text-white bg-rose-600 hover:bg-rose-700 px-3.5 py-1.5 rounded-xl transition-all shadow-4xs"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Đăng nhập</span>
-                </button>
-              )}
-            </div>
-
-            {/* Three Dots Menu Container */}
-            <div className="relative">
-              <button
-                onClick={() => { sounds.playClick(); setIsActionsMenuOpen(!isActionsMenuOpen); }}
-                className="p-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 hover:text-stone-800 transition-all shadow-4xs flex items-center justify-center"
-                title="Thêm thao tác"
-              >
-                <MoreVertical className="w-4 h-4" />
-              </button>
-
-              {isActionsMenuOpen && (
-                <>
-                  {/* Overlay to close menu */}
-                  <div 
-                    className="fixed inset-0 z-30" 
-                    onClick={() => setIsActionsMenuOpen(false)}
-                  />
-                  
-                  <div className="absolute right-0 mt-1.5 w-56 bg-white border border-stone-200 rounded-xl shadow-md p-1.5 z-40 animate-fadeIn">
-                    <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-2.5 py-1.5 border-b border-stone-100 font-mono">Tùy chọn giáo trình</p>
-                    
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setIsActionsMenuOpen(false);
-                        setImportTargetLessonId(selectedLesson?.id ?? lessons[0]?.id ?? 0);
-                        setImportSuccess(null);
-                        setImportError(null);
-                        setIsImportModalOpen(true);
-                      }}
-                      className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition-all flex items-center gap-2"
-                    >
-                      <FileJson className="w-4 h-4 text-rose-500" />
-                      <span>Import JSON từ vựng</span>
-                    </button>
-
-                    {selectedLesson && (
-                      <button
-                        onClick={() => {
-                          sounds.playClick();
-                          setIsActionsMenuOpen(false);
-                          setIsEditingVocab(!isEditingVocab);
-                          setStudySubMode("vocab"); // Switch to vocab tab to edit
-                          setEditingWordIndex(null);
-                          setMovingWordIndex(null);
-                        }}
-                        className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
-                          isEditingVocab 
-                            ? "bg-rose-50 text-rose-600 font-extrabold" 
-                            : "text-stone-700 hover:bg-stone-50 hover:text-stone-900"
-                        }`}
-                      >
-                        <Edit3 className="w-4 h-4 text-rose-500" />
-                        <span>{isEditingVocab ? "Hủy chỉnh sửa từ vựng" : "Chỉnh sửa từ vựng"}</span>
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setIsActionsMenuOpen(false);
-                        if (window.confirm("Bạn có chắc chắn muốn đặt lại toàn bộ tiến độ học tập không? Thao tác này không thể hoàn tác.")) {
-                          localStorage.removeItem("japanese_course_unlocked_lessons");
-                          localStorage.removeItem("japanese_course_completed_lessons");
-                          setUnlockedLessons([0]);
-                          setCompletedLessons([]);
-                          setSelectedLesson(null);
-                          window.location.reload();
-                        }
-                      }}
-                      className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-bold text-rose-600 hover:bg-rose-50 transition-all flex items-center gap-2"
-                    >
-                      <RotateCcw className="w-4 h-4 text-rose-500" />
-                      <span>Đặt lại toàn bộ tiến trình</span>
-                    </button>
-                  </div>
-                </>
-              )}
+            {/* Unified Account / Settings indicator */}
+            <div className="text-[11px] font-bold text-stone-400 font-mono flex items-center gap-2 bg-stone-50 border border-stone-200 rounded-xl px-3 py-1.5 shadow-4xs">
+              <span>Đồng bộ đám mây: Hoạt động</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             </div>
           </div>
         </div>
@@ -2038,20 +2246,106 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
         /* STUDY CLASSROOM (Sảnh học bài được chọn) */
         <div className="py-4 space-y-6 w-full max-w-full min-w-0 overflow-hidden">
           
-          {/* Breadcrumb controls */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-stone-50 p-3 rounded-xl border border-stone-150">
-            <button
-              id="back-to-syllabus-btn"
-              onClick={handleBackToSyllabus}
-              className="text-xs font-bold text-stone-500 hover:text-stone-800 flex items-center gap-1"
-            >
-              ← Trở về danh sách bài học
-            </button>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-medium text-stone-400">Đang học:</span>
-              <span className="text-xs font-extrabold text-stone-800 bg-white border border-stone-200 px-2.5 py-1 rounded-lg shadow-4xs">
-                {selectedLesson.title}
+          {/* Breadcrumb controls & Lesson Navigation Router */}
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-stone-50 p-4 rounded-2xl border border-stone-250 shadow-3xs">
+            {/* Left: Back to list */}
+            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto min-w-0">
+              <button
+                id="back-to-syllabus-btn"
+                onClick={handleBackToSyllabus}
+                className="text-xs font-extrabold text-stone-600 hover:text-rose-650 bg-white border border-stone-200 px-3 py-2 rounded-xl hover:border-rose-200 transition-all shadow-4xs flex items-center justify-center gap-1.5 shrink-0 flex-1 sm:flex-initial"
+              >
+                ← Danh sách bài học
+              </button>
+              
+              <div className="h-4 w-[1px] bg-stone-200 hidden sm:block"></div>
+              
+              {/* Quick Lesson Switcher dropdown */}
+              <div className="flex items-center gap-1.5 min-w-0 flex-1 sm:flex-initial">
+                <span className="text-[10px] font-bold text-stone-400 font-mono hidden md:inline shrink-0">CHUYỂN NHANH:</span>
+                <select
+                  value={selectedLesson.id}
+                  onChange={(e) => {
+                    sounds.playClick();
+                    const nextId = parseInt(e.target.value, 10);
+                    const found = lessons.find(l => l.id === nextId);
+                    if (found) {
+                      setSelectedLesson(found);
+                      setStudySubMode("vocab");
+                    }
+                  }}
+                  className="bg-white text-stone-800 border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-bold focus:ring-1 focus:ring-rose-500 focus:outline-none w-full sm:max-w-xs truncate"
+                >
+                  {lessons.map((l) => {
+                    const isLUnlocked = unlockedLessons.includes(l.id);
+                    return (
+                      <option key={l.id} value={l.id} disabled={!isLUnlocked}>
+                        {l.title} {!isLUnlocked ? "🔒" : ""}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+
+            {/* Right: Prev & Next Controls */}
+            <div className="flex items-center justify-between lg:justify-end gap-2 bg-stone-100 p-1 rounded-xl">
+              {/* Prev Button */}
+              <button
+                disabled={lessons.findIndex(l => l.id === selectedLesson.id) === 0}
+                onClick={() => {
+                  sounds.playClick();
+                  const idx = lessons.findIndex(l => l.id === selectedLesson.id);
+                  if (idx > 0) {
+                    setSelectedLesson(lessons[idx - 1]);
+                    setStudySubMode("vocab");
+                  }
+                }}
+                className="text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shrink-0 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed hover:bg-white text-stone-600 hover:text-stone-900"
+              >
+                ◀ Bài trước
+              </button>
+              
+              <span className="text-[11px] font-bold font-mono text-stone-400 px-1">
+                {lessons.findIndex(l => l.id === selectedLesson.id) + 1} / {lessons.length}
               </span>
+
+              {/* Next Button */}
+              {(() => {
+                const currentIdx = lessons.findIndex(l => l.id === selectedLesson.id);
+                const hasNext = currentIdx < lessons.length - 1;
+                if (!hasNext) {
+                  return (
+                    <button
+                      disabled
+                      className="text-[11px] font-bold px-3 py-1.5 rounded-lg opacity-40 cursor-not-allowed text-stone-600"
+                    >
+                      Kết thúc ▶
+                    </button>
+                  );
+                }
+                const nextLesson = lessons[currentIdx + 1];
+                const isNextUnlocked = unlockedLessons.includes(nextLesson.id);
+
+                return (
+                  <button
+                    disabled={!isNextUnlocked}
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedLesson(nextLesson);
+                      setStudySubMode("vocab");
+                    }}
+                    title={!isNextUnlocked ? "Hãy đỗ kỳ thi cuối bài học hiện tại để mở khóa bài học kế tiếp!" : `Chuyển sang ${nextLesson.title}`}
+                    className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shrink-0 ${
+                      isNextUnlocked 
+                        ? "bg-rose-600 text-white hover:bg-rose-700 font-extrabold" 
+                        : "bg-stone-200 text-stone-400 cursor-not-allowed"
+                    }`}
+                  >
+                    <span>Bài kế tiếp {!isNextUnlocked ? "🔒" : "▶"}</span>
+                  </button>
+                );
+              })()}
             </div>
           </div>
 
@@ -2597,36 +2891,38 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                   return (
                     <div 
                       key={wIdx}
-                      className="p-4 rounded-xl border border-stone-200 bg-white hover:bg-stone-50/50 flex items-center gap-4 transition-all shadow-4xs"
+                      className="p-4 rounded-xl border border-stone-200 bg-white hover:bg-stone-50/50 flex flex-col sm:flex-row sm:items-center gap-4 transition-all shadow-4xs"
                     >
-                      <button
-                        onClick={() => speakJapanese(word.japanese)}
-                        className="w-9 h-9 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center transition-all border border-rose-100 shrink-0"
-                        title="Nghe phát âm"
-                      >
-                        <Volume2 className="w-4.5 h-4.5" />
-                      </button>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline gap-2 flex-wrap">
-                          <span className="font-serif-jp font-black text-stone-850 text-base">
-                            {word.japanese}
+                      <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
+                        <button
+                          onClick={() => speakJapanese(word.japanese)}
+                          className="w-9 h-9 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center transition-all border border-rose-100 shrink-0"
+                          title="Nghe phát âm"
+                        >
+                          <Volume2 className="w-4.5 h-4.5" />
+                        </button>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <span className="font-serif-jp font-black text-stone-850 text-base">
+                              {word.japanese}
+                            </span>
+                            <span className="text-[11px] text-stone-400 font-mono font-medium lowercase">
+                              /{word.romaji}/
+                            </span>
+                          </div>
+                          <span className="text-xs text-stone-600 font-semibold block mt-0.5">
+                            {word.vietnameseMeaning}
                           </span>
-                          <span className="text-[11px] text-stone-400 font-mono font-medium lowercase">
-                            /{word.romaji}/
-                          </span>
+                          {word.englishMeaning && (
+                            <span className="text-[11px] text-stone-400 font-medium block mt-0.5">
+                              🇬🇧 English: {word.englishMeaning}
+                            </span>
+                          )}
                         </div>
-                        <span className="text-xs text-stone-600 font-semibold block mt-0.5">
-                          {word.vietnameseMeaning}
-                        </span>
-                        {word.englishMeaning && (
-                          <span className="text-[11px] text-stone-400 font-medium block mt-0.5">
-                            🇬🇧 English: {word.englishMeaning}
-                          </span>
-                        )}
                       </div>
 
                       {isEditingVocab && (
-                        <div className="flex items-center gap-1 shrink-0 ml-auto border-l border-stone-150 pl-3">
+                        <div className="flex items-center gap-1.5 shrink-0 ml-auto sm:border-l border-stone-150 sm:pl-3 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-stone-200/60 w-full sm:w-auto justify-end">
                           <button
                             onClick={() => {
                               sounds.playClick();
@@ -4066,6 +4362,411 @@ export default function BasicJapaneseCourse({ activeLevel: propActiveLevel, onLe
                     <span>{importMethod === "json" ? "Xác nhận Import" : "Thêm vào bài học"}</span>
                   )}
                 </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* 8.5. MODAL: LESSON PLAN BUILDER */}
+      <AnimatePresence>
+        {isLessonBuilderOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/45 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl border border-stone-200 shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            >
+              {/* Header */}
+              <div className="p-4 border-b border-stone-150 flex items-center justify-between bg-stone-50">
+                <div>
+                  <h3 className="text-sm font-extrabold text-stone-850 flex items-center gap-1.5">
+                    <Sparkles className="w-4.5 h-4.5 text-rose-500 animate-pulse" />
+                    <span>Trợ lý Soạn Giáo Trình AI (Lesson Builder)</span>
+                  </h3>
+                  <p className="text-[10px] text-stone-400 font-medium">
+                    Tạo từ vựng, ví dụ và đề thi ôn tập tự động thông qua mô hình <strong className="text-stone-600 font-mono">{selectedAiModel}</strong>
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    sounds.playClick();
+                    setIsLessonBuilderOpen(false);
+                    setBuilderStep(1);
+                    setBuilderError(null);
+                    setBuilderSuccess(null);
+                  }}
+                  className="w-7 h-7 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-700 transition-all"
+                >
+                  <X className="w-4.5 h-4.5" />
+                </button>
+              </div>
+
+              {/* Progress Steps Indicator */}
+              <div className="px-5 py-3.5 bg-stone-50 border-b border-stone-150 flex items-center justify-between gap-2">
+                {[
+                  { step: 1, label: "Nhập văn bản" },
+                  { step: 2, label: "Phân tách từ" },
+                  { step: 3, label: "Đặt câu ví dụ" },
+                  { step: 4, label: "Đề ôn tập" }
+                ].map((item) => (
+                  <div key={item.step} className="flex items-center gap-1.5 flex-1 last:flex-initial">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold font-mono transition-all duration-350 ${
+                      builderStep >= item.step
+                        ? "bg-rose-600 text-white ring-2 ring-rose-100"
+                        : "bg-stone-200 text-stone-500"
+                    }`}>
+                      {item.step}
+                    </div>
+                    <span className={`text-[10px] font-bold hidden sm:inline ${
+                      builderStep >= item.step ? "text-stone-800" : "text-stone-400"
+                    }`}>
+                      {item.label}
+                    </span>
+                    {item.step < 4 && <div className="h-[2px] bg-stone-200 flex-1 mx-2 hidden sm:block"></div>}
+                  </div>
+                ))}
+              </div>
+
+              {/* Body */}
+              <div className="p-5 flex-1 overflow-y-auto space-y-4">
+                
+                {builderError && (
+                  <div className="p-3.5 bg-rose-50 border border-rose-100 rounded-xl text-xs font-semibold text-rose-600 leading-relaxed">
+                    ⚠️ {builderError}
+                  </div>
+                )}
+
+                {builderSuccess && (
+                  <div className="p-3.5 bg-emerald-50 border border-emerald-100 rounded-xl text-xs font-bold text-emerald-700 leading-relaxed">
+                    🎉 {builderSuccess}
+                  </div>
+                )}
+
+                {/* STEP 1: RAW TEXT INPUT */}
+                {builderStep === 1 && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-stone-50 p-3 rounded-xl border border-stone-150">
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-extrabold text-stone-600 block">CHỌN BÀI HỌC MỤC TIÊU:</label>
+                        <select
+                          value={builderTargetLessonId}
+                          onChange={(e) => {
+                            sounds.playClick();
+                            setBuilderTargetLessonId(parseInt(e.target.value, 10));
+                          }}
+                          className="w-full bg-white border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
+                        >
+                          <option value={-1}>🆕 Tạo bài học mới hoàn toàn</option>
+                          {lessons.map((l) => (
+                            <option key={l.id} value={l.id}>
+                              Bài {l.id + 1}: {l.title} ({l.words.length} từ)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {builderTargetLessonId === -1 && (
+                        <div className="space-y-1">
+                          <label className="text-[11px] font-extrabold text-rose-600 block">TIÊU ĐỀ BÀI HỌC MỚI:</label>
+                          <input
+                            type="text"
+                            required
+                            value={builderNewLessonTitle}
+                            onChange={(e) => setBuilderNewLessonTitle(e.target.value)}
+                            placeholder="Ví dụ: Từ vựng Du lịch Kyoto"
+                            className="w-full bg-white border border-rose-200 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-stone-700 block">
+                        Nhập văn bản tiếng Nhật (Đoạn văn, bài báo, hoặc danh sách từ phân tách bằng dấu phẩy):
+                      </label>
+                      <textarea
+                        rows={6}
+                        value={builderRawText}
+                        onChange={(e) => setBuilderRawText(e.target.value)}
+                        placeholder="Ví dụ: 友達, 先生, 桜, 日本へ旅行に行きます。&#10;Hoặc dán bất kỳ bài đọc tiếng Nhật nào vào đây để AI tự động trích lọc từ vựng mới."
+                        className="w-full border border-stone-250 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-rose-500 bg-white leading-relaxed"
+                      />
+                    </div>
+
+                    <div className="p-3 bg-rose-50/50 border border-rose-100 rounded-xl text-[11px] text-rose-800 leading-normal">
+                      💡 <strong>Mẹo hay:</strong> AI sẽ tự động phân tách câu, nhận diện từ vựng, điền phiên âm Romaji, dịch nghĩa tiếng Việt & tiếng Anh, giúp bạn chuẩn bị tài liệu học tập trong nháy mắt!
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 2: REVIEW PARSED WORDS */}
+                {builderStep === 2 && (
+                  <div className="space-y-3">
+                    <p className="text-xs font-bold text-stone-600">
+                      Mô hình AI đã nhận diện và điền nghĩa cho {builderWords.length} từ vựng. Bạn có thể chỉnh sửa trực tiếp bên dưới:
+                    </p>
+
+                    <div className="border border-stone-200 rounded-xl overflow-hidden max-h-[45vh] overflow-y-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="bg-stone-50 border-b border-stone-200 text-[10px] font-extrabold text-stone-500 font-mono">
+                            <th className="p-2.5 text-center w-10">Chọn</th>
+                            <th className="p-2.5">Từ vựng (JP)</th>
+                            <th className="p-2.5">Romaji</th>
+                            <th className="p-2.5">Nghĩa Tiếng Việt</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-150">
+                          {builderWords.map((word, idx) => (
+                            <tr key={idx} className={`text-xs ${word.selected ? "bg-white" : "bg-stone-50 opacity-60"}`}>
+                              <td className="p-2.5 text-center">
+                                <input
+                                  type="checkbox"
+                                  checked={word.selected}
+                                  onChange={(e) => {
+                                    sounds.playClick();
+                                    const next = [...builderWords];
+                                    next[idx].selected = e.target.checked;
+                                    setBuilderWords(next);
+                                  }}
+                                  className="w-4 h-4 text-rose-600 border-stone-300 rounded focus:ring-rose-500"
+                                />
+                              </td>
+                              <td className="p-2">
+                                <input
+                                  type="text"
+                                  value={word.japanese}
+                                  onChange={(e) => {
+                                    const next = [...builderWords];
+                                    next[idx].japanese = e.target.value;
+                                    setBuilderWords(next);
+                                  }}
+                                  className="w-full bg-transparent border-0 border-b border-transparent hover:border-stone-300 focus:border-rose-500 focus:ring-0 px-1 py-0.5 font-bold text-stone-850"
+                                />
+                              </td>
+                              <td className="p-2">
+                                <input
+                                  type="text"
+                                  value={word.romaji}
+                                  onChange={(e) => {
+                                    const next = [...builderWords];
+                                    next[idx].romaji = e.target.value;
+                                    setBuilderWords(next);
+                                  }}
+                                  className="w-full bg-transparent border-0 border-b border-transparent hover:border-stone-300 focus:border-rose-500 focus:ring-0 px-1 py-0.5 font-mono text-stone-500"
+                                />
+                              </td>
+                              <td className="p-2">
+                                <input
+                                  type="text"
+                                  value={word.vietnameseMeaning}
+                                  onChange={(e) => {
+                                    const next = [...builderWords];
+                                    next[idx].vietnameseMeaning = e.target.value;
+                                    setBuilderWords(next);
+                                  }}
+                                  className="w-full bg-transparent border-0 border-b border-transparent hover:border-stone-300 focus:border-rose-500 focus:ring-0 px-1 py-0.5 font-semibold text-stone-700"
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 3: REVIEW GENERATED EXAMPLES */}
+                {builderStep === 3 && (
+                  <div className="space-y-3">
+                    <p className="text-xs font-bold text-stone-600">
+                      Đây là các câu ví dụ thực tế được AI đặt riêng cho từng từ vựng đã chọn:
+                    </p>
+
+                    <div className="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
+                      {builderWords.filter(w => w.selected).map((word, idx) => (
+                        <div key={idx} className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 shadow-4xs space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-extrabold text-white bg-rose-600 px-2 py-0.5 rounded-md font-mono">#{idx+1}</span>
+                            <span className="text-xs font-extrabold text-stone-850">{word.japanese} ({word.romaji})</span>
+                            <span className="text-xs text-stone-400 font-medium">| {word.vietnameseMeaning}</span>
+                          </div>
+                          
+                          <div className="bg-white p-2.5 rounded-lg border border-stone-150 font-serif-jp text-sm text-stone-800 space-y-1">
+                            <p className="font-bold">{word.exampleJp || "Đang chờ tạo..."}</p>
+                            <p className="text-xs text-stone-400 font-mono font-medium">{word.exampleRomaji}</p>
+                            <p className="text-xs text-emerald-700 font-bold">{word.exampleVn}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 4: REVIEW GENERATED REVIEW QUIZ */}
+                {builderStep === 4 && (
+                  <div className="space-y-3">
+                    <p className="text-xs font-bold text-stone-600">
+                      Mô hình AI đã thiết lập xong 5 câu hỏi ôn tập theo chuẩn JLPT dành riêng cho giáo trình này:
+                    </p>
+
+                    <div className="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
+                      {builderQuiz.map((q, idx) => (
+                        <div key={idx} className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 shadow-4xs space-y-2">
+                          <div className="flex items-start justify-between gap-2 border-b border-stone-200 pb-1.5">
+                            <span className="text-xs font-extrabold text-stone-850">Câu {idx + 1}: {q.question}</span>
+                            <span className="text-[10px] font-bold text-stone-400 font-mono bg-stone-200/50 px-2 py-0.5 rounded-md shrink-0 uppercase">
+                              {q.questionType}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {q.options.map((opt, oidx) => (
+                              <div
+                                key={oidx}
+                                className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 ${
+                                  oidx === q.answerIndex
+                                    ? "bg-emerald-50 border-emerald-250 text-emerald-800"
+                                    : "bg-white border-stone-200 text-stone-600"
+                                }`}
+                              >
+                                <span className="font-mono text-[10px] bg-stone-100 text-stone-500 w-5 h-5 rounded-full flex items-center justify-center border shrink-0">
+                                  {oidx + 1}
+                                </span>
+                                <span>{opt}</span>
+                                {oidx === q.answerIndex && <span className="ml-auto text-[10px] font-bold text-emerald-600">✓ ĐÚNG</span>}
+                              </div>
+                            ))}
+                          </div>
+
+                          <p className="text-[11px] text-stone-500 leading-relaxed bg-white p-2 rounded-lg border border-stone-150">
+                            💡 <strong>Giải thích:</strong> {q.explanation}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+
+              {/* Footer */}
+              <div className="p-4 border-t border-stone-150 bg-stone-50 flex items-center justify-between">
+                {/* Left controls */}
+                <div>
+                  {builderStep > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        setBuilderStep(builderStep - 1);
+                        setBuilderError(null);
+                      }}
+                      className="px-4 py-2 border border-stone-250 text-stone-500 hover:text-stone-850 hover:bg-white rounded-xl text-xs font-bold transition-all"
+                    >
+                      Quay lại
+                    </button>
+                  )}
+                </div>
+
+                {/* Right controls */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      setIsLessonBuilderOpen(false);
+                      setBuilderStep(1);
+                      setBuilderError(null);
+                      setBuilderSuccess(null);
+                    }}
+                    className="px-4 py-2 text-stone-400 hover:text-stone-700 text-xs font-bold transition-all"
+                  >
+                    Hủy bỏ
+                  </button>
+
+                  {builderStep === 1 && (
+                    <button
+                      type="button"
+                      disabled={builderLoading}
+                      onClick={handleBuilderTokenize}
+                      className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5"
+                    >
+                      {builderLoading ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Đang trích xuất từ...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Phân tích từ vựng AI 🪄</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+
+                  {builderStep === 2 && (
+                    <button
+                      type="button"
+                      disabled={builderLoading}
+                      onClick={handleBuilderGenerateExamples}
+                      className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5"
+                    >
+                      {builderLoading ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Đang tạo câu ví dụ...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Tạo ví dụ tự động 🤖</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+
+                  {builderStep === 3 && (
+                    <button
+                      type="button"
+                      disabled={builderLoading}
+                      onClick={handleBuilderGenerateQuiz}
+                      className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5"
+                    >
+                      {builderLoading ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Đang thiết kế đề thi...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Tạo câu hỏi trắc nghiệm 🎓</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+
+                  {builderStep === 4 && (
+                    <button
+                      type="button"
+                      disabled={builderLoading}
+                      onClick={handleBuilderSave}
+                      className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5 animate-pulse"
+                    >
+                      {builderLoading ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Đang cập nhật Cloud...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Hoàn thành & Lưu giáo trình 🎉</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             </motion.div>
           </div>

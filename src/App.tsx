@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import HiraganaChart from "./components/HiraganaChart";
 import SurvivalTestMode from "./components/SurvivalTestMode";
 import FlashcardMode from "./components/FlashcardMode";
@@ -30,9 +30,65 @@ import {
   Sliders,
   Settings,
   PenTool,
+  LogOut,
+  LogIn,
 } from "lucide-react";
 
 export default function App() {
+  // Lifted States for Settings, Auth and AI Model Configuration
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem("japanese_course_is_logged_in") === "true";
+  });
+  const [username, setUsername] = useState<string | null>(() => {
+    return localStorage.getItem("japanese_course_username");
+  });
+  const [userRole, setUserRole] = useState<"admin" | "user" | null>(() => {
+    return localStorage.getItem("japanese_course_user_role") as "admin" | "user" | null;
+  });
+  const [isEditingVocab, setIsEditingVocab] = useState<boolean>(false);
+  const [selectedModel, setSelectedModel] = useState<string>(() => {
+    return localStorage.getItem("japanese_course_selected_model") || "gemini-3.5-flash";
+  });
+  const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false);
+  const [isLessonBuilderOpen, setIsLessonBuilderOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [customModels, setCustomModels] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem("japanese_course_custom_models");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Handle ESC key to close Settings Popup
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSettingsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // Sync user details/role from Cloud database on mount if needed
+  useEffect(() => {
+    if (isLoggedIn && username && !userRole) {
+      import("./utils/firebase").then(({ getUserDetailsFromCloud }) => {
+        getUserDetailsFromCloud(username).then((details) => {
+          if (details) {
+            localStorage.setItem("japanese_course_user_role", details.role);
+            setUserRole(details.role);
+          }
+        });
+      });
+    }
+  }, [isLoggedIn, username, userRole]);
+
   // Toggle between Hiragana and Katakana character systems
   const [characterSet, setCharacterSet] = useState<"hiragana" | "katakana">("hiragana");
 
@@ -168,6 +224,210 @@ export default function App() {
     setSelectedGroups([]);
   };
 
+  const handleImportCustomModel = () => {
+    sounds.playClick();
+    const modelName = window.prompt("Nhập mã định danh mô hình Gemini mới (ví dụ: gemini-2.0-pro-exp-02-05):");
+    if (modelName && modelName.trim()) {
+      const trimmed = modelName.trim();
+      if (!customModels.includes(trimmed)) {
+        const updated = [...customModels, trimmed];
+        setCustomModels(updated);
+        localStorage.setItem("japanese_course_custom_models", JSON.stringify(updated));
+        setSelectedModel(trimmed);
+        localStorage.setItem("japanese_course_selected_model", trimmed);
+        alert(`Đã thêm và kích hoạt mô hình: ${trimmed}`);
+      } else {
+        setSelectedModel(trimmed);
+        localStorage.setItem("japanese_course_selected_model", trimmed);
+      }
+    }
+  };
+
+  const renderSettingsPanel = (isMobile: boolean) => {
+    const allModels = [
+      "gemini-3.5-flash",
+      "gemini-2.5-flash",
+      "gemini-2.5-pro",
+      "gemini-1.5-pro",
+      "gemini-1.5-flash",
+      ...customModels
+    ];
+
+    const handleSelectModel = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      sounds.playClick();
+      const val = e.target.value;
+      setSelectedModel(val);
+      localStorage.setItem("japanese_course_selected_model", val);
+    };
+
+    const handleLogout = () => {
+      sounds.playClick();
+      if (window.confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+        localStorage.removeItem("japanese_course_is_logged_in");
+        localStorage.removeItem("japanese_course_username");
+        localStorage.removeItem("japanese_course_user_role");
+        localStorage.removeItem("japanese_course_unlocked_lessons");
+        localStorage.removeItem("japanese_course_completed_lessons");
+        setIsLoggedIn(false);
+        setUsername(null);
+        setUserRole(null);
+        window.location.reload();
+      }
+    };
+
+    return (
+      <div className="font-sans text-xs space-y-4">
+        {/* Cloud Sync Status */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-[10px]">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Đồng bộ đám mây: Hoạt động</span>
+          </div>
+          <span className="text-[9px] text-stone-500 font-mono">Firestore DB</span>
+        </div>
+
+        {/* Student Account Info / Login */}
+        <div className="p-3 bg-stone-900/80 rounded-xl border border-stone-800 space-y-2">
+          {!isLoggedIn ? (
+            <div className="space-y-1.5">
+              <p className="text-[10px] text-stone-400 leading-relaxed font-semibold">Đăng nhập để đồng bộ tiến trình học lên đám mây.</p>
+              <button
+                id="sidebar-settings-btn-login"
+                onClick={() => {
+                  sounds.playClick();
+                  setIsLoginModalOpen(true);
+                  setIsSettingsOpen(false);
+                  if (isMobile) setIsMobileSidebarOpen(false);
+                }}
+                className="w-full py-1.5 px-3 rounded-lg bg-rose-600 text-white font-bold flex items-center justify-center gap-2 hover:bg-rose-700 transition-colors text-center"
+              >
+                <span>Đăng nhập học viên</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5 min-w-0 flex-1 mr-1">
+                  <span className="text-[10px] text-stone-500 block uppercase font-mono tracking-wider">Học viên</span>
+                  <span className="font-bold text-white text-xs truncate block">@{username}</span>
+                </div>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                  userRole === "admin" 
+                    ? "bg-rose-950 text-rose-400 border border-rose-900" 
+                    : "bg-stone-850 text-stone-400 border border-stone-800"
+                }`}>
+                  {userRole === "admin" ? "🛡️ Admin" : "Học viên"}
+                </span>
+              </div>
+              <button
+                id="sidebar-settings-btn-logout"
+                onClick={handleLogout}
+                className="w-full py-1 px-2.5 rounded-md bg-stone-800 text-stone-400 hover:text-white hover:bg-stone-750 transition-colors font-bold text-[10px]"
+              >
+                Đăng xuất tài khoản
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* AI Model Settings Manager */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between items-center">
+            <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider font-mono">Mô hình AI mặc định</label>
+            <button
+              onClick={handleImportCustomModel}
+              title="Import model mới"
+              className="px-1.5 py-0.5 rounded bg-stone-850 hover:bg-stone-800 text-stone-300 transition-colors text-[9px] font-bold"
+            >
+              + Import
+            </button>
+          </div>
+          <select
+            value={selectedModel}
+            onChange={handleSelectModel}
+            className="w-full bg-stone-900 text-stone-200 border border-stone-800 rounded-lg p-2 focus:ring-1 focus:ring-rose-500 focus:outline-none text-[11px] font-mono"
+          >
+            {allModels.map((m) => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Course Options & Admin Controls */}
+        <div className="space-y-1">
+          <p className="text-[9px] font-bold text-stone-500 uppercase tracking-widest font-mono pl-1 mb-1">Quản trị giáo trình</p>
+          
+          {/* Admin only buttons */}
+          {isLoggedIn && userRole === "admin" && (
+            <>
+              <button
+                id="sidebar-settings-btn-lesson-builder"
+                onClick={() => {
+                  sounds.playClick();
+                  setIsLessonBuilderOpen(true);
+                  setIsSettingsOpen(false);
+                  if (isMobile) setIsMobileSidebarOpen(false);
+                }}
+                className="w-full py-1.5 px-3 rounded-lg bg-stone-850 text-stone-200 hover:text-white hover:bg-stone-800 text-left font-bold transition-colors flex items-center gap-2"
+              >
+                <span className="text-[11px]">✍️ Soạn giáo trình (Admin)</span>
+              </button>
+              
+              <button
+                id="sidebar-settings-btn-reset-progress"
+                onClick={() => {
+                  sounds.playClick();
+                  const resetEvent = new CustomEvent("japanese_course_reset_progress");
+                  window.dispatchEvent(resetEvent);
+                  setIsSettingsOpen(false);
+                  if (isMobile) setIsMobileSidebarOpen(false);
+                }}
+                className="w-full py-1.5 px-3 rounded-lg bg-stone-850 text-stone-300 hover:text-rose-450 hover:bg-stone-800 text-left font-bold transition-colors flex items-center gap-2"
+              >
+                <span className="text-[11px]">🔄 Đặt lại tiến trình học</span>
+              </button>
+            </>
+          )}
+
+          {/* Student/General logged in options */}
+          <button
+            id="sidebar-settings-btn-import-vocab"
+            onClick={() => {
+              sounds.playClick();
+              setIsImportModalOpen(true);
+              setIsSettingsOpen(false);
+              if (isMobile) setIsMobileSidebarOpen(false);
+            }}
+            className="w-full py-1.5 px-3 rounded-lg bg-stone-850 text-stone-300 hover:text-white hover:bg-stone-800 text-left font-bold transition-colors flex items-center gap-2"
+          >
+            <span className="text-[11px]">📥 Import JSON từ vựng</span>
+          </button>
+
+          <button
+            id="sidebar-settings-btn-toggle-edit-mode"
+            onClick={() => {
+              sounds.playClick();
+              setIsEditingVocab(prev => !prev);
+              setIsSettingsOpen(false);
+              if (isMobile) setIsMobileSidebarOpen(false);
+            }}
+            className={`w-full py-1.5 px-3 rounded-lg text-left font-bold transition-colors flex items-center justify-between gap-2 ${
+              isEditingVocab 
+                ? "bg-rose-950 text-rose-400 border border-rose-900" 
+                : "bg-stone-850 text-stone-300 hover:text-white hover:bg-stone-800"
+            }`}
+          >
+            <span className="text-[11px]">✏️ Chỉnh sửa từ vựng</span>
+            <span className={`w-2 h-2 rounded-full ${isEditingVocab ? "bg-rose-500 animate-pulse" : "bg-stone-600"}`}></span>
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const totalChars = characterSet === "hiragana" ? ALL_HIRAGANA.length : ALL_KATAKANA.length;
 
   return (
@@ -276,18 +536,23 @@ export default function App() {
 
         </div>
 
-        {/* Database & Account Status Footer */}
-        <div className="p-6 border-t border-stone-800 bg-stone-950/40 text-[10px] space-y-2">
-          <div className="flex items-center gap-2 text-emerald-400 font-medium">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span>Đồng bộ đám mây: Hoạt động</span>
-          </div>
-          <p className="text-stone-500 leading-relaxed font-mono">
-            Firestore: Verified Blueprints
-          </p>
+        {/* Unified Settings Button at Sidebar Footer */}
+        <div className="p-4 border-t border-stone-850 bg-stone-950/20">
+          <button
+            id="desktop-settings-trigger-btn"
+            onClick={() => {
+              sounds.playClick();
+              setIsSettingsOpen(true);
+            }}
+            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-transparent hover:border-stone-800 shadow-4xs"
+            title="Mở cài đặt hệ thống (Esc)"
+          >
+            <div className="flex items-center gap-2.5">
+              <Settings className="w-4 h-4 text-stone-500" />
+              <span>Cài đặt hệ thống</span>
+            </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          </button>
         </div>
       </aside>
 
@@ -301,106 +566,117 @@ export default function App() {
           ></div>
 
           {/* Drawer Body */}
-          <div className="relative flex flex-col w-64 max-w-xs bg-stone-900 text-stone-100 p-6 space-y-6 z-10 shadow-xl border-r border-stone-800">
+          <div className="relative flex flex-col w-64 max-w-xs h-screen bg-stone-900 text-stone-100 z-10 shadow-xl border-r border-stone-800">
             {/* Close Button */}
             <button 
               onClick={() => setIsMobileSidebarOpen(false)}
-              className="absolute top-4 right-4 text-stone-400 hover:text-white"
+              className="absolute top-4 right-4 text-stone-400 hover:text-white z-20 p-1 rounded-lg"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* Title */}
-            <div className="flex items-center gap-3 border-b border-stone-800 pb-4">
-              <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-white shadow-md">
-                <span className="font-serif-jp text-sm font-bold">日</span>
+            {/* Scrollable Drawer Content */}
+            <div className="flex flex-col flex-1 overflow-y-auto p-6 space-y-6 scrollbar-none">
+              {/* Title */}
+              <div className="flex items-center gap-3 border-b border-stone-800 pb-4">
+                <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-white shadow-md">
+                  <span className="font-serif-jp text-sm font-bold">日</span>
+                </div>
+                <div>
+                  <h1 className="text-xs font-bold text-white">Nihongo Manager</h1>
+                  <p className="text-[9px] text-stone-400">Học & Quản lý</p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-xs font-bold text-white">Nihongo Manager</h1>
-                <p className="text-[9px] text-stone-400">Học & Quản lý</p>
-              </div>
-            </div>
 
-            {/* Menu Links */}
-            <div className="space-y-1">
-              <p className="text-[9px] font-bold text-stone-500 uppercase tracking-widest pl-2 mb-2">GIÁO TRÌNH MINNA</p>
-              
-              {(["N5", "N4", "N3", "N2", "N1"] as const).map((lvl) => {
-                const isActive = activeTab === "minna-1" && activeLevel === lvl;
-                return (
+              {/* Menu Links */}
+              <div className="space-y-1">
+                <p className="text-[9px] font-bold text-stone-500 uppercase tracking-widest pl-2 mb-2">GIÁO TRÌNH MINNA</p>
+                
+                {(["N5", "N4", "N3", "N2", "N1"] as const).map((lvl) => {
+                  const isActive = activeTab === "minna-1" && activeLevel === lvl;
+                  return (
+                    <button
+                      key={lvl}
+                      onClick={() => {
+                        sounds.playClick();
+                        setActiveTab("minna-1");
+                        setActiveLevel(lvl);
+                        setIsMobileSidebarOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                        isActive
+                          ? "bg-rose-600 text-white shadow-xs"
+                          : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4" />
+                        <span>Trình độ {lvl}</span>
+                      </div>
+                      {lvl !== "N5" && (
+                        <span className={`text-[8px] font-mono px-1 py-0.5 rounded-sm font-bold uppercase ${
+                          isActive ? "bg-rose-800 text-rose-200" : "bg-stone-800 text-stone-400"
+                        }`}>
+                          pro
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+
+                <div className="pt-4 mt-2 border-t border-stone-800">
+                  <p className="text-[9px] font-bold text-stone-500 uppercase tracking-widest pl-2 mb-2">PHẢN XẠ & BẢNG CHỮ CÁI</p>
                   <button
-                    key={lvl}
                     onClick={() => {
                       sounds.playClick();
-                      setActiveTab("minna-1");
-                      setActiveLevel(lvl);
+                      setActiveTab("alphabet-test");
                       setIsMobileSidebarOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-                      isActive
-                        ? "bg-rose-600 text-white shadow-xs"
+                    className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${
+                      activeTab === "alphabet-test"
+                        ? "bg-rose-600 text-white"
                         : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
                     }`}
                   >
-                    <div className="flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4" />
-                      <span>Trình độ {lvl}</span>
-                    </div>
-                    {lvl !== "N5" && (
-                      <span className={`text-[8px] font-mono px-1 py-0.5 rounded-sm font-bold uppercase ${
-                        isActive ? "bg-rose-800 text-rose-200" : "bg-stone-800 text-stone-400"
-                      }`}>
-                        pro
-                      </span>
-                    )}
+                    <CheckSquare className="w-4 h-4" />
+                    <span>Kiểm tra bảng chữ cái</span>
                   </button>
-                );
-              })}
-
-              <div className="pt-4 mt-2 border-t border-stone-800">
-                <p className="text-[9px] font-bold text-stone-500 uppercase tracking-widest pl-2 mb-2">PHẢN XẠ & BẢNG CHỮ CÁI</p>
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setActiveTab("alphabet-test");
-                    setIsMobileSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${
-                    activeTab === "alphabet-test"
-                      ? "bg-rose-600 text-white"
-                      : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
-                  }`}
-                >
-                  <CheckSquare className="w-4 h-4" />
-                  <span>Kiểm tra bảng chữ cái</span>
-                </button>
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setActiveTab("kanji");
-                    setIsMobileSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${
-                    activeTab === "kanji"
-                      ? "bg-rose-600 text-white"
-                      : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
-                  }`}
-                >
-                  <PenTool className="w-4 h-4" />
-                  <span>Học Kanji</span>
-                </button>
+                  <button
+                    onClick={() => {
+                      sounds.playClick();
+                      setActiveTab("kanji");
+                      setIsMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${
+                      activeTab === "kanji"
+                        ? "bg-rose-600 text-white"
+                        : "text-stone-400 hover:text-stone-100 hover:bg-stone-800"
+                    }`}
+                  >
+                    <PenTool className="w-4 h-4" />
+                    <span>Học Kanji</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-
-
-            {/* Cloud Status */}
-            <div className="mt-auto pt-4 border-t border-stone-800 text-[10px] text-stone-500">
-              <div className="flex items-center gap-1.5 text-emerald-400 font-bold mb-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Cloud: Synced</span>
-              </div>
-              <p className="font-mono">Secure Fallback ID Active</p>
+            {/* Unified Settings Button at Mobile Drawer Footer */}
+            <div className="p-4 border-t border-stone-800 bg-stone-950/20">
+              <button
+                id="mobile-settings-trigger-btn"
+                onClick={() => {
+                  sounds.playClick();
+                  setIsSettingsOpen(true);
+                  setIsMobileSidebarOpen(false);
+                }}
+                className="w-full flex items-center justify-between px-3.5 py-2 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-stone-100 hover:bg-stone-800"
+              >
+                <div className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  <span>Cài đặt hệ thống</span>
+                </div>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              </button>
             </div>
           </div>
         </div>
@@ -523,7 +799,26 @@ export default function App() {
             {/* TAB: MINNA NO NIHONGO 1 */}
             {activeTab === "minna-1" && (
               <div className="space-y-6 w-full max-w-full min-w-0 overflow-hidden">
-                <BasicJapaneseCourse activeLevel={activeLevel} onLevelChange={setActiveLevel} />
+                <BasicJapaneseCourse 
+                  activeLevel={activeLevel} 
+                  onLevelChange={setActiveLevel}
+                  isLoggedIn={isLoggedIn}
+                  setIsLoggedIn={setIsLoggedIn}
+                  username={username}
+                  setUsername={setUsername}
+                  userRole={userRole}
+                  setUserRole={setUserRole}
+                  isEditingVocab={isEditingVocab}
+                  setIsEditingVocab={setIsEditingVocab}
+                  isImportModalOpen={isImportModalOpen}
+                  setIsImportModalOpen={setIsImportModalOpen}
+                  isLessonBuilderOpen={isLessonBuilderOpen}
+                  setIsLessonBuilderOpen={setIsLessonBuilderOpen}
+                  isLoginModalOpen={isLoginModalOpen}
+                  setIsLoginModalOpen={setIsLoginModalOpen}
+                  selectedModel={selectedModel}
+                  setSelectedModel={setSelectedModel}
+                />
               </div>
             )}
 
@@ -703,6 +998,44 @@ export default function App() {
         </footer>
 
       </main>
+
+      {/* ----------------- SETTINGS MODAL POPUP ----------------- */}
+      {isSettingsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop click outside */}
+          <div 
+            className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs transition-opacity"
+            onClick={() => {
+              sounds.playClick();
+              setIsSettingsOpen(false);
+            }}
+          ></div>
+          
+          {/* Modal Container */}
+          <div className="relative bg-stone-950 text-stone-100 border border-stone-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl z-10 max-h-[85vh] overflow-y-auto animate-fadeIn scrollbar-thin">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-stone-800 pb-3 mb-4">
+              <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px] text-stone-400">
+                <Settings className="w-4 h-4 text-rose-500" />
+                <span>Cài đặt hệ thống</span>
+              </div>
+              <button 
+                onClick={() => {
+                  sounds.playClick();
+                  setIsSettingsOpen(false);
+                }}
+                className="p-1 rounded-lg hover:bg-stone-900 text-stone-400 hover:text-white transition-all"
+                title="Đóng (Esc)"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            
+            {/* Settings content */}
+            {renderSettingsPanel(true)}
+          </div>
+        </div>
+      )}
 
     </div>
   );

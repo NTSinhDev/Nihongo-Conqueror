@@ -14,6 +14,26 @@ export const auth = getAuth(app);
 // Use specific databaseId from the applet-config if present
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "default");
 
+const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes cache duration
+
+export function invalidateLessonsCache(): void {
+  try {
+    localStorage.removeItem("japanese_lessons_cache");
+    localStorage.removeItem("japanese_lessons_cache_time");
+  } catch (e) {
+    console.warn("Failed to invalidate lessons cache:", e);
+  }
+}
+
+export function invalidateCasualVocabCache(): void {
+  try {
+    localStorage.removeItem("casual_vocab_cache");
+    localStorage.removeItem("casual_vocab_cache_time");
+  } catch (e) {
+    console.warn("Failed to invalidate casual vocab cache:", e);
+  }
+}
+
 export interface CloudProgress {
   unlockedLessons: number[];
   completedLessons: number[];
@@ -153,10 +173,24 @@ export async function loadProgressFromCloud(userId: string): Promise<CloudProgre
 }
 
 /**
- * Fetch all Japanese lessons from Firestore
+ * Fetch all Japanese lessons from Firestore with caching
  */
 export async function getLessonsFromCloud(): Promise<Lesson[]> {
   try {
+    // Check local data cache first
+    const cachedData = localStorage.getItem("japanese_lessons_cache");
+    const cachedTime = localStorage.getItem("japanese_lessons_cache_time");
+    if (cachedData && cachedTime) {
+      const isExpired = Date.now() - Number(cachedTime) > CACHE_EXPIRATION_MS;
+      if (!isExpired) {
+        try {
+          return JSON.parse(cachedData);
+        } catch {
+          // Parse failed, ignore and fetch fresh
+        }
+      }
+    }
+
     await ensureAuthenticated();
     const colRef = collection(db, "japanese_lessons");
     const querySnapshot = await getDocs(colRef);
@@ -164,6 +198,16 @@ export async function getLessonsFromCloud(): Promise<Lesson[]> {
     querySnapshot.forEach((docSnap) => {
       lessons.push(docSnap.data() as Lesson);
     });
+
+    // Cache the result
+    if (lessons.length > 0) {
+      try {
+        localStorage.setItem("japanese_lessons_cache", JSON.stringify(lessons));
+        localStorage.setItem("japanese_lessons_cache_time", String(Date.now()));
+      } catch (e) {
+        console.warn("Could not save lessons cache to Local Storage:", e);
+      }
+    }
     return lessons;
   } catch (error) {
     console.warn("Could not fetch lessons from Cloud, using built-in local lessons:", error);
@@ -176,10 +220,22 @@ export async function getLessonsFromCloud(): Promise<Lesson[]> {
  */
 export async function seedLessonsToCloud(lessons: Lesson[]): Promise<boolean> {
   try {
+    invalidateLessonsCache();
     await ensureAuthenticated();
+
+    // Get credentials for rules check
+    const username = localStorage.getItem("japanese_course_username") || "anonymous";
+    const accounts = getLocalAccounts();
+    const password = username ? accounts[username] : "";
+
     for (const lesson of lessons) {
       const docRef = doc(db, "japanese_lessons", String(lesson.id));
-      await setDoc(docRef, lesson);
+      const payload = {
+        ...lesson,
+        lastUpdatedBy: username,
+        adminPassword: password
+      };
+      await setDoc(docRef, payload);
     }
     return true;
   } catch (error) {
@@ -196,10 +252,19 @@ export async function saveCategorizedVocabToCloud(
   categorizedVocab: any[]
 ): Promise<boolean> {
   try {
+    invalidateLessonsCache();
     await ensureAuthenticated();
+
+    // Get credentials for rules check
+    const username = localStorage.getItem("japanese_course_username") || "anonymous";
+    const accounts = getLocalAccounts();
+    const password = username ? accounts[username] : "";
+
     const docRef = doc(db, "japanese_lessons", String(lessonId));
     await updateDoc(docRef, {
-      categorizedVocab
+      categorizedVocab,
+      lastUpdatedBy: username,
+      adminPassword: password
     });
     return true;
   } catch (error) {
@@ -241,9 +306,11 @@ export async function registerCustomAccount(username: string, password: string):
     if (docSnap.exists()) {
       throw new Error("Tài khoản đã tồn tại trên hệ thống.");
     }
+    const role = uName === "sinh" ? "admin" : "user";
     await setDoc(userRef, {
       username: uName,
       password, // Simple text password for our learning applet
+      role,
       createdAt: new Date().toISOString()
     });
     return true;
@@ -271,8 +338,14 @@ export async function verifyCustomAccount(username: string, password: string): P
         await setDoc(userRef, {
           username: "sinh",
           password: "123456",
+          role: "admin",
           createdAt: new Date().toISOString()
         });
+      } else {
+        const data = docSnap.data();
+        if (data.role !== "admin") {
+          await updateDoc(userRef, { role: "admin" });
+        }
       }
     } catch (e) {
       console.warn("Could not sync default user 'sinh' to Firestore, continuing with local:", e);
@@ -313,10 +386,24 @@ export async function verifyCustomAccount(username: string, password: string): P
 }
 
 /**
- * Fetch all casual/transient vocabulary from Firestore
+ * Fetch all casual/transient vocabulary from Firestore with caching
  */
 export async function getCasualVocabFromCloud(): Promise<VocabularyWord[]> {
   try {
+    // Check local data cache first
+    const cachedData = localStorage.getItem("casual_vocab_cache");
+    const cachedTime = localStorage.getItem("casual_vocab_cache_time");
+    if (cachedData && cachedTime) {
+      const isExpired = Date.now() - Number(cachedTime) > CACHE_EXPIRATION_MS;
+      if (!isExpired) {
+        try {
+          return JSON.parse(cachedData);
+        } catch {
+          // Parse failed, ignore and fetch fresh
+        }
+      }
+    }
+
     await ensureAuthenticated();
     const colRef = collection(db, "casual_vocab");
     const querySnapshot = await getDocs(colRef);
@@ -332,6 +419,16 @@ export async function getCasualVocabFromCloud(): Promise<VocabularyWord[]> {
         });
       }
     });
+
+    // Cache result
+    if (words.length > 0) {
+      try {
+        localStorage.setItem("casual_vocab_cache", JSON.stringify(words));
+        localStorage.setItem("casual_vocab_cache_time", String(Date.now()));
+      } catch (e) {
+        console.warn("Could not save casual vocab cache to Local Storage:", e);
+      }
+    }
     return words;
   } catch (error) {
     console.warn("Could not fetch casual vocab from Cloud:", error);
@@ -344,6 +441,7 @@ export async function getCasualVocabFromCloud(): Promise<VocabularyWord[]> {
  */
 export async function saveCasualWordToCloud(word: VocabularyWord): Promise<boolean> {
   try {
+    invalidateCasualVocabCache();
     await ensureAuthenticated();
     // Use encodeURIComponent to make document ID safe across firestore systems
     const docId = encodeURIComponent(word.japanese.trim());
@@ -368,13 +466,14 @@ export async function seedCasualVocabToCloud(words: VocabularyWord[]): Promise<b
   try {
     await ensureAuthenticated();
     
-    // Check if we already have casual words
+    // Check cache or db if we already have casual words
     const existing = await getCasualVocabFromCloud();
     if (existing.length > 0) {
       console.log("Casual vocab already seeded. Count:", existing.length);
       return true;
     }
 
+    invalidateCasualVocabCache();
     console.log(`Seeding first 100 casual vocabulary words to Firestore...`);
     // Seed in chunks or sequentially to respect quotas and timing
     const chunk = words.slice(0, 100);
@@ -386,5 +485,30 @@ export async function seedCasualVocabToCloud(words: VocabularyWord[]): Promise<b
     console.warn("Could not seed casual vocab to Cloud:", error);
     return false;
   }
+}
+
+/**
+ * Fetch detailed user account information, including role from cloud
+ */
+export async function getUserDetailsFromCloud(username: string): Promise<{ username: string; role: "admin" | "user" } | null> {
+  const uName = username.trim().toLowerCase();
+  try {
+    await ensureAuthenticated();
+    const userRef = doc(db, "course_accounts", uName);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return {
+        username: data.username || uName,
+        role: data.role || (uName === "sinh" ? "admin" : "user")
+      };
+    }
+  } catch (e) {
+    console.warn("Could not fetch user details from Cloud, using local defaults:", e);
+  }
+  return {
+    username: uName,
+    role: uName === "sinh" ? "admin" : "user"
+  };
 }
 

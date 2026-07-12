@@ -244,6 +244,236 @@ ${JSON.stringify(missingWords.map(w => ({ japanese: w.japanese, romaji: w.romaji
   }
 });
 
+// API: Tokenize & Romaji & English meaning for Raw Vocabulary list
+app.post("/api/lesson/tokenize", async (req, res) => {
+  try {
+    const { words, model } = req.body;
+    if (!words || !Array.isArray(words)) {
+      return res.status(400).json({ error: "Dữ liệu từ vựng đầu vào không hợp lệ hoặc trống." });
+    }
+
+    const ai = getAiClient();
+    const allowedModels = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-pro", "gemini-1.5-flash"];
+    const chosenModel = allowedModels.includes(model) ? model : "gemini-3.5-flash";
+
+    const fallbackModels = [
+      chosenModel,
+      ...allowedModels.filter(m => m !== chosenModel)
+    ];
+
+    const prompt = `Phân tích danh sách từ vựng tiếng Nhật thô sau đây.
+Đối với mỗi từ, hãy xác định hoặc sinh ra:
+1. Từ tiếng Nhật chuẩn xác (japanese)
+2. Cách đọc phiên âm Romaji chính xác (romaji)
+3. Nghĩa tiếng Việt chuẩn (vietnameseMeaning)
+4. Nghĩa tiếng Anh tự nhiên ngắn gọn (englishMeaning)
+
+Danh sách từ vựng đầu vào:
+${JSON.stringify(words, null, 2)}`;
+
+    let response;
+    let successModel = chosenModel;
+    let lastError = null;
+
+    for (const currentModel of fallbackModels) {
+      try {
+        console.log(`AI Tokenizing with model: ${currentModel}`);
+        response = await ai.models.generateContent({
+          model: currentModel,
+          contents: prompt,
+          config: {
+            systemInstruction: "Bạn là chuyên gia ngôn ngữ học tiếng Nhật học thuật. Nhiệm vụ của bạn là lấy danh sách từ vựng tiếng Nhật thô, phân tích bổ sung Romaji chính xác viết thường, hoàn thiện nghĩa tiếng Việt và tiếng Anh chuẩn xác. Trả về mảng JSON.",
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.ARRAY,
+              description: "Danh sách từ vựng đã được phân tích đầy đủ",
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  japanese: { type: Type.STRING },
+                  romaji: { type: Type.STRING },
+                  vietnameseMeaning: { type: Type.STRING },
+                  englishMeaning: { type: Type.STRING }
+                },
+                required: ["japanese", "romaji", "vietnameseMeaning", "englishMeaning"]
+              }
+            }
+          }
+        });
+        successModel = currentModel;
+        break;
+      } catch (err: any) {
+        console.warn(`Model ${currentModel} failed in tokenize:`, err.message || err);
+        lastError = err;
+      }
+    }
+
+    if (!response) {
+      throw lastError || new Error("Không thể xử lý phân tích từ vựng.");
+    }
+
+    const resultText = response.text?.trim() || "[]";
+    const tokenizedData = JSON.parse(resultText);
+    return res.json({ words: tokenizedData, activeModel: successModel });
+  } catch (error: any) {
+    console.error("AI Tokenize Error:", error);
+    return res.status(500).json({ error: error.message || "Lỗi xử lý phân tích từ vựng." });
+  }
+});
+
+// API: Generate Example Sentences with translations
+app.post("/api/lesson/generate-examples", async (req, res) => {
+  try {
+    const { words, model } = req.body;
+    if (!words || !Array.isArray(words)) {
+      return res.status(400).json({ error: "Dữ liệu từ vựng không hợp lệ hoặc trống." });
+    }
+
+    const ai = getAiClient();
+    const allowedModels = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-pro", "gemini-1.5-flash"];
+    const chosenModel = allowedModels.includes(model) ? model : "gemini-3.5-flash";
+
+    const fallbackModels = [
+      chosenModel,
+      ...allowedModels.filter(m => m !== chosenModel)
+    ];
+
+    const prompt = `Hãy tạo một câu ví dụ tiếng Nhật tự nhiên, ngắn gọn và đời thường cho mỗi từ vựng tiếng Nhật sau đây. 
+Đồng thời, hãy cung cấp bản dịch nghĩa tiếng Việt chính xác và tinh tế của câu ví dụ đó.
+
+Danh sách từ vựng đầu vào:
+${JSON.stringify(words, null, 2)}`;
+
+    let response;
+    let successModel = chosenModel;
+    let lastError = null;
+
+    for (const currentModel of fallbackModels) {
+      try {
+        console.log(`AI Examples generating with model: ${currentModel}`);
+        response = await ai.models.generateContent({
+          model: currentModel,
+          contents: prompt,
+          config: {
+            systemInstruction: "Bạn là giáo viên tiếng Nhật chuyên nghiệp bản xứ. Hãy viết đúng 1 câu ví dụ tiếng Nhật chuẩn, ngắn gọn và bản dịch tiếng Việt cho mỗi từ vựng. Trả về mảng JSON.",
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.ARRAY,
+              description: "Danh sách các câu ví dụ và nghĩa của chúng",
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  japanese: { type: Type.STRING, description: "Từ vựng gốc" },
+                  example: { type: Type.STRING, description: "Câu ví dụ tiếng Nhật tự nhiên, ngắn gọn" },
+                  exampleMeaning: { type: Type.STRING, description: "Bản dịch tiếng Việt của câu ví dụ" }
+                },
+                required: ["japanese", "example", "exampleMeaning"]
+              }
+            }
+          }
+        });
+        successModel = currentModel;
+        break;
+      } catch (err: any) {
+        console.warn(`Model ${currentModel} failed in examples:`, err.message || err);
+        lastError = err;
+      }
+    }
+
+    if (!response) {
+      throw lastError || new Error("Không thể tạo câu ví dụ.");
+    }
+
+    const resultText = response.text?.trim() || "[]";
+    const examplesData = JSON.parse(resultText);
+    return res.json({ examples: examplesData, activeModel: successModel });
+  } catch (error: any) {
+    console.error("AI Examples Error:", error);
+    return res.status(500).json({ error: error.message || "Lỗi tạo câu ví dụ bằng AI." });
+  }
+});
+
+// API: Generate Review Questions
+app.post("/api/lesson/generate-review", async (req, res) => {
+  try {
+    const { grammar, words, model } = req.body;
+    if (!words || !Array.isArray(words)) {
+      return res.status(400).json({ error: "Dữ liệu bài học không hợp lệ." });
+    }
+
+    const ai = getAiClient();
+    const allowedModels = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-pro", "gemini-1.5-flash"];
+    const chosenModel = allowedModels.includes(model) ? model : "gemini-3.5-flash";
+
+    const fallbackModels = [
+      chosenModel,
+      ...allowedModels.filter(m => m !== chosenModel)
+    ];
+
+    const prompt = `Hãy tạo 5 câu hỏi ôn tập/kiểm tra (Multiple Choice Questions) để kiểm tra mức độ ghi nhớ từ vựng và ngữ pháp của bài học.
+Các câu hỏi nên bao quát:
+- Nhận diện nghĩa từ vựng (Nhật - Việt hoặc Việt - Nhật)
+- Điền trợ từ hoặc chia mẫu câu dựa trên ngữ pháp bài học.
+
+Dữ liệu đầu vào bài học:
+Ngữ pháp: ${JSON.stringify(grammar)}
+Từ vựng: ${JSON.stringify(words, null, 2)}`;
+
+    let response;
+    let successModel = chosenModel;
+    let lastError = null;
+
+    for (const currentModel of fallbackModels) {
+      try {
+        console.log(`AI Review questions generating with model: ${currentModel}`);
+        response = await ai.models.generateContent({
+          model: currentModel,
+          contents: prompt,
+          config: {
+            systemInstruction: "Bạn là giảng viên tiếng Nhật và chuyên gia soạn đề thi JLPT. Hãy soạn đúng 5 câu hỏi trắc nghiệm chất lượng cao kèm 4 phương án lựa chọn, ghi rõ đáp án đúng và lời giải thích ngắn gọn bằng tiếng Việt. Trả về mảng JSON.",
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.ARRAY,
+              description: "Mảng chứa 5 câu hỏi trắc nghiệm",
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  type: { type: Type.STRING, description: "Đặt là 'vocab-exam' hoặc 'jlpt-exam'" },
+                  question: { type: Type.STRING, description: "Nội dung câu hỏi (tiếng Nhật có chỗ trống hoặc hỏi nghĩa tiếng Việt)" },
+                  options: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING },
+                    description: "Chứa đúng 4 phương án lựa chọn khác nhau"
+                  },
+                  correctStr: { type: Type.STRING, description: "Đáp án chính xác, phải khớp tuyệt đối 1 trong 4 lựa chọn trong mảng options" },
+                  explanation: { type: Type.STRING, description: "Giải thích chi tiết ngắn gọn bằng tiếng Việt" }
+                },
+                required: ["type", "question", "options", "correctStr", "explanation"]
+              }
+            }
+          }
+        });
+        successModel = currentModel;
+        break;
+      } catch (err: any) {
+        console.warn(`Model ${currentModel} failed in review questions:`, err.message || err);
+        lastError = err;
+      }
+    }
+
+    if (!response) {
+      throw lastError || new Error("Không thể tạo câu hỏi ôn tập.");
+    }
+
+    const resultText = response.text?.trim() || "[]";
+    const reviewData = JSON.parse(resultText);
+    return res.json({ reviewQuestions: reviewData, activeModel: successModel });
+  } catch (error: any) {
+    console.error("AI Review Error:", error);
+    return res.status(500).json({ error: error.message || "Lỗi tạo đề thi ôn tập bằng AI." });
+  }
+});
+
 // Setup Vite or static serving
 async function setupVite() {
   if (process.env.NODE_ENV !== "production") {

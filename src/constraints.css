@@ -13,10 +13,10 @@
 /* Enforce strict width bounds for cards on mobile viewports */
 @media (max-width: 639px) {
   .mobile-card-constraint {
-    width: calc(100vw - 32px) !important;
-    max-width: calc(100vw - 32px) !important;
+    width: 100% !important;
+    max-width: 100% !important;
     min-width: 0 !important;
-    overflow-hidden: clip !important;
+    overflow: hidden !important;
   }
 }
 

@@ -1,12 +1,21 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // Helper to verify if the request was authenticated by an admin account
+    function isAdmin(resource) {
+      return resource.data.lastUpdatedBy != null && 
+             get(/databases/$(database)/documents/course_accounts/$(resource.data.lastUpdatedBy)).data.role == "admin" &&
+             get(/databases/$(database)/documents/course_accounts/$(resource.data.lastUpdatedBy)).data.password == resource.data.adminPassword;
+    }
+
     match /user_progress/{userId} {
       allow read, write: if true;
     }
 
     match /japanese_lessons/{lessonId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAdmin(request.resource);
     }
 
     match /course_accounts/{username} {
