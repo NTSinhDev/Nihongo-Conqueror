@@ -4079,7 +4079,7 @@ export default function BasicJapaneseCourse({
                     >
                       {lessons.map(les => (
                         <option key={les.id} value={les.id}>
-                          Bài {les.id + 1}: {les.title} ({les.words.length} từ vựng)
+                          Bài {les.id}: {les.title} ({les.words.length} từ vựng)
                         </option>
                       ))}
                     </select>
