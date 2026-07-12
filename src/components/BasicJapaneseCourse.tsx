@@ -4461,7 +4461,7 @@ export default function BasicJapaneseCourse({
                           <option value={-1}>🆕 Tạo bài học mới hoàn toàn</option>
                           {lessons.map((l) => (
                             <option key={l.id} value={l.id}>
-                              Bài {l.id + 1}: {l.title} ({l.words.length} từ)
+                              Bài {l.id}: {l.title} ({l.words.length} từ)
                             </option>
                           ))}
                         </select>
