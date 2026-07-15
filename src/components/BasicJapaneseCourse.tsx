@@ -54,7 +54,6 @@ import {
 } from "lucide-react";
 import { sounds } from "../utils/audio";
 import { 
-  authenticateAnonymously, 
   saveProgressToCloud, 
   loadProgressFromCloud,
   getLessonsFromCloud,
@@ -64,6 +63,7 @@ import {
   saveCategorizedVocabToCloud,
   seedCasualVocabToCloud
 } from "../utils/firebase";
+import { LessonBuilderDashboard } from "../workflow-engine/presentation/components/Pages";
 
 // Smart confusable generator for distraction generation
 const JP_CONFUSABLES: Record<string, string[]> = {
@@ -613,259 +613,6 @@ export default function BasicJapaneseCourse({
   const selectedAiModel = propSelectedModel !== undefined ? propSelectedModel : internalSelectedAiModel;
   const setSelectedAiModel = propSetSelectedModel !== undefined ? propSetSelectedModel : setInternalSelectedAiModel;
 
-  // --- Lesson Plan Builder States & Actions ---
-  const [builderTargetLessonId, setBuilderTargetLessonId] = useState<number>(0);
-  const [builderNewLessonTitle, setBuilderNewLessonTitle] = useState<string>("");
-  const [builderRawText, setBuilderRawText] = useState<string>("");
-  const [builderStep, setBuilderStep] = useState<number>(1); // 1: Input & Tokenize, 2: Review & Examples, 3: Quiz Generation, 4: Done & Save
-  const [builderLoading, setBuilderLoading] = useState<boolean>(false);
-  const [builderError, setBuilderError] = useState<string | null>(null);
-  const [builderSuccess, setBuilderSuccess] = useState<string | null>(null);
-  
-  const [builderWords, setBuilderWords] = useState<Array<{
-    japanese: string;
-    romaji: string;
-    vietnameseMeaning: string;
-    englishMeaning: string;
-    selected: boolean;
-    exampleJp?: string;
-    exampleRomaji?: string;
-    exampleVn?: string;
-  }>>([]);
-
-  const [builderQuiz, setBuilderQuiz] = useState<Array<{
-    question: string;
-    options: string[];
-    answerIndex: number;
-    explanation: string;
-    questionType: string;
-  }>>([]);
-
-  // Handler for Step 1: Phân tách & Điền nghĩa (Tokenize)
-  const handleBuilderTokenize = async () => {
-    if (!builderRawText.trim()) {
-      setBuilderError("Vui lòng nhập văn bản hoặc danh sách từ vựng tiếng Nhật!");
-      return;
-    }
-    setBuilderLoading(true);
-    setBuilderError(null);
-    try {
-      const response = await fetch("/api/lesson/tokenize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rawText: builderRawText, model: selectedAiModel }),
-      });
-      if (!response.ok) {
-        throw new Error(`Tokenization failed: Status ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      const parsedWords = (data.words || []).map((w: any) => ({
-        japanese: w.japanese || "",
-        romaji: w.romaji || "",
-        vietnameseMeaning: w.vietnameseMeaning || "",
-        englishMeaning: w.englishMeaning || "",
-        selected: true,
-      }));
-      if (parsedWords.length === 0) {
-        throw new Error("Không tìm thấy từ vựng hợp lệ trong văn bản.");
-      }
-      setBuilderWords(parsedWords);
-      setBuilderStep(2);
-    } catch (err: any) {
-      console.error(err);
-      setBuilderError(err.message || "Đã xảy ra lỗi khi phân tách từ vựng.");
-    } finally {
-      setBuilderLoading(false);
-    }
-  };
-
-  // Handler for Step 2: Đặt câu ví dụ tự động (Generate Examples)
-  const handleBuilderGenerateExamples = async () => {
-    const activeWords = builderWords.filter((w) => w.selected);
-    if (activeWords.length === 0) {
-      setBuilderError("Vui lòng chọn ít nhất một từ vựng để tạo ví dụ!");
-      return;
-    }
-    setBuilderLoading(true);
-    setBuilderError(null);
-    try {
-      const response = await fetch("/api/lesson/generate-examples", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          words: activeWords.map((w) => w.japanese),
-          model: selectedAiModel,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`Example generation failed: Status ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      const examplesMap = data.examples || [];
-      const updatedWords = builderWords.map((w) => {
-        if (!w.selected) return w;
-        const matched = examplesMap.find(
-          (ex: any) => ex.japaneseWord?.trim() === w.japanese?.trim()
-        );
-        if (matched) {
-          return {
-            ...w,
-            exampleJp: matched.exampleJp || "",
-            exampleRomaji: matched.exampleRomaji || "",
-            exampleVn: matched.exampleVn || "",
-          };
-        }
-        return w;
-      });
-      setBuilderWords(updatedWords);
-      setBuilderStep(3);
-    } catch (err: any) {
-      console.error(err);
-      setBuilderError(err.message || "Đã xảy ra lỗi khi tạo ví dụ.");
-    } finally {
-      setBuilderLoading(false);
-    }
-  };
-
-  // Handler for Step 3: Tạo 5 câu hỏi ôn tập (Generate Review Quiz)
-  const handleBuilderGenerateQuiz = async () => {
-    const activeWords = builderWords.filter((w) => w.selected).map((w) => ({
-      japanese: w.japanese,
-      romaji: w.romaji,
-      vietnameseMeaning: w.vietnameseMeaning,
-      englishMeaning: w.englishMeaning,
-    }));
-    if (activeWords.length === 0) {
-      setBuilderError("Không có từ vựng nào được chọn để tạo câu hỏi!");
-      return;
-    }
-    setBuilderLoading(true);
-    setBuilderError(null);
-    try {
-      const response = await fetch("/api/lesson/generate-review", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          words: activeWords,
-          model: selectedAiModel,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`Quiz generation failed: Status ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      setBuilderQuiz(data.questions || []);
-      setBuilderStep(4);
-    } catch (err: any) {
-      console.error(err);
-      setBuilderError(err.message || "Đã xảy ra lỗi khi tạo bộ câu hỏi ôn tập.");
-    } finally {
-      setBuilderLoading(false);
-    }
-  };
-
-  // Handler for Step 4: Hoàn thành & Lưu vào bài học
-  const handleBuilderSave = async () => {
-    setBuilderLoading(true);
-    setBuilderError(null);
-    try {
-      const activeWords = builderWords.filter((w) => w.selected);
-      const newVocabItems = activeWords.map((w) => ({
-        japanese: w.japanese,
-        romaji: w.romaji,
-        vietnameseMeaning: w.vietnameseMeaning,
-        englishMeaning: w.englishMeaning || "",
-        exampleJp: w.exampleJp || "",
-        exampleRomaji: w.exampleRomaji || "",
-        exampleVn: w.exampleVn || "",
-      }));
-
-      const newQuizQuestions = builderQuiz.map((q, qidx) => ({
-        id: qidx + 100, // Safe offset
-        question: q.question,
-        options: q.options,
-        answerIndex: q.answerIndex,
-        explanation: q.explanation,
-        questionType: q.questionType,
-      }));
-
-      let updatedLessons = [...lessons];
-
-      if (builderTargetLessonId === -1) {
-        // Create new Lesson
-        if (!builderNewLessonTitle.trim()) {
-          throw new Error("Vui lòng nhập tiêu đề cho bài học mới!");
-        }
-        const nextId = lessons.length > 0 ? Math.max(...lessons.map(l => l.id)) + 1 : 0;
-        const newLesson: Lesson = {
-          id: nextId,
-          title: builderNewLessonTitle.trim(),
-          description: `Bài học soạn tự động bằng AI về: ${activeWords.slice(0, 3).map(w => w.japanese).join(", ")}...`,
-          category: "Chủ đề tự soạn",
-          level: activeLevel,
-          words: newVocabItems,
-          grammar: {
-            pattern: `Ngữ pháp bài ${nextId + 1}`,
-            explanation: "Học cấu trúc thông qua ví dụ và câu trắc nghiệm.",
-            example: newVocabItems[0]?.exampleJp || "日本へ行きます。",
-            exampleMeaning: newVocabItems[0]?.exampleVn || "Tôi đi Nhật Bản.",
-          },
-        };
-        updatedLessons.push(newLesson);
-      } else {
-        // Add to existing Lesson
-        updatedLessons = lessons.map((l) => {
-          if (l.id === builderTargetLessonId) {
-            return {
-              ...l,
-              words: [...l.words, ...newVocabItems],
-            };
-          }
-          return l;
-        });
-      }
-
-      // Update local state
-      setLessons(updatedLessons);
-
-      // If logged in, save to Cloud
-      if (isLoggedIn && username) {
-        await seedLessonsToCloud(updatedLessons);
-        // Clear cached lessons to force fetch fresh next time
-        localStorage.removeItem("japanese_lessons_cache");
-      }
-
-      setBuilderSuccess("Chúc mừng! Giáo trình đã được cập nhật thành công!");
-      sounds.playSuccess();
-      
-      // Delay closing modal slightly so the user sees the success state
-      setTimeout(() => {
-        setIsLessonBuilderOpen(false);
-        // Reset states
-        setBuilderStep(1);
-        setBuilderRawText("");
-        setBuilderWords([]);
-        setBuilderQuiz([]);
-        setBuilderSuccess(null);
-        setBuilderNewLessonTitle("");
-      }, 1500);
-
-    } catch (err: any) {
-      console.error(err);
-      setBuilderError(err.message || "Đã xảy ra lỗi khi lưu giáo trình.");
-    } finally {
-      setBuilderLoading(false);
-    }
-  };
   
   // --- AI Auto-Translate States ---
   const [isTranslatingEn, setIsTranslatingEn] = useState<boolean>(false);
@@ -1023,19 +770,42 @@ export default function BasicJapaneseCourse({
     setCompletedLessons(localCompleted);
 
     const loadLessonsAndSync = async () => {
-      // 1. Fetch lessons from Firestore (Using local default lessons as fallback if empty/offline without overwriting the Cloud)
+      // 1. Fetch lessons from Firestore and merge with local N5_LESSONS so all levels and custom ones are available
       try {
         setLessonsLoading(true);
         const cloudLessons = await getLessonsFromCloud();
+        
+        const mergedLessonsMap = new Map<string, Lesson>();
+        
+        // Add built-in N5 lessons first
+        N5_LESSONS.forEach(l => {
+          const key = `${l.level || 'N5'}-${l.id}`;
+          mergedLessonsMap.set(key, l);
+        });
+
+        // Add/overwrite with custom lessons from Firestore
         if (cloudLessons && cloudLessons.length > 0) {
-          setLessons(cloudLessons.sort((a, b) => a.id - b.id));
-        } else {
-          // Keep local default lessons in UI but do NOT write/overwrite anything to Cloud automatically
-          setLessons(N5_LESSONS);
+          cloudLessons.forEach(l => {
+            const key = `${l.level || 'N5'}-${l.id}`;
+            mergedLessonsMap.set(key, l);
+          });
         }
+
+        const merged = Array.from(mergedLessonsMap.values());
+        // Sort by level priority then by ID
+        const levelOrder = { "N5": 1, "N4": 2, "N3": 3, "N2": 4, "N1": 5 };
+        setLessons(merged.sort((a, b) => {
+          const lvlA = a.level || "N5";
+          const lvlB = b.level || "N5";
+          if (lvlA !== lvlB) {
+            return (levelOrder[lvlA] || 99) - (levelOrder[lvlB] || 99);
+          }
+          return a.id - b.id;
+        }));
       } catch (e) {
         console.error("Using local lessons fallback due to Firestore load failure:", e);
         // Keeps the default state (N5_LESSONS)
+        setLessons(N5_LESSONS);
       } finally {
         setLessonsLoading(false);
       }
@@ -1054,7 +824,7 @@ export default function BasicJapaneseCourse({
     };
 
     loadLessonsAndSync();
-  }, [isLoggedIn, username]);
+  }, [isLoggedIn, username, isLessonBuilderOpen]);
 
   const handleLevelChange = (lvl: "N5" | "N4" | "N3" | "N2" | "N1") => {
     sounds.playClick();
@@ -2123,14 +1893,14 @@ export default function BasicJapaneseCourse({
         </div>
       ) : !selectedLesson ? (
         <div className="py-6 space-y-6">
-          {activeLevel !== "N5" ? (
+          {lessons.filter(l => (l.level || "N5") === activeLevel).length === 0 ? (
             <div className="bg-stone-50 border border-stone-200 rounded-2xl p-8 text-center max-w-xl mx-auto my-12">
               <div className="w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
                 <Lock className="w-6 h-6 text-rose-500" />
               </div>
               <h3 className="text-base font-extrabold text-stone-850">Chương trình {activeLevel} đang phát triển</h3>
               <p className="text-xs text-stone-400 mt-2">
-                Hãy thi đỗ các bài học trình độ <strong className="text-stone-700">JLPT N5</strong> bên dưới để chuẩn bị sẵn sàng mở khóa nội dung {activeLevel} nâng cao!
+                Chưa có giáo trình chính thức cho cấp độ {activeLevel}. Hãy thi đỗ các bài học trình độ <strong className="text-stone-700">JLPT N5</strong> hoặc sử dụng **Trình soạn thảo bài học AI** để biên soạn và xuất bản bài học mới cho cấp độ này!
               </p>
               <button
                 onClick={() => handleLevelChange("N5")}
@@ -2142,8 +1912,13 @@ export default function BasicJapaneseCourse({
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {lessons.map((lesson) => {
-                  const isUnlocked = unlockedLessons.includes(lesson.id);
+                {lessons.filter(l => (l.level || "N5") === activeLevel).map((lesson) => {
+                  // Custom lessons, admin-published, or non-N5 lessons are unlocked automatically so they can be viewed immediately
+                  const isUnlocked = 
+                    userRole === "admin" || 
+                    lesson.level !== "N5" || 
+                    unlockedLessons.includes(lesson.id) ||
+                    !N5_LESSONS.some(l => l.id === lesson.id && l.level === "N5");
                   const isStudying = unlockedLessons[unlockedLessons.length - 1] === lesson.id || (lesson.id === 0 && unlockedLessons.length === 1);
                   
                   return (
@@ -3078,49 +2853,127 @@ export default function BasicJapaneseCourse({
           {/* 3. TAB: NGỮ PHÁP */}
           {studySubMode === "grammar" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 w-full max-w-full min-w-0 overflow-hidden">
-              <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-3xs">
-                <h3 className="text-sm font-extrabold uppercase tracking-wide text-stone-850 flex items-center gap-1.5 flex-wrap">
-                  <Lightbulb className="w-4.5 h-4.5 text-amber-500 fill-amber-100 shrink-0" /> Cấu trúc Ngữ pháp chính thức của bài học
-                </h3>
-                
-                <div className="bg-white border border-stone-150 rounded-xl p-4 shadow-4xs">
-                  <span className="block font-mono text-stone-500 text-[10px] uppercase font-bold tracking-wider mb-1">
-                    Mẫu câu cốt lõi
-                  </span>
-                  <h4 className="text-base sm:text-lg font-black text-rose-600 font-serif-jp break-all">
-                    {selectedLesson.grammar.pattern}
-                  </h4>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-xs font-bold text-stone-700 block">Ý nghĩa & Cách dùng chi tiết:</span>
-                  <p className="text-xs text-stone-500 leading-relaxed font-semibold break-words">
-                    {selectedLesson.grammar.explanation}
-                  </p>
-                </div>
-
-                <div className="bg-rose-50/40 rounded-xl p-4 border border-rose-100 flex items-start gap-3">
-                  <CornerDownRight className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                  <div className="min-w-0 flex-1">
-                    <span className="text-xs font-bold text-rose-800 block">Ví dụ trực quan:</span>
-                    <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <p className="text-base font-black text-stone-800 font-serif-jp break-all">
-                        {selectedLesson.grammar.example}
-                      </p>
-                      <button
-                        onClick={() => speakJapanese(selectedLesson.grammar.example)}
-                        className="p-1 rounded-full text-rose-500 hover:bg-rose-100 transition-all border border-transparent hover:border-rose-200 shrink-0"
-                        title="Nghe phát âm ví dụ"
-                      >
-                        <Volume2 className="w-3.5 h-3.5" />
-                      </button>
+              {selectedLesson.grammar.items && Array.isArray(selectedLesson.grammar.items) ? (
+                // Multi-grammar render for custom published lessons
+                selectedLesson.grammar.items.map((item: any, itemIdx: number) => (
+                  <div key={itemIdx} className="bg-stone-50 border border-stone-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-3xs">
+                    <h3 className="text-sm font-extrabold uppercase tracking-wide text-stone-850 flex items-center gap-1.5 flex-wrap">
+                      <Lightbulb className="w-4.5 h-4.5 text-amber-500 fill-amber-100 shrink-0" /> Cấu trúc Ngữ pháp #{itemIdx + 1}: {item.pattern || item.grammarPoint}
+                    </h3>
+                    
+                    <div className="bg-white border border-stone-150 rounded-xl p-4 shadow-4xs">
+                      <span className="block font-mono text-stone-500 text-[10px] uppercase font-bold tracking-wider mb-1">
+                        Mẫu câu cốt lõi
+                      </span>
+                      <h4 className="text-base sm:text-lg font-black text-rose-600 font-serif-jp break-all">
+                        {item.pattern || item.grammarPoint}
+                      </h4>
                     </div>
-                    <p className="text-xs text-stone-500 italic mt-0.5 break-words">
-                      Dịch nghĩa: {selectedLesson.grammar.exampleMeaning}
+
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-stone-700 block">Ý nghĩa & Cách dùng chi tiết:</span>
+                      <p className="text-xs text-stone-500 leading-relaxed font-semibold break-words">
+                        {item.explanation || item.meaningVi || item.meaningEn}
+                      </p>
+                    </div>
+
+                    {item.examples && Array.isArray(item.examples) && item.examples.length > 0 ? (
+                      item.examples.map((ex: any, exIdx: number) => (
+                        <div key={exIdx} className="bg-rose-50/40 rounded-xl p-4 border border-rose-100 flex items-start gap-3 mt-2">
+                          <CornerDownRight className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                          <div className="min-w-0 flex-1">
+                            <span className="text-xs font-bold text-rose-800 block">Ví dụ trực quan {item.examples.length > 1 ? `#${exIdx + 1}` : ""}:</span>
+                            <div className="flex items-center gap-2 mt-1 flex-wrap">
+                              <p className="text-base font-black text-stone-800 font-serif-jp break-all">
+                                {ex.japanese || ex.example}
+                              </p>
+                              <button
+                                onClick={() => speakJapanese(ex.japanese || ex.example)}
+                                className="p-1 rounded-full text-rose-500 hover:bg-rose-100 transition-all border border-transparent hover:border-rose-200 shrink-0"
+                                title="Nghe phát âm ví dụ"
+                              >
+                                <Volume2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                            <p className="text-xs text-stone-500 italic mt-0.5 break-words">
+                              Dịch nghĩa: {ex.meaningVi || ex.meaningEn || ex.translation}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      (item.example || (item.examples && item.examples[0]?.japanese)) && (
+                        <div className="bg-rose-50/40 rounded-xl p-4 border border-rose-100 flex items-start gap-3 mt-2">
+                          <CornerDownRight className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                          <div className="min-w-0 flex-1">
+                            <span className="text-xs font-bold text-rose-800 block">Ví dụ trực quan:</span>
+                            <div className="flex items-center gap-2 mt-1 flex-wrap">
+                              <p className="text-base font-black text-stone-800 font-serif-jp break-all">
+                                {item.example || item.examples[0]?.japanese}
+                              </p>
+                              <button
+                                onClick={() => speakJapanese(item.example || item.examples[0]?.japanese)}
+                                className="p-1 rounded-full text-rose-500 hover:bg-rose-100 transition-all border border-transparent hover:border-rose-200 shrink-0"
+                                title="Nghe phát âm ví dụ"
+                              >
+                                <Volume2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                            <p className="text-xs text-stone-500 italic mt-0.5 break-words">
+                              Dịch nghĩa: {item.exampleMeaning || item.examples[0]?.meaningVi || ""}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                ))
+              ) : (
+                // Standard single grammar rendering for local default lessons
+                <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-3xs">
+                  <h3 className="text-sm font-extrabold uppercase tracking-wide text-stone-850 flex items-center gap-1.5 flex-wrap">
+                    <Lightbulb className="w-4.5 h-4.5 text-amber-500 fill-amber-100 shrink-0" /> Cấu trúc Ngữ pháp chính thức của bài học
+                  </h3>
+                  
+                  <div className="bg-white border border-stone-150 rounded-xl p-4 shadow-4xs">
+                    <span className="block font-mono text-stone-500 text-[10px] uppercase font-bold tracking-wider mb-1">
+                      Mẫu câu cốt lõi
+                    </span>
+                    <h4 className="text-base sm:text-lg font-black text-rose-600 font-serif-jp break-all">
+                      {selectedLesson.grammar.pattern}
+                    </h4>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-stone-700 block">Ý nghĩa & Cách dùng chi tiết:</span>
+                    <p className="text-xs text-stone-500 leading-relaxed font-semibold break-words">
+                      {selectedLesson.grammar.explanation}
                     </p>
                   </div>
+
+                  <div className="bg-rose-50/40 rounded-xl p-4 border border-rose-100 flex items-start gap-3">
+                    <CornerDownRight className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                    <div className="min-w-0 flex-1">
+                      <span className="text-xs font-bold text-rose-800 block">Ví dụ trực quan:</span>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        <p className="text-base font-black text-stone-800 font-serif-jp break-all">
+                          {selectedLesson.grammar.example}
+                        </p>
+                        <button
+                          onClick={() => speakJapanese(selectedLesson.grammar.example)}
+                          className="p-1 rounded-full text-rose-500 hover:bg-rose-100 transition-all border border-transparent hover:border-rose-200 shrink-0"
+                          title="Nghe phát âm ví dụ"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-stone-500 italic mt-0.5 break-words">
+                        Dịch nghĩa: {selectedLesson.grammar.exampleMeaning}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Extra Practice Generation */}
               <div className="bg-white border border-stone-200 rounded-2xl p-4 sm:p-5 space-y-4 shadow-4xs">
@@ -4376,402 +4229,17 @@ export default function BasicJapaneseCourse({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-2xl border border-stone-200 shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              className="bg-white rounded-2xl shadow-xl w-full max-w-6xl overflow-hidden flex flex-col h-[90vh]"
             >
-              {/* Header */}
-              <div className="p-4 border-b border-stone-150 flex items-center justify-between bg-stone-50">
-                <div>
-                  <h3 className="text-sm font-extrabold text-stone-850 flex items-center gap-1.5">
-                    <Sparkles className="w-4.5 h-4.5 text-rose-500 animate-pulse" />
-                    <span>Trợ lý Soạn Giáo Trình AI (Lesson Builder)</span>
-                  </h3>
-                  <p className="text-[10px] text-stone-400 font-medium">
-                    Tạo từ vựng, ví dụ và đề thi ôn tập tự động thông qua mô hình <strong className="text-stone-600 font-mono">{selectedAiModel}</strong>
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setIsLessonBuilderOpen(false);
-                    setBuilderStep(1);
-                    setBuilderError(null);
-                    setBuilderSuccess(null);
-                  }}
-                  className="w-7 h-7 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-700 transition-all"
-                >
-                  <X className="w-4.5 h-4.5" />
-                </button>
-              </div>
-
-              {/* Progress Steps Indicator */}
-              <div className="px-5 py-3.5 bg-stone-50 border-b border-stone-150 flex items-center justify-between gap-2">
-                {[
-                  { step: 1, label: "Nhập văn bản" },
-                  { step: 2, label: "Phân tách từ" },
-                  { step: 3, label: "Đặt câu ví dụ" },
-                  { step: 4, label: "Đề ôn tập" }
-                ].map((item) => (
-                  <div key={item.step} className="flex items-center gap-1.5 flex-1 last:flex-initial">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold font-mono transition-all duration-350 ${
-                      builderStep >= item.step
-                        ? "bg-rose-600 text-white ring-2 ring-rose-100"
-                        : "bg-stone-200 text-stone-500"
-                    }`}>
-                      {item.step}
-                    </div>
-                    <span className={`text-[10px] font-bold hidden sm:inline ${
-                      builderStep >= item.step ? "text-stone-800" : "text-stone-400"
-                    }`}>
-                      {item.label}
-                    </span>
-                    {item.step < 4 && <div className="h-[2px] bg-stone-200 flex-1 mx-2 hidden sm:block"></div>}
-                  </div>
-                ))}
-              </div>
-
-              {/* Body */}
-              <div className="p-5 flex-1 overflow-y-auto space-y-4">
-                
-                {builderError && (
-                  <div className="p-3.5 bg-rose-50 border border-rose-100 rounded-xl text-xs font-semibold text-rose-600 leading-relaxed">
-                    ⚠️ {builderError}
-                  </div>
-                )}
-
-                {builderSuccess && (
-                  <div className="p-3.5 bg-emerald-50 border border-emerald-100 rounded-xl text-xs font-bold text-emerald-700 leading-relaxed">
-                    🎉 {builderSuccess}
-                  </div>
-                )}
-
-                {/* STEP 1: RAW TEXT INPUT */}
-                {builderStep === 1 && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-stone-50 p-3 rounded-xl border border-stone-150">
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-extrabold text-stone-600 block">CHỌN BÀI HỌC MỤC TIÊU:</label>
-                        <select
-                          value={builderTargetLessonId}
-                          onChange={(e) => {
-                            sounds.playClick();
-                            setBuilderTargetLessonId(parseInt(e.target.value, 10));
-                          }}
-                          className="w-full bg-white border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
-                        >
-                          <option value={-1}>🆕 Tạo bài học mới hoàn toàn</option>
-                          {lessons.map((l) => (
-                            <option key={l.id} value={l.id}>
-                              Bài {l.id + 1}: {l.title} ({l.words.length} từ)
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {builderTargetLessonId === -1 && (
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-extrabold text-rose-600 block">TIÊU ĐỀ BÀI HỌC MỚI:</label>
-                          <input
-                            type="text"
-                            required
-                            value={builderNewLessonTitle}
-                            onChange={(e) => setBuilderNewLessonTitle(e.target.value)}
-                            placeholder="Ví dụ: Từ vựng Du lịch Kyoto"
-                            className="w-full bg-white border border-rose-200 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-stone-700 block">
-                        Nhập văn bản tiếng Nhật (Đoạn văn, bài báo, hoặc danh sách từ phân tách bằng dấu phẩy):
-                      </label>
-                      <textarea
-                        rows={6}
-                        value={builderRawText}
-                        onChange={(e) => setBuilderRawText(e.target.value)}
-                        placeholder="Ví dụ: 友達, 先生, 桜, 日本へ旅行に行きます。&#10;Hoặc dán bất kỳ bài đọc tiếng Nhật nào vào đây để AI tự động trích lọc từ vựng mới."
-                        className="w-full border border-stone-250 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-rose-500 bg-white leading-relaxed"
-                      />
-                    </div>
-
-                    <div className="p-3 bg-rose-50/50 border border-rose-100 rounded-xl text-[11px] text-rose-800 leading-normal">
-                      💡 <strong>Mẹo hay:</strong> AI sẽ tự động phân tách câu, nhận diện từ vựng, điền phiên âm Romaji, dịch nghĩa tiếng Việt & tiếng Anh, giúp bạn chuẩn bị tài liệu học tập trong nháy mắt!
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 2: REVIEW PARSED WORDS */}
-                {builderStep === 2 && (
-                  <div className="space-y-3">
-                    <p className="text-xs font-bold text-stone-600">
-                      Mô hình AI đã nhận diện và điền nghĩa cho {builderWords.length} từ vựng. Bạn có thể chỉnh sửa trực tiếp bên dưới:
-                    </p>
-
-                    <div className="border border-stone-200 rounded-xl overflow-hidden max-h-[45vh] overflow-y-auto">
-                      <table className="w-full text-left border-collapse">
-                        <thead>
-                          <tr className="bg-stone-50 border-b border-stone-200 text-[10px] font-extrabold text-stone-500 font-mono">
-                            <th className="p-2.5 text-center w-10">Chọn</th>
-                            <th className="p-2.5">Từ vựng (JP)</th>
-                            <th className="p-2.5">Romaji</th>
-                            <th className="p-2.5">Nghĩa Tiếng Việt</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-stone-150">
-                          {builderWords.map((word, idx) => (
-                            <tr key={idx} className={`text-xs ${word.selected ? "bg-white" : "bg-stone-50 opacity-60"}`}>
-                              <td className="p-2.5 text-center">
-                                <input
-                                  type="checkbox"
-                                  checked={word.selected}
-                                  onChange={(e) => {
-                                    sounds.playClick();
-                                    const next = [...builderWords];
-                                    next[idx].selected = e.target.checked;
-                                    setBuilderWords(next);
-                                  }}
-                                  className="w-4 h-4 text-rose-600 border-stone-300 rounded focus:ring-rose-500"
-                                />
-                              </td>
-                              <td className="p-2">
-                                <input
-                                  type="text"
-                                  value={word.japanese}
-                                  onChange={(e) => {
-                                    const next = [...builderWords];
-                                    next[idx].japanese = e.target.value;
-                                    setBuilderWords(next);
-                                  }}
-                                  className="w-full bg-transparent border-0 border-b border-transparent hover:border-stone-300 focus:border-rose-500 focus:ring-0 px-1 py-0.5 font-bold text-stone-850"
-                                />
-                              </td>
-                              <td className="p-2">
-                                <input
-                                  type="text"
-                                  value={word.romaji}
-                                  onChange={(e) => {
-                                    const next = [...builderWords];
-                                    next[idx].romaji = e.target.value;
-                                    setBuilderWords(next);
-                                  }}
-                                  className="w-full bg-transparent border-0 border-b border-transparent hover:border-stone-300 focus:border-rose-500 focus:ring-0 px-1 py-0.5 font-mono text-stone-500"
-                                />
-                              </td>
-                              <td className="p-2">
-                                <input
-                                  type="text"
-                                  value={word.vietnameseMeaning}
-                                  onChange={(e) => {
-                                    const next = [...builderWords];
-                                    next[idx].vietnameseMeaning = e.target.value;
-                                    setBuilderWords(next);
-                                  }}
-                                  className="w-full bg-transparent border-0 border-b border-transparent hover:border-stone-300 focus:border-rose-500 focus:ring-0 px-1 py-0.5 font-semibold text-stone-700"
-                                />
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 3: REVIEW GENERATED EXAMPLES */}
-                {builderStep === 3 && (
-                  <div className="space-y-3">
-                    <p className="text-xs font-bold text-stone-600">
-                      Đây là các câu ví dụ thực tế được AI đặt riêng cho từng từ vựng đã chọn:
-                    </p>
-
-                    <div className="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
-                      {builderWords.filter(w => w.selected).map((word, idx) => (
-                        <div key={idx} className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 shadow-4xs space-y-1.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-extrabold text-white bg-rose-600 px-2 py-0.5 rounded-md font-mono">#{idx+1}</span>
-                            <span className="text-xs font-extrabold text-stone-850">{word.japanese} ({word.romaji})</span>
-                            <span className="text-xs text-stone-400 font-medium">| {word.vietnameseMeaning}</span>
-                          </div>
-                          
-                          <div className="bg-white p-2.5 rounded-lg border border-stone-150 font-serif-jp text-sm text-stone-800 space-y-1">
-                            <p className="font-bold">{word.exampleJp || "Đang chờ tạo..."}</p>
-                            <p className="text-xs text-stone-400 font-mono font-medium">{word.exampleRomaji}</p>
-                            <p className="text-xs text-emerald-700 font-bold">{word.exampleVn}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 4: REVIEW GENERATED REVIEW QUIZ */}
-                {builderStep === 4 && (
-                  <div className="space-y-3">
-                    <p className="text-xs font-bold text-stone-600">
-                      Mô hình AI đã thiết lập xong 5 câu hỏi ôn tập theo chuẩn JLPT dành riêng cho giáo trình này:
-                    </p>
-
-                    <div className="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
-                      {builderQuiz.map((q, idx) => (
-                        <div key={idx} className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 shadow-4xs space-y-2">
-                          <div className="flex items-start justify-between gap-2 border-b border-stone-200 pb-1.5">
-                            <span className="text-xs font-extrabold text-stone-850">Câu {idx + 1}: {q.question}</span>
-                            <span className="text-[10px] font-bold text-stone-400 font-mono bg-stone-200/50 px-2 py-0.5 rounded-md shrink-0 uppercase">
-                              {q.questionType}
-                            </span>
-                          </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {q.options.map((opt, oidx) => (
-                              <div
-                                key={oidx}
-                                className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 ${
-                                  oidx === q.answerIndex
-                                    ? "bg-emerald-50 border-emerald-250 text-emerald-800"
-                                    : "bg-white border-stone-200 text-stone-600"
-                                }`}
-                              >
-                                <span className="font-mono text-[10px] bg-stone-100 text-stone-500 w-5 h-5 rounded-full flex items-center justify-center border shrink-0">
-                                  {oidx + 1}
-                                </span>
-                                <span>{opt}</span>
-                                {oidx === q.answerIndex && <span className="ml-auto text-[10px] font-bold text-emerald-600">✓ ĐÚNG</span>}
-                              </div>
-                            ))}
-                          </div>
-
-                          <p className="text-[11px] text-stone-500 leading-relaxed bg-white p-2 rounded-lg border border-stone-150">
-                            💡 <strong>Giải thích:</strong> {q.explanation}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {/* Footer */}
-              <div className="p-4 border-t border-stone-150 bg-stone-50 flex items-center justify-between">
-                {/* Left controls */}
-                <div>
-                  {builderStep > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        sounds.playClick();
-                        setBuilderStep(builderStep - 1);
-                        setBuilderError(null);
-                      }}
-                      className="px-4 py-2 border border-stone-250 text-stone-500 hover:text-stone-850 hover:bg-white rounded-xl text-xs font-bold transition-all"
-                    >
-                      Quay lại
-                    </button>
-                  )}
-                </div>
-
-                {/* Right controls */}
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      sounds.playClick();
-                      setIsLessonBuilderOpen(false);
-                      setBuilderStep(1);
-                      setBuilderError(null);
-                      setBuilderSuccess(null);
-                    }}
-                    className="px-4 py-2 text-stone-400 hover:text-stone-700 text-xs font-bold transition-all"
-                  >
-                    Hủy bỏ
-                  </button>
-
-                  {builderStep === 1 && (
-                    <button
-                      type="button"
-                      disabled={builderLoading}
-                      onClick={handleBuilderTokenize}
-                      className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5"
-                    >
-                      {builderLoading ? (
-                        <>
-                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Đang trích xuất từ...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Phân tích từ vựng AI 🪄</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-
-                  {builderStep === 2 && (
-                    <button
-                      type="button"
-                      disabled={builderLoading}
-                      onClick={handleBuilderGenerateExamples}
-                      className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5"
-                    >
-                      {builderLoading ? (
-                        <>
-                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Đang tạo câu ví dụ...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Tạo ví dụ tự động 🤖</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-
-                  {builderStep === 3 && (
-                    <button
-                      type="button"
-                      disabled={builderLoading}
-                      onClick={handleBuilderGenerateQuiz}
-                      className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5"
-                    >
-                      {builderLoading ? (
-                        <>
-                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Đang thiết kế đề thi...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Tạo câu hỏi trắc nghiệm 🎓</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-
-                  {builderStep === 4 && (
-                    <button
-                      type="button"
-                      disabled={builderLoading}
-                      onClick={handleBuilderSave}
-                      className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold transition-all shadow-3xs flex items-center gap-1.5 animate-pulse"
-                    >
-                      {builderLoading ? (
-                        <>
-                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Đang cập nhật Cloud...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Hoàn thành & Lưu giáo trình 🎉</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-              </div>
+              <LessonBuilderDashboard onClose={() => {
+                sounds.playClick();
+                setIsLessonBuilderOpen(false);
+              }} />
             </motion.div>
           </div>
         )}
       </AnimatePresence>
+
 
       {/* 9. MODAL: USER AUTHENTICATION */}
       <AnimatePresence>

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 import firebaseConfig from "../../firebase-applet-config.json";
 import { Lesson } from "../data/lessons";
@@ -95,14 +95,46 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
 /**
  * Ensure the client is authenticated (anonymously) to avoid permission issues
  */
+let authPromise: Promise<void> | null = null;
 export async function ensureAuthenticated(): Promise<void> {
-  if (!auth.currentUser) {
-    try {
-      await signInAnonymously(auth);
-    } catch (e) {
-      console.warn("Auto anonymous sign-in failed, proceeding with fallback:", e);
-    }
+  if (auth.currentUser) return;
+  
+  if (!authPromise) {
+    authPromise = new Promise<void>((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        unsubscribe();
+        if (user) {
+          resolve();
+        } else {
+          try {
+            await signInAnonymously(auth);
+            resolve();
+          } catch (e) {
+            console.warn("Auto anonymous sign-in failed, proceeding with local fallback ID:", e);
+            resolve();
+          }
+        }
+      });
+    });
   }
+  
+  await authPromise;
+}
+
+/**
+ * Get the current user's unique identifier, falling back to a stable browser UUID if unauthenticated
+ */
+export function getCurrentUserId(): string {
+  if (auth.currentUser?.uid) {
+    return auth.currentUser.uid;
+  }
+  
+  let localUid = localStorage.getItem("japanese_course_local_uid");
+  if (!localUid) {
+    localUid = "usr_" + Math.random().toString(36).substring(2, 11);
+    localStorage.setItem("japanese_course_local_uid", localUid);
+  }
+  return localUid;
 }
 
 /**
@@ -116,11 +148,7 @@ export async function authenticateAnonymously(): Promise<SyncUser | null> {
   } catch (error: any) {
     console.warn("Firebase Anonymous Authentication fell back key: Using browser-level UUID sync.", error);
     
-    let localUid = localStorage.getItem("japanese_course_local_uid");
-    if (!localUid) {
-      localUid = "usr_" + Math.random().toString(36).substring(2, 11);
-      localStorage.setItem("japanese_course_local_uid", localUid);
-    }
+    const localUid = getCurrentUserId();
     return { uid: localUid, isFallback: true };
   }
 }
@@ -196,7 +224,54 @@ export async function getLessonsFromCloud(): Promise<Lesson[]> {
     const querySnapshot = await getDocs(colRef);
     const lessons: Lesson[] = [];
     querySnapshot.forEach((docSnap) => {
-      lessons.push(docSnap.data() as Lesson);
+      const data = docSnap.data() as any;
+      
+      // Normalize vocabulary words to ensure compatible properties
+      const words = Array.isArray(data.words) ? data.words.map((w: any) => {
+        return {
+          japanese: w.japanese || w.kanji || w.hiragana || "",
+          romaji: w.romaji || "",
+          vietnameseMeaning: w.vietnameseMeaning || w.meaningVi || "",
+          englishMeaning: w.englishMeaning || w.meaningEn || "",
+          mnemonic: w.mnemonic || ""
+        };
+      }) : [];
+
+      // Normalize grammar to ensure compatible properties
+      let grammar = data.grammar;
+      if (grammar && grammar.items && Array.isArray(grammar.items) && grammar.items.length > 0) {
+        const firstItem = grammar.items[0];
+        grammar = {
+          pattern: firstItem.pattern || firstItem.grammarPoint || "",
+          explanation: firstItem.explanation || firstItem.meaningVi || firstItem.meaningEn || "",
+          example: firstItem.examples?.[0]?.japanese || firstItem.example || "",
+          exampleMeaning: firstItem.examples?.[0]?.meaningVi || firstItem.exampleMeaning || "",
+          items: grammar.items
+        };
+      } else if (grammar) {
+        grammar = {
+          pattern: grammar.pattern || "",
+          explanation: grammar.explanation || "",
+          example: grammar.example || "",
+          exampleMeaning: grammar.exampleMeaning || ""
+        };
+      } else {
+        grammar = {
+          pattern: "",
+          explanation: "",
+          example: "",
+          exampleMeaning: ""
+        };
+      }
+
+      lessons.push({
+        ...data,
+        id: typeof data.id === "string" ? parseInt(data.id, 10) : data.id,
+        level: data.level || "N5",
+        category: data.category || `Minna Bài ${data.id}`,
+        words,
+        grammar
+      });
     });
 
     // Cache the result

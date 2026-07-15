@@ -112,6 +112,66 @@
         }
       },
       "required": ["japanese", "vietnameseMeaning"]
+    },
+    "lesson_drafts": {
+      "title": "Lesson Drafts",
+      "description": "Stores current state, steps, and full context of Lesson Builder pipelines.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique draft/pipeline identifier"
+        },
+        "schemaVersion": {
+          "type": "integer",
+          "description": "Schema version number"
+        },
+        "aiModel": {
+          "type": "string",
+          "description": "The AI model identifier used"
+        },
+        "promptVersion": {
+          "type": "string",
+          "description": "The version of prompts used"
+        },
+        "currentMessage": {
+          "type": "string",
+          "description": "Optional status or info message"
+        },
+        "pipelineState": {
+          "type": "string",
+          "description": "Status of the entire pipeline"
+        },
+        "currentStepId": {
+          "type": "string",
+          "description": "ID of the current active step"
+        },
+        "steps": {
+          "type": "object",
+          "description": "Key-value map of step IDs to step statuses"
+        },
+        "context": {
+          "type": "object",
+          "description": "Full workflow engine PipelineContext structure"
+        },
+        "createdById": {
+          "type": "string",
+          "description": "The unique user ID who created/owns this draft"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO 8601 string of draft creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO 8601 string of last draft update"
+        },
+        "archived": {
+          "type": "boolean",
+          "description": "Whether the draft is archived"
+        }
+      },
+      "required": ["id", "schemaVersion", "aiModel", "promptVersion", "pipelineState", "steps", "context", "createdById", "createdAt", "updatedAt"]
     }
   },
   "firestore": {
@@ -130,6 +190,10 @@
     "casual_vocab/{wordId}": {
       "schema": "casual_vocab",
       "description": "Stores casual vocabulary words"
+    },
+    "lesson_drafts/{draftId}": {
+      "schema": "lesson_drafts",
+      "description": "Stores user lesson plans in progress"
     }
   }
 }

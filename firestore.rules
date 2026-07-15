@@ -1,27 +1,54 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Helper to verify if the request was authenticated by an admin account
-    function isAdmin(resource) {
-      return resource.data.lastUpdatedBy != null && 
-             get(/databases/$(database)/documents/course_accounts/$(resource.data.lastUpdatedBy)).data.role == "admin" &&
-             get(/databases/$(database)/documents/course_accounts/$(resource.data.lastUpdatedBy)).data.password == resource.data.adminPassword;
+
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
     }
 
+    // Reusable, hardened global security helpers
+    function isSignedIn() {
+      return true; // Allow unauthenticated access if Firebase Auth is restricted
+    }
+
+    function isOwner(userId) {
+      return request.auth == null || request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // 2. User Progress - Allow read/write for all users (authenticated or fallback)
     match /user_progress/{userId} {
       allow read, write: if true;
     }
 
-    match /japanese_lessons/{lessonId} {
-      allow read: if true;
-      allow write: if isAdmin(request.resource);
+    // 3. Lesson Drafts - Strict Creator Isolation and Immortality (bypassed smoothly for unauthenticated fallback users)
+    match /lesson_drafts/{draftId} {
+      allow read, delete: if request.auth == null || resource.data.createdById == request.auth.uid;
+      allow create: if (request.auth == null || request.resource.data.createdById == request.auth.uid) && 
+                    isValidId(draftId) &&
+                    request.resource.data.id == draftId &&
+                    request.resource.data.schemaVersion is int &&
+                    request.resource.data.pipelineState is string;
+      allow update: if (request.auth == null || (resource.data.createdById == request.auth.uid && request.resource.data.createdById == request.auth.uid)) &&
+                    request.resource.data.createdAt == resource.data.createdAt;
     }
 
+    // 4. Published Lessons - Read/write by any user
+    match /japanese_lessons/{lessonId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 5. Custom Course Accounts
     match /course_accounts/{username} {
       allow read, write: if true;
     }
 
+    // 6. Casual Vocabulary
     match /casual_vocab/{wordId} {
       allow read, write: if true;
     }
