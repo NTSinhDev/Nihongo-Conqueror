@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc, writeBatch } from "firebase/firestore";
 import firebaseConfig from "../../firebase-applet-config.json";
 import { Lesson } from "../data/lessons";
 import { VocabularyWord } from "../data/vocabulary";
@@ -500,6 +500,7 @@ export async function getCasualVocabFromCloud(): Promise<VocabularyWord[]> {
       try {
         localStorage.setItem("casual_vocab_cache", JSON.stringify(words));
         localStorage.setItem("casual_vocab_cache_time", String(Date.now()));
+        localStorage.setItem("casual_vocab_seed_status", "done");
       } catch (e) {
         console.warn("Could not save casual vocab cache to Local Storage:", e);
       }
@@ -539,25 +540,54 @@ export async function saveCasualWordToCloud(word: VocabularyWord): Promise<boole
  */
 export async function seedCasualVocabToCloud(words: VocabularyWord[]): Promise<boolean> {
   try {
+    // Prevent repeated network checks/writes across component mounts or page reloads
+    const seedStatus = localStorage.getItem("casual_vocab_seed_status");
+    if (seedStatus === "done" || seedStatus === "skipped") {
+      return true;
+    }
+
     await ensureAuthenticated();
     
-    // Check cache or db if we already have casual words
+    // Check if we already have casual words in the DB
     const existing = await getCasualVocabFromCloud();
     if (existing.length > 0) {
       console.log("Casual vocab already seeded. Count:", existing.length);
+      try {
+        localStorage.setItem("casual_vocab_seed_status", "done");
+      } catch (e) {}
       return true;
     }
 
     invalidateCasualVocabCache();
-    console.log(`Seeding first 100 casual vocabulary words to Firestore...`);
-    // Seed in chunks or sequentially to respect quotas and timing
+    console.log(`Seeding first 100 casual vocabulary words to Firestore using a fast atomic batch...`);
+    
     const chunk = words.slice(0, 100);
+    const batch = writeBatch(db);
+    
     for (const w of chunk) {
-      await saveCasualWordToCloud(w);
+      const docId = encodeURIComponent(w.japanese.trim());
+      const docRef = doc(db, "casual_vocab", docId);
+      batch.set(docRef, {
+        japanese: w.japanese.trim(),
+        romaji: w.romaji ? w.romaji.trim() : "",
+        vietnameseMeaning: w.vietnameseMeaning.trim(),
+        englishMeaning: w.englishMeaning ? w.englishMeaning.trim() : ""
+      });
     }
+
+    // Single atomic write call instead of 100 sequential requests!
+    await batch.commit();
+    console.log("Atomic seed batch committed successfully.");
+    
+    try {
+      localStorage.setItem("casual_vocab_seed_status", "done");
+    } catch (e) {}
     return true;
   } catch (error) {
-    console.warn("Could not seed casual vocab to Cloud:", error);
+    console.warn("Could not seed casual vocab to Cloud, marking as skipped to prevent browser freezes:", error);
+    try {
+      localStorage.setItem("casual_vocab_seed_status", "skipped");
+    } catch (e) {}
     return false;
   }
 }

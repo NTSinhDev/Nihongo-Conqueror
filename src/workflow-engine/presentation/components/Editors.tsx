@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDraft } from "../lessonBuilderContext";
 import { 
   Plus, 
@@ -12,15 +12,40 @@ import {
   FileText,
   BookmarkCheck,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Settings,
+  Database,
+  Check
 } from "lucide-react";
 import { VocabularyItem, GrammarItem } from "../../domain/types";
 import { motion, AnimatePresence } from "motion/react";
 
 export function Editors() {
   const { currentDraft, updateDraft, isUpdating } = useDraft();
-  const [activeTab, setActiveTab] = useState<"vocab" | "grammar">("vocab");
+  const [activeTab, setActiveTab] = useState<"vocab" | "grammar" | "settings">("vocab");
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Configuration local states
+  const [localTitleVi, setLocalTitleVi] = useState("");
+  const [localLessonId, setLocalLessonId] = useState(1);
+  const [localLevel, setLocalLevel] = useState("N5");
+  const [localAiModel, setLocalAiModel] = useState("gemini-3.5-flash");
+
+  // Keep local config inputs in sync with draft changes
+  useEffect(() => {
+    if (currentDraft) {
+      setLocalTitleVi(currentDraft.context.metadata.titleVi || "");
+      setLocalLessonId(currentDraft.context.metadata.lessonId || 1);
+      setLocalLevel(currentDraft.context.metadata.level || "N5");
+      setLocalAiModel(currentDraft.aiModel || "gemini-3.5-flash");
+    }
+  }, [
+    currentDraft?.id,
+    currentDraft?.context.metadata.titleVi,
+    currentDraft?.context.metadata.lessonId,
+    currentDraft?.context.metadata.level,
+    currentDraft?.aiModel
+  ]);
 
   // Expanded card/accordion details states
   const [expandedVocab, setExpandedVocab] = useState<Record<string, boolean>>({});
@@ -36,6 +61,28 @@ export function Editors() {
   }
 
   const { vocabulary, grammar } = currentDraft.context.input;
+
+  const handleSaveSettings = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    try {
+      await updateDraft(currentDraft.id, {
+        aiModel: localAiModel,
+        context: {
+          ...currentDraft.context,
+          metadata: {
+            ...currentDraft.context.metadata,
+            titleVi: localTitleVi,
+            lessonId: localLessonId,
+            level: localLevel,
+          }
+        }
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err) {
+      console.error("Failed to save draft configuration:", err);
+    }
+  };
 
   const handleUpdateVocab = (index: number, field: keyof VocabularyItem, value: any) => {
     const nextVocab = [...vocabulary];
@@ -135,6 +182,17 @@ export function Editors() {
             }`}
           >
             Ngữ pháp ({grammar.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`px-3 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center gap-1.5 ${
+              activeTab === "settings"
+                ? "bg-white text-rose-600 shadow-3xs border border-stone-150"
+                : "text-stone-500 hover:text-stone-850"
+            }`}
+          >
+            <Settings className="w-3.5 h-3.5" />
+            <span>Cấu hình & Lưu trữ</span>
           </button>
         </div>
 
@@ -266,7 +324,7 @@ export function Editors() {
               })}
             </div>
           </div>
-        ) : (
+        ) : activeTab === "grammar" ? (
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
@@ -352,6 +410,113 @@ export function Editors() {
               })}
             </div>
           </div>
+        ) : (
+          <form onSubmit={handleSaveSettings} className="space-y-4">
+            <div className="border-b border-stone-150 pb-3">
+              <h3 className="text-xs font-extrabold text-stone-800 flex items-center gap-1.5 uppercase tracking-wider">
+                <Database className="w-4 h-4 text-rose-500" />
+                <span>Cấu hình Bản thảo Giáo trình</span>
+              </h3>
+              <p className="text-[10px] text-stone-400 mt-1 font-medium">
+                Chỉnh sửa thông tin cấu hình cơ bản của giáo trình và thực hiện lưu/đồng bộ thủ công lên Firestore Database bất kỳ lúc nào.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-[10px] font-bold text-stone-500 uppercase block mb-1">Cấp độ (Level)</label>
+                <select
+                  value={localLevel}
+                  onChange={(e) => setLocalLevel(e.target.value)}
+                  className="w-full bg-white border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
+                >
+                  <option value="N5">N5 (Sơ cấp 1)</option>
+                  <option value="N4">N4 (Sơ cấp 2)</option>
+                  <option value="N3">N3 (Trung cấp)</option>
+                  <option value="N2">N2 (Thượng trung cấp)</option>
+                  <option value="N1">N1 (Cao cấp)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-stone-500 uppercase block mb-1">Số thứ tự bài</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={localLessonId}
+                  onChange={(e) => setLocalLessonId(parseInt(e.target.value) || 1)}
+                  className="w-full bg-white border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-stone-500 uppercase block mb-1">Mô hình AI</label>
+              <select
+                value={localAiModel}
+                onChange={(e) => setLocalAiModel(e.target.value)}
+                className="w-full bg-white border border-stone-250 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-rose-500"
+              >
+                <option value="gemini-3.5-flash">Gemini 3.5 Flash (Nhanh & Tối ưu)</option>
+                <option value="gemini-3.5-pro">Gemini 3.5 Pro (Thông minh vượt trội)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-stone-500 uppercase block mb-1">Tiêu đề bài học (Việt hóa)</label>
+              <input
+                type="text"
+                required
+                value={localTitleVi}
+                onChange={(e) => setLocalTitleVi(e.target.value)}
+                placeholder="Ví dụ: Bài học về chủ đề Thời tiết"
+                className="w-full bg-white border border-stone-250 rounded-lg px-3 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-500"
+              />
+            </div>
+
+            <div className="bg-stone-50 border border-stone-200 rounded-xl p-3.5 mt-4 space-y-3">
+              <div className="flex items-start gap-2.5">
+                <Database className="w-5 h-5 text-stone-400 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <h4 className="text-[11px] font-bold text-stone-700">Đồng bộ đám mây (Cloud Sync)</h4>
+                  <p className="text-[9.5px] text-stone-500 leading-normal">
+                    ID Bản thảo: <code className="font-mono bg-stone-100 px-1 py-0.5 rounded text-[8.5px]">{currentDraft.id}</code>
+                  </p>
+                  <p className="text-[9.5px] text-stone-500 leading-normal">
+                    Cập nhật lần cuối: {new Date(currentDraft.updatedAt).toLocaleString("vi-VN")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="submit"
+                  disabled={isUpdating}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:bg-stone-200 text-white py-2 px-4 rounded-lg text-xs font-extrabold shadow-3xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  {isUpdating ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Đang lưu lên database...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-3.5 h-3.5" />
+                      <span>Lưu cấu hình & Toàn bộ bản thảo</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {saveSuccess && (
+                <div className="p-2 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-[10px] font-bold flex items-center gap-1.5 justify-center animate-fade-in">
+                  <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Đã lưu thành công cấu hình bản thảo lên database!</span>
+                </div>
+              )}
+            </div>
+          </form>
         )}
       </div>
     </div>
