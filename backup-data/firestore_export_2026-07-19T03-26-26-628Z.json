@@ -1,0 +1,6674 @@
+{
+  "user_progress": [
+    {
+      "id": "user_sinh",
+      "data": {
+        "userId": "user_sinh",
+        "completedLessons": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "unlockedLessons": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "lastUpdated": "2026-07-16T12:12:48.246Z"
+      }
+    },
+    {
+      "id": "usr_d3eozwdux",
+      "data": {
+        "unlockedLessons": [
+          0,
+          1,
+          2
+        ],
+        "lastUpdated": "2026-07-07T09:58:12.197Z",
+        "completedLessons": [
+          1
+        ],
+        "userId": "usr_d3eozwdux"
+      }
+    },
+    {
+      "id": "usr_pok3f6b5r",
+      "data": {
+        "lastUpdated": "2026-06-27T08:37:04.240Z",
+        "unlockedLessons": [
+          0,
+          1,
+          2
+        ],
+        "userId": "usr_pok3f6b5r",
+        "studiedWords": {
+          "0-22": true,
+          "0-12": true,
+          "0-28": true,
+          "0-0": true,
+          "0-24": true,
+          "0-29": true,
+          "0-21": true,
+          "0-8": true,
+          "0-15": true,
+          "0-5": true,
+          "0-16": true,
+          "0-9": true,
+          "0-4": true,
+          "0-10": true,
+          "0-19": true,
+          "0-2": true,
+          "0-18": true,
+          "0-23": true,
+          "0-11": true,
+          "0-25": true,
+          "0-14": true,
+          "0-7": true,
+          "0-17": true,
+          "0-27": true,
+          "0-6": true,
+          "0-1": true,
+          "0-13": true,
+          "0-20": true,
+          "0-3": true,
+          "0-26": true
+        }
+      }
+    }
+  ],
+  "japanese_lessons": [
+    {
+      "id": "1",
+      "data": {
+        "categorizedVocab": [],
+        "description": "Học cách tự giới thiệu tên, quốc tịch, nghề nghiệp của bản thân và người khác.",
+        "level": "N5",
+        "title": "Bài 1: Giới thiệu bản thân",
+        "category": "Minna Bài 1",
+        "words": [
+          {
+            "vietnameseMeaning": "Tôi",
+            "japanese": "わたし",
+            "romaji": "watashi"
+          },
+          {
+            "romaji": "anata",
+            "vietnameseMeaning": "Bạn, anh/chị",
+            "japanese": "あなた"
+          },
+          {
+            "romaji": "ano hito",
+            "vietnameseMeaning": "Người kia",
+            "japanese": "あの ひと"
+          },
+          {
+            "romaji": "ano kata",
+            "japanese": "あの かた",
+            "vietnameseMeaning": "Vị kia (lịch sự)"
+          },
+          {
+            "romaji": "sensei",
+            "japanese": "せんせい",
+            "vietnameseMeaning": "Thầy/cô giáo"
+          },
+          {
+            "romaji": "kyoushi",
+            "japanese": "きょうし",
+            "vietnameseMeaning": "Giáo viên, nghề giáo"
+          },
+          {
+            "romaji": "gakusei",
+            "vietnameseMeaning": "Học sinh, sinh viên",
+            "japanese": "がくせい"
+          },
+          {
+            "japanese": "かいしゃいん",
+            "vietnameseMeaning": "Nhân viên công ty",
+            "romaji": "kaishain"
+          },
+          {
+            "vietnameseMeaning": "Nhân viên công ty ~",
+            "japanese": "しゃいん",
+            "romaji": "shain"
+          },
+          {
+            "romaji": "ginkouin",
+            "vietnameseMeaning": "Nhân viên ngân hàng",
+            "japanese": "ぎんこういん"
+          },
+          {
+            "japanese": "いしゃ",
+            "vietnameseMeaning": "Bác sĩ",
+            "romaji": "isha"
+          },
+          {
+            "vietnameseMeaning": "Nhà nghiên cứu",
+            "japanese": "けんきゅうしゃ",
+            "romaji": "kenkyuusha"
+          },
+          {
+            "japanese": "だいがく",
+            "vietnameseMeaning": "Trường đại học",
+            "romaji": "daigaku"
+          },
+          {
+            "japanese": "びょういん",
+            "vietnameseMeaning": "Bệnh viện",
+            "romaji": "byouin"
+          },
+          {
+            "vietnameseMeaning": "Ai (hỏi người)",
+            "japanese": "だれ",
+            "romaji": "dare"
+          },
+          {
+            "japanese": "みなさん",
+            "vietnameseMeaning": "Các bạn, mọi người",
+            "romaji": "minasan"
+          },
+          {
+            "vietnameseMeaning": "Anh, chị, ông, bà (hậu tố lịch sự)",
+            "japanese": "～さん",
+            "romaji": "~san"
+          },
+          {
+            "vietnameseMeaning": "Hậu tố thân mật cho trẻ em",
+            "japanese": "～ちゃん",
+            "romaji": "~chan"
+          },
+          {
+            "vietnameseMeaning": "Hậu tố thân mật cho bé trai",
+            "japanese": "～くん",
+            "romaji": "~kun"
+          },
+          {
+            "romaji": "~jin",
+            "japanese": "～じん",
+            "vietnameseMeaning": "Người (nước nào đó)"
+          },
+          {
+            "japanese": "エンジニア",
+            "vietnameseMeaning": "Kỹ sư",
+            "romaji": "enjinia"
+          },
+          {
+            "vietnameseMeaning": "Tuổi",
+            "japanese": "さい",
+            "romaji": "sai"
+          },
+          {
+            "vietnameseMeaning": "Mấy tuổi",
+            "japanese": "なんさい",
+            "romaji": "nansai"
+          },
+          {
+            "vietnameseMeaning": "Vâng, dạ",
+            "japanese": "はい",
+            "romaji": "hai"
+          },
+          {
+            "romaji": "iie",
+            "japanese": "いいえ",
+            "vietnameseMeaning": "Không"
+          },
+          {
+            "vietnameseMeaning": "Rất vui được gặp anh/chị (lần đầu)",
+            "japanese": "はじめまして",
+            "romaji": "hajimemashite"
+          },
+          {
+            "romaji": "kara kimashita",
+            "vietnameseMeaning": "Đến từ",
+            "japanese": "からきました"
+          },
+          {
+            "vietnameseMeaning": "Rất mong được giúp đỡ",
+            "japanese": "どうぞ よろしく おねがいします",
+            "romaji": "douzo yoroshiku onegaishimasu"
+          },
+          {
+            "vietnameseMeaning": "Tên anh/chị là gì?",
+            "japanese": "おなまえは？",
+            "romaji": "onamae wa?"
+          },
+          {
+            "vietnameseMeaning": "Mỹ",
+            "japanese": "アメリカ",
+            "romaji": "amerika"
+          },
+          {
+            "japanese": "イギリス",
+            "vietnameseMeaning": "Anh",
+            "romaji": "igirisu"
+          },
+          {
+            "romaji": "indo",
+            "vietnameseMeaning": "Ấn Độ",
+            "japanese": "インド"
+          },
+          {
+            "vietnameseMeaning": "Indonesia",
+            "japanese": "インドネシア",
+            "romaji": "indoneshia"
+          },
+          {
+            "vietnameseMeaning": "Hàn Quốc",
+            "japanese": "かんこく",
+            "romaji": "kankoku"
+          },
+          {
+            "romaji": "tai",
+            "vietnameseMeaning": "Thái Lan",
+            "japanese": "タイ"
+          },
+          {
+            "vietnameseMeaning": "Trung Quốc",
+            "japanese": "ちゅうごく",
+            "romaji": "chuugoku"
+          },
+          {
+            "japanese": "ドイツ",
+            "vietnameseMeaning": "Đức",
+            "romaji": "doitsu"
+          },
+          {
+            "japanese": "にほん",
+            "vietnameseMeaning": "Nhật Bản",
+            "romaji": "nihon"
+          },
+          {
+            "romaji": "burajiru",
+            "japanese": "ブラジル",
+            "vietnameseMeaning": "Brazil"
+          },
+          {
+            "romaji": "betonamu",
+            "japanese": "ベトナム",
+            "vietnameseMeaning": "Việt Nam"
+          },
+          {
+            "vietnameseMeaning": "Bao nhiêu tuổi (lịch sự)",
+            "japanese": "おいくつ",
+            "romaji": "oikutsu"
+          },
+          {
+            "romaji": "donata",
+            "vietnameseMeaning": "Ai (hỏi người lịch sự)",
+            "japanese": "どなた"
+          },
+          {
+            "vietnameseMeaning": "Xin lỗi, nhưng...",
+            "japanese": "しつれいですが",
+            "romaji": "shitsurei desu ka"
+          },
+          {
+            "romaji": "pawaa denki",
+            "vietnameseMeaning": "Điện Denki",
+            "japanese": "パワーデンキ"
+          },
+          {
+            "romaji": "burajiru eaa",
+            "vietnameseMeaning": "Hàng không Braxin",
+            "japanese": "ブラジルエアー"
+          },
+          {
+            "japanese": "こべ　びょういん",
+            "vietnameseMeaning": "Bệnh viện Koube",
+            "romaji": "koube byouin"
+          }
+        ],
+        "id": 1,
+        "grammar": {
+          "example": "わたし は ミラー です。",
+          "pattern": "N1 は N2 です / では ありません / ですか",
+          "explanation": "Dùng để khẳng định, phủ định hoặc nghi vấn về danh tính, nghề nghiệp, quốc tịch.",
+          "exampleMeaning": "Tôi là Miller."
+        }
+      }
+    },
+    {
+      "id": "10",
+      "data": {
+        "description": "Mô tả đồ vật, con người đang nằm ở vị trí nào (trên, dưới, trong, ngoài, bên cạnh).",
+        "title": "Bài 10: Sự hiện hữu & Trợ từ vị trí",
+        "level": "N5",
+        "grammar": {
+          "pattern": "Địa điểm に N が あります/います | N は Địa điểm に あります/います",
+          "example": "つくえ の うえ に ほん が あります。",
+          "exampleMeaning": "Trên bàn có cuốn sách.",
+          "explanation": "Phân biệt あります cho vật vô tri, và います cho sinh vật cử động như người và động vật."
+        },
+        "words": [
+          {
+            "japanese": "あります",
+            "vietnameseMeaning": "Có, ở (vật vô tri)",
+            "romaji": "arimasu"
+          },
+          {
+            "romaji": "imasu",
+            "vietnameseMeaning": "Có, ở (người, động vật)",
+            "japanese": "います"
+          },
+          {
+            "vietnameseMeaning": "Phía trên",
+            "japanese": "うえ",
+            "romaji": "ue"
+          },
+          {
+            "romaji": "shita",
+            "vietnameseMeaning": "Phía dưới",
+            "japanese": "した"
+          },
+          {
+            "romaji": "mae",
+            "japanese": "まえ",
+            "vietnameseMeaning": "Phía trước"
+          },
+          {
+            "romaji": "ushiro",
+            "vietnameseMeaning": "Phía sau",
+            "japanese": "うしろ"
+          },
+          {
+            "romaji": "migi",
+            "vietnameseMeaning": "Phải",
+            "japanese": "みぎ"
+          },
+          {
+            "japanese": "ひだり",
+            "vietnameseMeaning": "Trái",
+            "romaji": "hidari"
+          },
+          {
+            "vietnameseMeaning": "Trong",
+            "japanese": "なか",
+            "romaji": "naka"
+          },
+          {
+            "romaji": "soto",
+            "vietnameseMeaning": "Ngoài",
+            "japanese": "そと"
+          },
+          {
+            "japanese": "となり",
+            "vietnameseMeaning": "Bên cạnh, sát vách",
+            "romaji": "tonari"
+          },
+          {
+            "romaji": "chikaku",
+            "vietnameseMeaning": "Gần đây",
+            "japanese": "ちかく"
+          },
+          {
+            "romaji": "aida",
+            "japanese": "あいだ",
+            "vietnameseMeaning": "Ở giữa"
+          },
+          {
+            "romaji": "tsukue",
+            "japanese": "つくえ",
+            "vietnameseMeaning": "Cái bàn"
+          },
+          {
+            "romaji": "reizouko",
+            "japanese": "れいぞうこ",
+            "vietnameseMeaning": "Tủ lạnh"
+          },
+          {
+            "romaji": "iroiro(na)",
+            "vietnameseMeaning": "Nhiều, đa dạng",
+            "japanese": "いろいろ(な)"
+          },
+          {
+            "vietnameseMeaning": "Người đàn ông",
+            "japanese": "おとこのひと",
+            "romaji": "otoko no hito"
+          },
+          {
+            "japanese": "おんなのひと",
+            "vietnameseMeaning": "Người phụ nữ",
+            "romaji": "onna no hito"
+          },
+          {
+            "japanese": "おとこのこ",
+            "vietnameseMeaning": "Cậu con trai",
+            "romaji": "otoko no ko"
+          },
+          {
+            "japanese": "おんなのこ",
+            "vietnameseMeaning": "Cô con gái, bé gái",
+            "romaji": "onna no ko"
+          },
+          {
+            "japanese": "いぬ",
+            "vietnameseMeaning": "Con chó",
+            "romaji": "inu"
+          },
+          {
+            "romaji": "neko",
+            "japanese": "ねこ",
+            "vietnameseMeaning": "Con mèo"
+          },
+          {
+            "romaji": "panda",
+            "vietnameseMeaning": "Con gấu trúc",
+            "japanese": "ぱんだ"
+          },
+          {
+            "romaji": "zou",
+            "japanese": "ぞう",
+            "vietnameseMeaning": "Con voi"
+          },
+          {
+            "vietnameseMeaning": "Cái cây",
+            "japanese": "き",
+            "romaji": "ki"
+          },
+          {
+            "vietnameseMeaning": "Đồ vật",
+            "japanese": "もの",
+            "romaji": "mono"
+          },
+          {
+            "romaji": "hako",
+            "japanese": "はこ",
+            "vietnameseMeaning": "Cái hộp"
+          },
+          {
+            "japanese": "スイッチ",
+            "vietnameseMeaning": "Công tắc",
+            "romaji": "suicchi"
+          },
+          {
+            "romaji": "teeburu",
+            "japanese": "テーブル",
+            "vietnameseMeaning": "Cái bàn (loại bàn ăn, phòng khách)"
+          },
+          {
+            "romaji": "beddo",
+            "japanese": "ベッド",
+            "vietnameseMeaning": "Cái giường"
+          },
+          {
+            "romaji": "dana",
+            "vietnameseMeaning": "Cái giá, kệ",
+            "japanese": "だな"
+          },
+          {
+            "japanese": "ドア",
+            "vietnameseMeaning": "Cái cửa",
+            "romaji": "doa"
+          },
+          {
+            "romaji": "mado",
+            "vietnameseMeaning": "Cái cửa sổ",
+            "japanese": "まど"
+          },
+          {
+            "japanese": "ポスト",
+            "vietnameseMeaning": "Hộp thư, hòm thư",
+            "romaji": "posuto"
+          },
+          {
+            "romaji": "biru",
+            "vietnameseMeaning": "Tòa nhà",
+            "japanese": "びる"
+          },
+          {
+            "romaji": "ATM",
+            "japanese": "ATM",
+            "vietnameseMeaning": "Máy rút tiền tự động"
+          },
+          {
+            "japanese": "コンビニ",
+            "vietnameseMeaning": "Cửa hàng tiện lợi",
+            "romaji": "konbini"
+          },
+          {
+            "romaji": "kouen",
+            "vietnameseMeaning": "Công viên",
+            "japanese": "こうえん"
+          },
+          {
+            "vietnameseMeaning": "Quán giải khát, quán cà phê",
+            "japanese": "きっさてん",
+            "romaji": "kissaten"
+          },
+          {
+            "vietnameseMeaning": "Hiệu, cửa hàng",
+            "japanese": "や",
+            "romaji": "ya"
+          },
+          {
+            "vietnameseMeaning": "Điểm đón (xe buýt, taxi)",
+            "japanese": "のりば",
+            "romaji": "noriba"
+          },
+          {
+            "romaji": "ken",
+            "vietnameseMeaning": "Tỉnh",
+            "japanese": "けん"
+          },
+          {
+            "vietnameseMeaning": "...và... (liệt kê)",
+            "japanese": "や",
+            "romaji": "ya"
+          },
+          {
+            "romaji": "sumimasen",
+            "japanese": "すみません",
+            "vietnameseMeaning": "Xin lỗi/Cảm ơn"
+          },
+          {
+            "japanese": "ナンプラー",
+            "vietnameseMeaning": "Nước mắm",
+            "romaji": "nanpuraa"
+          },
+          {
+            "vietnameseMeaning": "Góc, khu vực",
+            "japanese": "コーナー",
+            "romaji": "koonaa"
+          },
+          {
+            "romaji": "ichiban shita",
+            "vietnameseMeaning": "Dưới cùng",
+            "japanese": "いちばんした"
+          }
+        ],
+        "id": 10,
+        "category": "Minna Bài 10"
+      }
+    },
+    {
+      "id": "11",
+      "data": {
+        "grammar": {
+          "explanation": "Đặt lượng từ đúng vị trí trong câu, hỏi tần suất và cách sử dụng giới hạn 'chỉ'.",
+          "exampleMeaning": "Tôi đã mua 4 quả táo.",
+          "example": "りんご を ４つ かいました。",
+          "pattern": "Lượng từ (Số đếm) V | Khoảng thời gian に ～かい V | ～だけ"
+        },
+        "words": [
+          {
+            "romaji": "hitotsu",
+            "vietnameseMeaning": "1 cái (đếm vật)",
+            "japanese": "ひとつ"
+          },
+          {
+            "vietnameseMeaning": "2 cái",
+            "japanese": "ふたつ",
+            "romaji": "futatsu"
+          },
+          {
+            "romaji": "mittsu",
+            "vietnameseMeaning": "3 cái",
+            "japanese": "みっつ"
+          },
+          {
+            "vietnameseMeaning": "4 cái",
+            "japanese": "よっつ",
+            "romaji": "yottsu"
+          },
+          {
+            "vietnameseMeaning": "5 cái",
+            "japanese": "いつつ",
+            "romaji": "itsutsu"
+          },
+          {
+            "vietnameseMeaning": "6 cái",
+            "japanese": "むっつ",
+            "romaji": "muttsu"
+          },
+          {
+            "japanese": "ななつ",
+            "vietnameseMeaning": "7 cái",
+            "romaji": "nanatsu"
+          },
+          {
+            "romaji": "yatsu",
+            "vietnameseMeaning": "8 cái",
+            "japanese": "やっつ"
+          },
+          {
+            "japanese": "ここのつ",
+            "vietnameseMeaning": "9 cái",
+            "romaji": "kokonotsu"
+          },
+          {
+            "vietnameseMeaning": "10 cái",
+            "japanese": "とお",
+            "romaji": "too"
+          },
+          {
+            "vietnameseMeaning": "1 người",
+            "japanese": "ひとり",
+            "romaji": "hitori"
+          },
+          {
+            "vietnameseMeaning": "2 người",
+            "japanese": "ふたり",
+            "romaji": "futari"
+          },
+          {
+            "japanese": "～にん",
+            "vietnameseMeaning": "~ người",
+            "romaji": "~nin"
+          },
+          {
+            "romaji": "~dai",
+            "vietnameseMeaning": "~ chiếc (máy móc)",
+            "japanese": "～だい"
+          },
+          {
+            "romaji": "~mai",
+            "japanese": "～まい",
+            "vietnameseMeaning": "~ tờ, tấm (mỏng)"
+          },
+          {
+            "vietnameseMeaning": "Có (người/động vật)",
+            "japanese": "います",
+            "romaji": "imasu"
+          },
+          {
+            "romaji": "arimasu",
+            "vietnameseMeaning": "Có (vật)",
+            "japanese": "あります"
+          },
+          {
+            "romaji": "kakarimasu",
+            "vietnameseMeaning": "Tốn (thời gian/tiền bạc)",
+            "japanese": "かかります"
+          },
+          {
+            "romaji": "ikutsu",
+            "vietnameseMeaning": "Mấy cái",
+            "japanese": "いくつ"
+          },
+          {
+            "vietnameseMeaning": "~ lần",
+            "japanese": "～かい",
+            "romaji": "~kai"
+          },
+          {
+            "romaji": "ringo",
+            "japanese": "りんご",
+            "vietnameseMeaning": "Quả táo"
+          },
+          {
+            "romaji": "mikan",
+            "vietnameseMeaning": "Quả quýt/cam",
+            "japanese": "みかん"
+          },
+          {
+            "romaji": "sandoicchi",
+            "vietnameseMeaning": "Bánh sandwich",
+            "japanese": "サンドイッチ"
+          },
+          {
+            "romaji": "kareeraisu",
+            "vietnameseMeaning": "Cơm cà ri",
+            "japanese": "カレーライス"
+          },
+          {
+            "vietnameseMeaning": "Kem",
+            "japanese": "アイスクリーム",
+            "romaji": "aisukuriimu"
+          },
+          {
+            "romaji": "kitte",
+            "vietnameseMeaning": "Tem thư",
+            "japanese": "きって"
+          },
+          {
+            "romaji": "hagaki",
+            "vietnameseMeaning": "Bưu thiếp",
+            "japanese": "はがき"
+          },
+          {
+            "japanese": "ふうとう",
+            "vietnameseMeaning": "Phong bì",
+            "romaji": "fuutou"
+          },
+          {
+            "vietnameseMeaning": "Bố mẹ",
+            "japanese": "りょうしん",
+            "romaji": "ryoushin"
+          },
+          {
+            "japanese": "きょうだい",
+            "vietnameseMeaning": "Anh chị em",
+            "romaji": "kyoudai"
+          },
+          {
+            "romaji": "ani",
+            "japanese": "あに",
+            "vietnameseMeaning": "Anh trai (của tôi)"
+          },
+          {
+            "japanese": "おにいさん",
+            "vietnameseMeaning": "Anh trai (người khác)",
+            "romaji": "oniisan"
+          },
+          {
+            "vietnameseMeaning": "Chị gái (của tôi)",
+            "japanese": "あね",
+            "romaji": "ane"
+          },
+          {
+            "vietnameseMeaning": "Chị gái (người khác)",
+            "japanese": "おねえさん",
+            "romaji": "oneesan"
+          },
+          {
+            "romaji": "otouto",
+            "vietnameseMeaning": "Em trai (của tôi)",
+            "japanese": "おとうと"
+          },
+          {
+            "romaji": "otoutosan",
+            "vietnameseMeaning": "Em trai (người khác)",
+            "japanese": "おとうとさん"
+          },
+          {
+            "romaji": "imouto",
+            "japanese": "いもうと",
+            "vietnameseMeaning": "Em gái (của tôi)"
+          },
+          {
+            "vietnameseMeaning": "Em gái (người khác)",
+            "japanese": "いもうとさん",
+            "romaji": "imoutosan"
+          },
+          {
+            "romaji": "gaikoku",
+            "japanese": "がいこく",
+            "vietnameseMeaning": "Nước ngoài"
+          },
+          {
+            "japanese": "りゅうがくせい",
+            "vietnameseMeaning": "Du học sinh",
+            "romaji": "ryuugakusei"
+          },
+          {
+            "romaji": "kurasu",
+            "japanese": "クラス",
+            "vietnameseMeaning": "Lớp học"
+          },
+          {
+            "vietnameseMeaning": "~ tiếng (đồng hồ)",
+            "japanese": "～じかん",
+            "romaji": "~jikan"
+          },
+          {
+            "japanese": "～しゅうかん",
+            "vietnameseMeaning": "~ tuần",
+            "romaji": "~shuukan"
+          },
+          {
+            "japanese": "～かげつ",
+            "vietnameseMeaning": "~ tháng",
+            "romaji": "~kagetsu"
+          },
+          {
+            "romaji": "~nen",
+            "japanese": "～ねん",
+            "vietnameseMeaning": "~ năm"
+          },
+          {
+            "romaji": "gurai",
+            "vietnameseMeaning": "Khoảng",
+            "japanese": "ぐらい"
+          },
+          {
+            "japanese": "どのくらい",
+            "vietnameseMeaning": "Khoảng bao lâu/bao nhiêu",
+            "romaji": "dono kurai"
+          },
+          {
+            "romaji": "zenbu de",
+            "japanese": "ぜんぶで",
+            "vietnameseMeaning": "Tổng cộng, tất cả"
+          },
+          {
+            "japanese": "みんな",
+            "vietnameseMeaning": "Mọi người",
+            "romaji": "minna"
+          },
+          {
+            "romaji": "~dake",
+            "japanese": "～だけ",
+            "vietnameseMeaning": "Chỉ ~"
+          },
+          {
+            "vietnameseMeaning": "Tôi rõ rồi ạ",
+            "japanese": "かしこまりました",
+            "romaji": "kashikomarimashita"
+          },
+          {
+            "vietnameseMeaning": "Thời tiết đẹp nhỉ",
+            "japanese": "いいおてんきですね",
+            "romaji": "ii otenki desu ne"
+          },
+          {
+            "vietnameseMeaning": "Anh chị đi ra ngoài đấy à?",
+            "japanese": "おでかけですか",
+            "romaji": "odekake desu ka"
+          },
+          {
+            "romaji": "chotto ~ made",
+            "vietnameseMeaning": "Tôi đi ~ một chút",
+            "japanese": "ちょっと～まで"
+          },
+          {
+            "romaji": "itterasshai",
+            "vietnameseMeaning": "Anh đi nhé (người ở nhà nói)",
+            "japanese": "いってらっしゃい"
+          },
+          {
+            "japanese": "いってきます",
+            "vietnameseMeaning": "Tôi đi đây (người ra ngoài nói)",
+            "romaji": "ittekimasu"
+          },
+          {
+            "vietnameseMeaning": "Gửi bằng đường tàu biển",
+            "japanese": "ふなびん",
+            "romaji": "funabin"
+          },
+          {
+            "japanese": "こうくうびん",
+            "vietnameseMeaning": "Gửi bằng đường hàng không",
+            "romaji": "koukuubin"
+          },
+          {
+            "vietnameseMeaning": "Nhờ anh/chị/làm ơn",
+            "japanese": "おねがいします",
+            "romaji": "onegaishimasu"
+          }
+        ],
+        "category": "Minna Bài 11",
+        "id": 11,
+        "description": "Học cách đếm đồ vật thông dụng bằng số đếm thuần Nhật, đếm người, đo đạc thời gian.",
+        "level": "N5",
+        "title": "Bài 11: Số đếm & Lượng từ"
+      }
+    },
+    {
+      "id": "12",
+      "data": {
+        "description": "Chia tính từ/danh từ ở quá khứ, học so sánh hơn kém, so sánh lựa chọn, so sánh nhất.",
+        "title": "Bài 12: Thì quá khứ & So sánh",
+        "level": "N5",
+        "words": [
+          {
+            "japanese": "かんたん [na]",
+            "vietnameseMeaning": "Đơn giản",
+            "romaji": "kantan"
+          },
+          {
+            "romaji": "chikai",
+            "vietnameseMeaning": "Gần",
+            "japanese": "ちかい"
+          },
+          {
+            "vietnameseMeaning": "Xa",
+            "japanese": "とおい",
+            "romaji": "tooi"
+          },
+          {
+            "japanese": "はやい",
+            "vietnameseMeaning": "Nhanh, sớm",
+            "romaji": "hayai"
+          },
+          {
+            "romaji": "osoi",
+            "japanese": "おそい",
+            "vietnameseMeaning": "Chậm, muộn"
+          },
+          {
+            "japanese": "おおい",
+            "vietnameseMeaning": "Nhiều người",
+            "romaji": "ooi"
+          },
+          {
+            "romaji": "sukunai",
+            "japanese": "すくない",
+            "vietnameseMeaning": "Ít người"
+          },
+          {
+            "romaji": "atatakai",
+            "japanese": "あたたかい",
+            "vietnameseMeaning": "Ấm áp"
+          },
+          {
+            "vietnameseMeaning": "Mát mẻ",
+            "japanese": "すずしい",
+            "romaji": "suzushii"
+          },
+          {
+            "romaji": "amai",
+            "japanese": "あまい",
+            "vietnameseMeaning": "Ngọt"
+          },
+          {
+            "vietnameseMeaning": "Cay",
+            "japanese": "からい",
+            "romaji": "karai"
+          },
+          {
+            "vietnameseMeaning": "Nặng",
+            "japanese": "おmoい",
+            "romaji": "omoi"
+          },
+          {
+            "romaji": "karui",
+            "japanese": "かるい",
+            "vietnameseMeaning": "Nhẹ"
+          },
+          {
+            "japanese": "きせつ",
+            "vietnameseMeaning": "Mùa",
+            "romaji": "kisetsu"
+          },
+          {
+            "romaji": "tenki",
+            "vietnameseMeaning": "Thời tiết",
+            "japanese": "てんき"
+          },
+          {
+            "romaji": "kantan (na)",
+            "japanese": "簡単(な)",
+            "vietnameseMeaning": "Đơn giản, dễ dàng"
+          },
+          {
+            "japanese": "近い",
+            "vietnameseMeaning": "Gần",
+            "romaji": "chikai"
+          },
+          {
+            "vietnameseMeaning": "Xa",
+            "japanese": "遠い",
+            "romaji": "tooi"
+          },
+          {
+            "japanese": "速い/早い",
+            "vietnameseMeaning": "Nhanh/Sớm",
+            "romaji": "hayai"
+          },
+          {
+            "japanese": "遅い",
+            "vietnameseMeaning": "Muộn, chậm",
+            "romaji": "osoi"
+          },
+          {
+            "romaji": "ooi",
+            "vietnameseMeaning": "Nhiều",
+            "japanese": "多い"
+          },
+          {
+            "japanese": "少ない",
+            "vietnameseMeaning": "Ít",
+            "romaji": "sukunai"
+          },
+          {
+            "romaji": "atatakai",
+            "japanese": "暖かい/温かい",
+            "vietnameseMeaning": "Ấm"
+          },
+          {
+            "romaji": "suzushii",
+            "vietnameseMeaning": "Mát",
+            "japanese": "涼しい"
+          },
+          {
+            "romaji": "amai",
+            "japanese": "甘い",
+            "vietnameseMeaning": "Ngọt"
+          },
+          {
+            "vietnameseMeaning": "Cay",
+            "japanese": "辛い",
+            "romaji": "karai"
+          },
+          {
+            "romaji": "omoi",
+            "vietnameseMeaning": "Nặng",
+            "japanese": "重い"
+          },
+          {
+            "romaji": "karui",
+            "vietnameseMeaning": "Nhẹ",
+            "japanese": "軽い"
+          },
+          {
+            "romaji": "ii",
+            "japanese": "いい",
+            "vietnameseMeaning": "Thích, chọn, dùng"
+          },
+          {
+            "vietnameseMeaning": "Mùa",
+            "japanese": "季節",
+            "romaji": "kisetsu"
+          },
+          {
+            "vietnameseMeaning": "Mùa xuân",
+            "japanese": "春",
+            "romaji": "haru"
+          },
+          {
+            "romaji": "natsu",
+            "japanese": "夏",
+            "vietnameseMeaning": "Mùa hè"
+          },
+          {
+            "japanese": "秋",
+            "vietnameseMeaning": "Mùa thu",
+            "romaji": "aki"
+          },
+          {
+            "vietnameseMeaning": "Mùa đông",
+            "japanese": "冬",
+            "romaji": "fuyu"
+          },
+          {
+            "vietnameseMeaning": "Thời tiết",
+            "japanese": "天気",
+            "romaji": "tenki"
+          },
+          {
+            "romaji": "ame",
+            "japanese": "雨",
+            "vietnameseMeaning": "Mưa"
+          },
+          {
+            "romaji": "yuki",
+            "vietnameseMeaning": "Tuyết",
+            "japanese": "雪"
+          },
+          {
+            "vietnameseMeaning": "Có mây",
+            "japanese": "曇り",
+            "romaji": "kumori"
+          },
+          {
+            "japanese": "ホテル",
+            "vietnameseMeaning": "Khách sạn",
+            "romaji": "hoteru"
+          },
+          {
+            "japanese": "空港",
+            "vietnameseMeaning": "Sân bay",
+            "romaji": "kuukou"
+          },
+          {
+            "japanese": "海",
+            "vietnameseMeaning": "Biển",
+            "romaji": "umi"
+          },
+          {
+            "romaji": "sekai",
+            "vietnameseMeaning": "Thế giới",
+            "japanese": "世界"
+          },
+          {
+            "japanese": "パーティー",
+            "vietnameseMeaning": "Tiệc tùng",
+            "romaji": "paatii"
+          },
+          {
+            "romaji": "matsuri",
+            "vietnameseMeaning": "Lễ hội",
+            "japanese": "祭り"
+          },
+          {
+            "japanese": "すき焼き",
+            "vietnameseMeaning": "Món Sukiyaki",
+            "romaji": "sukiyaki"
+          },
+          {
+            "japanese": "刺身",
+            "vietnameseMeaning": "Món Sashimi",
+            "romaji": "sashimi"
+          },
+          {
+            "romaji": "sushi",
+            "vietnameseMeaning": "Món Sushi",
+            "japanese": "寿司"
+          },
+          {
+            "japanese": "天ぷら",
+            "vietnameseMeaning": "Món Tempura",
+            "romaji": "tenpura"
+          },
+          {
+            "romaji": "butaniku",
+            "vietnameseMeaning": "Thịt lợn",
+            "japanese": "豚肉"
+          },
+          {
+            "romaji": "toriniku",
+            "vietnameseMeaning": "Thịt gà",
+            "japanese": "鶏肉"
+          },
+          {
+            "romaji": "gyuuniku",
+            "vietnameseMeaning": "Thịt bò",
+            "japanese": "牛肉"
+          },
+          {
+            "romaji": "remon",
+            "vietnameseMeaning": "Quả chanh",
+            "japanese": "レモン"
+          },
+          {
+            "romaji": "ikebana",
+            "vietnameseMeaning": "Nghệ thuật cắm hoa",
+            "japanese": "生け花"
+          },
+          {
+            "japanese": "紅葉",
+            "vietnameseMeaning": "Lá đỏ",
+            "romaji": "momiji"
+          },
+          {
+            "romaji": "dore",
+            "japanese": "どれ",
+            "vietnameseMeaning": "Cái nào"
+          },
+          {
+            "romaji": "doremo",
+            "vietnameseMeaning": "Cái nào cũng",
+            "japanese": "どれも"
+          },
+          {
+            "vietnameseMeaning": "Nhất",
+            "japanese": "一番",
+            "romaji": "ichiban"
+          },
+          {
+            "vietnameseMeaning": "Hơn hẳn, suốt",
+            "japanese": "ずっと",
+            "romaji": "zutto"
+          },
+          {
+            "vietnameseMeaning": "Lần đầu tiên",
+            "japanese": "初めて",
+            "romaji": "hajimete"
+          },
+          {
+            "romaji": "tadaima",
+            "japanese": "ただいま",
+            "vietnameseMeaning": "Tôi đã về rồi (nói khi về nhà)"
+          },
+          {
+            "romaji": "okaerinasai",
+            "vietnameseMeaning": "Chào mừng anh/chị đã về",
+            "japanese": "お帰りなさい"
+          },
+          {
+            "romaji": "waa",
+            "japanese": "わあ",
+            "vietnameseMeaning": "Woa (thể hiện ngạc nhiên)"
+          },
+          {
+            "vietnameseMeaning": "Tôi mệt rồi",
+            "japanese": "疲れました",
+            "romaji": "tsukaremashita"
+          },
+          {
+            "vietnameseMeaning": "Đơn giản, dễ dàng",
+            "japanese": "かんたん（な）",
+            "romaji": "kantan (na)"
+          },
+          {
+            "romaji": "omoi",
+            "japanese": "おもい",
+            "vietnameseMeaning": "Nặng"
+          },
+          {
+            "japanese": "はる",
+            "vietnameseMeaning": "Mùa xuân",
+            "romaji": "haru"
+          },
+          {
+            "romaji": "natsu",
+            "vietnameseMeaning": "Mùa hè",
+            "japanese": "なつ"
+          },
+          {
+            "japanese": "あき",
+            "vietnameseMeaning": "Mùa thu",
+            "romaji": "aki"
+          },
+          {
+            "vietnameseMeaning": "Mùa đông",
+            "japanese": "ふゆ",
+            "romaji": "fuyu"
+          },
+          {
+            "japanese": "あめ",
+            "vietnameseMeaning": "Mưa",
+            "romaji": "ame"
+          },
+          {
+            "romaji": "yuki",
+            "vietnameseMeaning": "Tuyết",
+            "japanese": "ゆき"
+          },
+          {
+            "vietnameseMeaning": "Có mây",
+            "japanese": "くもり",
+            "romaji": "kumori"
+          },
+          {
+            "romaji": "kuukou",
+            "vietnameseMeaning": "Sân bay",
+            "japanese": "くうこう"
+          },
+          {
+            "romaji": "umi",
+            "japanese": "うみ",
+            "vietnameseMeaning": "Biển"
+          },
+          {
+            "romaji": "sekai",
+            "vietnameseMeaning": "Thế giới",
+            "japanese": "せかい"
+          },
+          {
+            "romaji": "matsuri",
+            "japanese": "まつり",
+            "vietnameseMeaning": "Lễ hội"
+          },
+          {
+            "japanese": "すきやき",
+            "vietnameseMeaning": "Món Sukiyaki",
+            "romaji": "sukiyaki"
+          },
+          {
+            "romaji": "sashimi",
+            "japanese": "さしみ",
+            "vietnameseMeaning": "Món Sashimi"
+          },
+          {
+            "japanese": "すし",
+            "vietnameseMeaning": "Món Sushi",
+            "romaji": "sushi"
+          },
+          {
+            "romaji": "tenpura",
+            "japanese": "てんぷら",
+            "vietnameseMeaning": "Món Tempura"
+          },
+          {
+            "romaji": "butaniku",
+            "vietnameseMeaning": "Thịt lợn",
+            "japanese": "ぶたにく"
+          },
+          {
+            "romaji": "toriniku",
+            "vietnameseMeaning": "Thịt gà",
+            "japanese": "とりにく"
+          },
+          {
+            "romaji": "gyuuniku",
+            "vietnameseMeaning": "Thịt bò",
+            "japanese": "ぎゅうにく"
+          },
+          {
+            "vietnameseMeaning": "Nghệ thuật cắm hoa",
+            "japanese": "いけばな",
+            "romaji": "ikebana"
+          },
+          {
+            "romaji": "momiji",
+            "vietnameseMeaning": "Lá đỏ",
+            "japanese": "もみじ"
+          },
+          {
+            "romaji": "ichiban",
+            "japanese": "いちばん",
+            "vietnameseMeaning": "Nhất"
+          },
+          {
+            "romaji": "hajimete",
+            "japanese": "はじめて",
+            "vietnameseMeaning": "Lần đầu tiên"
+          },
+          {
+            "romaji": "okaerinasai",
+            "japanese": "おかえりなさい",
+            "vietnameseMeaning": "Chào mừng anh/chị đã về"
+          },
+          {
+            "japanese": "つかれました",
+            "vietnameseMeaning": "Tôi mệt rồi",
+            "romaji": "tsukaremashita"
+          }
+        ],
+        "id": 12,
+        "category": "Minna Bài 12",
+        "grammar": {
+          "pattern": "N1 は N2 より Adj です | N1 と N2 と どちらが Adj ですか | N1 [のなか] で N2 が いちばん Adj です",
+          "example": "にほん と ベトナム と どちら が あつい ですか。",
+          "exampleMeaning": "Giữa Nhật Bản và Việt Nam thì nơi nào nóng hơn?",
+          "explanation": "So sánh các đối tượng dựa trên tiêu chí tính chất, và so sánh lựa chọn giữa hai vật."
+        }
+      }
+    },
+    {
+      "id": "13",
+      "data": {
+        "description": "Học cách nói mình muốn có cái gì, muốn thực hiện việc gì và diễn tả mục đích đi đâu đó.",
+        "title": "Bài 13: Thể hiện ước muốn",
+        "level": "N5",
+        "id": 13,
+        "category": "Minna Bài 13",
+        "words": [
+          {
+            "romaji": "hoshii",
+            "vietnameseMeaning": "Muốn có",
+            "japanese": "ほしい"
+          },
+          {
+            "japanese": "あそびます",
+            "vietnameseMeaning": "Đi chơi, chơi",
+            "romaji": "asobimasu"
+          },
+          {
+            "romaji": "oyogimasu",
+            "vietnameseMeaning": "Bơi",
+            "japanese": "およぎます"
+          },
+          {
+            "romaji": "mukaemasu",
+            "japanese": "むかえます",
+            "vietnameseMeaning": "Đón"
+          },
+          {
+            "romaji": "tsukaremasu",
+            "japanese": "つかれます",
+            "vietnameseMeaning": "Mệt mỏi"
+          },
+          {
+            "japanese": "だします",
+            "vietnameseMeaning": "Nộp, gửi",
+            "romaji": "dashimasu"
+          },
+          {
+            "japanese": "はいります",
+            "vietnameseMeaning": "Vào (phòng/bể bơi)",
+            "romaji": "hairimasu"
+          },
+          {
+            "romaji": "demasu",
+            "japanese": "でます",
+            "vietnameseMeaning": "Ra ngoài"
+          },
+          {
+            "romaji": "kaimono shimasu",
+            "vietnameseMeaning": "Mua sắm",
+            "japanese": "かいものします"
+          },
+          {
+            "vietnameseMeaning": "Ăn uống, dùng bữa",
+            "japanese": "しょくじします",
+            "romaji": "shokuji shimasu"
+          },
+          {
+            "romaji": "sanpo shimasu",
+            "japanese": "さんぽします",
+            "vietnameseMeaning": "Đi dạo"
+          },
+          {
+            "romaji": "kouen",
+            "vietnameseMeaning": "Công viên",
+            "japanese": "こうえん"
+          },
+          {
+            "romaji": "kawa",
+            "japanese": "かわ",
+            "vietnameseMeaning": "Sông"
+          },
+          {
+            "romaji": "bijutsukan",
+            "vietnameseMeaning": "Bảo tàng mỹ thuật",
+            "japanese": "びじゅつかん"
+          },
+          {
+            "romaji": "onaka",
+            "japanese": "おなか",
+            "vietnameseMeaning": "Bụng"
+          }
+        ],
+        "grammar": {
+          "pattern": "N が ほしい です | V-たい です | V-ni Địa điểm へ いきます/きます/かえります",
+          "example": "わたし は にほん へ にほんご を べんきょうし に いきます。",
+          "exampleMeaning": "Tôi đi đến Nhật Bản để học tiếng Nhật.",
+          "explanation": "Bày tỏ ham muốn sở hữu, mong muốn hành động và cấu trúc chỉ mục đích di chuyển."
+        }
+      }
+    },
+    {
+      "id": "14",
+      "data": {
+        "category": "Minna Bài 14",
+        "words": [
+          {
+            "romaji": "tsukemasu",
+            "japanese": "つけます",
+            "vietnameseMeaning": "Bật (thiết bị)"
+          },
+          {
+            "romaji": "keshimasu",
+            "vietnameseMeaning": "Tắt (thiết bị)",
+            "japanese": "けします"
+          },
+          {
+            "romaji": "akemasu",
+            "vietnameseMeaning": "Mở (cửa/hộp)",
+            "japanese": "あけます"
+          },
+          {
+            "romaji": "shimemasu",
+            "vietnameseMeaning": "Đóng (cửa/hộp)",
+            "japanese": "しめます"
+          },
+          {
+            "vietnameseMeaning": "Vội vã, gấp rút",
+            "japanese": "いそぎます",
+            "romaji": "isogimasu"
+          },
+          {
+            "romaji": "machimasu",
+            "japanese": "まちます",
+            "vietnameseMeaning": "Chờ đợi"
+          },
+          {
+            "japanese": "もちます",
+            "vietnameseMeaning": "Cầm, mang",
+            "romaji": "mochimasu"
+          },
+          {
+            "romaji": "torimasu",
+            "vietnameseMeaning": "Lấy, cầm giúp",
+            "japanese": "とります"
+          },
+          {
+            "vietnameseMeaning": "Giúp đỡ, phụ một tay",
+            "japanese": "てつだいます",
+            "romaji": "tetsudaimasu"
+          },
+          {
+            "romaji": "yobimasu",
+            "japanese": "よびます",
+            "vietnameseMeaning": "Gọi (taxi/tên)"
+          },
+          {
+            "vietnameseMeaning": "Nói chuyện, đàm thoại",
+            "japanese": "はなします",
+            "romaji": "hanashimasu"
+          },
+          {
+            "vietnameseMeaning": "Cho xem",
+            "japanese": "みせます",
+            "romaji": "misemasu"
+          },
+          {
+            "romaji": "oshiemasu",
+            "japanese": "おしえます",
+            "vietnameseMeaning": "Dạy học, chỉ bảo"
+          },
+          {
+            "vietnameseMeaning": "Bắt đầu",
+            "japanese": "はじめます",
+            "romaji": "hajimemasu"
+          },
+          {
+            "romaji": "furimasu",
+            "vietnameseMeaning": "Rơi (mưa, tuyết)",
+            "japanese": "ふります"
+          }
+        ],
+        "id": 14,
+        "grammar": {
+          "explanation": "Chia động từ nhóm I, II, III sang thể て, đưa ra lời yêu cầu lịch sự hoặc đề nghị hỗ trợ.",
+          "exampleMeaning": "Xin vui lòng chờ một chút.",
+          "example": "ちょっと まって ください。",
+          "pattern": "V-てください | V-ています | V-ましょうか"
+        },
+        "title": "Bài 14: Thể Te & Nhờ vả lịch sự",
+        "level": "N5",
+        "description": "Bắt đầu làm quen với Thể Te cực kì quan trọng, nhờ vả người khác hoặc diễn đạt đang làm gì."
+      }
+    },
+    {
+      "id": "15",
+      "data": {
+        "words": [
+          {
+            "romaji": "tachimasu",
+            "japanese": "たちます",
+            "vietnameseMeaning": "Đứng dậy"
+          },
+          {
+            "vietnameseMeaning": "Ngồi xuống",
+            "japanese": "すわります",
+            "romaji": "suwarimasu"
+          },
+          {
+            "vietnameseMeaning": "Sử dụng",
+            "japanese": "つかいます",
+            "romaji": "tsukaimasu"
+          },
+          {
+            "romaji": "okimasu",
+            "japanese": "おきます",
+            "vietnameseMeaning": "Đặt, để"
+          },
+          {
+            "vietnameseMeaning": "Làm, chế tạo",
+            "japanese": "つくります",
+            "romaji": "tsukurimasu"
+          },
+          {
+            "romaji": "urimasu",
+            "japanese": "うります",
+            "vietnameseMeaning": "Bán"
+          },
+          {
+            "vietnameseMeaning": "Biết, nắm rõ",
+            "japanese": "しります",
+            "romaji": "shirimasu"
+          },
+          {
+            "romaji": "sumimasu",
+            "japanese": "すみます",
+            "vietnameseMeaning": "Sống, trú ngụ"
+          },
+          {
+            "japanese": "けんきゅうします",
+            "vietnameseMeaning": "Nghiên cứu",
+            "romaji": "kenkyuu shimasu"
+          },
+          {
+            "romaji": "shiryou",
+            "japanese": "しりょう",
+            "vietnameseMeaning": "Tài liệu"
+          },
+          {
+            "romaji": "katarogu",
+            "vietnameseMeaning": "Sách danh mục",
+            "japanese": "カタログ"
+          },
+          {
+            "romaji": "jikokuhyou",
+            "vietnameseMeaning": "Bảng giờ chạy tàu",
+            "japanese": "じこくひょう"
+          },
+          {
+            "japanese": "はいしゃ",
+            "vietnameseMeaning": "Nha sĩ, bác sĩ răng",
+            "romaji": "haisha"
+          },
+          {
+            "romaji": "tokoya",
+            "vietnameseMeaning": "Tiệm cắt tóc",
+            "japanese": "とこや"
+          },
+          {
+            "japanese": "しゃくしょ",
+            "vietnameseMeaning": "Tòa thị chính",
+            "romaji": "shakusho"
+          }
+        ],
+        "category": "Minna Bài 15",
+        "id": 15,
+        "grammar": {
+          "example": "ここ で しゃしん を とっても いいですか。",
+          "pattern": "V-ても いいです | V-ては いけません | V-ています (Trạng thái)",
+          "explanation": "Diễn đạt sự cho phép, cấm đoán hành vi và nói về thói quen, nghề nghiệp, nơi sống.",
+          "exampleMeaning": "Tôi chụp ảnh ở đây có được không?"
+        },
+        "title": "Bài 15: Cho phép & Trạng thái kéo dài",
+        "level": "N5",
+        "description": "Học cách xin phép làm gì đó, cấm đoán ai và nói về trạng thái kéo dài (kết hôn, nơi sống)."
+      }
+    },
+    {
+      "id": "16",
+      "data": {
+        "description": "Cách nối nhiều tính từ, danh từ hoặc động từ trong một câu và diễn tả sau khi làm xong gì.",
+        "title": "Bài 16: Liên kết câu bằng Thể Te",
+        "level": "N5",
+        "id": 16,
+        "category": "Minna Bài 16",
+        "words": [
+          {
+            "romaji": "norimasu",
+            "japanese": "のります",
+            "vietnameseMeaning": "Lên xe, đi tàu"
+          },
+          {
+            "romaji": "orimasu",
+            "vietnameseMeaning": "Xuống tàu xe",
+            "japanese": "おりまs"
+          },
+          {
+            "romaji": "norikaemasu",
+            "vietnameseMeaning": "Chuyển tàu xe",
+            "japanese": "のりかえます"
+          },
+          {
+            "romaji": "abimasu",
+            "vietnameseMeaning": "Tắm vòi sen",
+            "japanese": "あびます"
+          },
+          {
+            "vietnameseMeaning": "Cho vào, bỏ vào",
+            "japanese": "いれます",
+            "romaji": "iremasu"
+          },
+          {
+            "romaji": "dashimasu",
+            "japanese": "だします",
+            "vietnameseMeaning": "Nộp, lấy ra"
+          },
+          {
+            "vietnameseMeaning": "Rút tiền",
+            "japanese": "おろします",
+            "romaji": "oroshimasu"
+          },
+          {
+            "romaji": "oshimasu",
+            "vietnameseMeaning": "Ấn nút",
+            "japanese": "おします"
+          },
+          {
+            "japanese": "わかい",
+            "vietnameseMeaning": "Trẻ trung",
+            "romaji": "wakai"
+          },
+          {
+            "vietnameseMeaning": "Dài",
+            "japanese": "ながい",
+            "romaji": "nagai"
+          },
+          {
+            "vietnameseMeaning": "Ngắn",
+            "japanese": "みじかい",
+            "romaji": "mijikai"
+          },
+          {
+            "vietnameseMeaning": "Sáng sủa",
+            "japanese": "あかるい",
+            "romaji": "akaruy"
+          },
+          {
+            "romaji": "kurai",
+            "vietnameseMeaning": "Tối tăm",
+            "japanese": "くらい"
+          },
+          {
+            "vietnameseMeaning": "Cơ thể",
+            "japanese": "からだ",
+            "romaji": "karada"
+          },
+          {
+            "vietnameseMeaning": "Đầu",
+            "japanese": "あたま",
+            "romaji": "atama"
+          }
+        ],
+        "grammar": {
+          "example": "おふろ に はいって から, ねます。",
+          "pattern": "V1-て, V2-て, V3 ます | Adj1-くて, Adj2 です | N1 で, N2 です | V1-て から V2",
+          "explanation": "Ghép chuỗi hành động theo trình tự thời gian, nối tính từ/danh từ, và diễn tả 'sau khi làm V1'.",
+          "exampleMeaning": "Sau khi tắm bồn xong, tôi sẽ đi ngủ."
+        }
+      }
+    },
+    {
+      "id": "17",
+      "data": {
+        "grammar": {
+          "exampleMeaning": "Tôi bắt buộc phải uống thuốc.",
+          "explanation": "Khuyên nhủ ai không nên làm gì, biểu đạt bổn phận bắt buộc phải làm, và không cần làm.",
+          "pattern": "V-ないで ください | V-なければ なりません | V-なくても いいです",
+          "example": "くすり を のまなければ なりません。"
+        },
+        "words": [
+          {
+            "japanese": "おぼえます",
+            "vietnameseMeaning": "Ghi nhớ, nhớ",
+            "romaji": "oboemasu"
+          },
+          {
+            "vietnameseMeaning": "Quên",
+            "japanese": "わすれます",
+            "romaji": "wasuremasu"
+          },
+          {
+            "romaji": "nakushimasu",
+            "vietnameseMeaning": "Làm mất",
+            "japanese": "なくします"
+          },
+          {
+            "romaji": "haraimasu",
+            "vietnameseMeaning": "Thanh toán",
+            "japanese": "はらいます"
+          },
+          {
+            "japanese": "かえします",
+            "vietnameseMeaning": "Trả lại",
+            "romaji": "kaeshimasu"
+          },
+          {
+            "romaji": "dekakemasu",
+            "vietnameseMeaning": "Đi ra ngoài",
+            "japanese": "でかけます"
+          },
+          {
+            "romaji": "nugimasu",
+            "japanese": "ぬぎます",
+            "vietnameseMeaning": "Cởi quần áo/giày"
+          },
+          {
+            "romaji": "motte ikimasu",
+            "vietnameseMeaning": "Mang đi",
+            "japanese": "もっていきます"
+          },
+          {
+            "japanese": "もってきます",
+            "vietnameseMeaning": "Mang đến",
+            "romaji": "motte kimasu"
+          },
+          {
+            "vietnameseMeaning": "Lo lắng",
+            "japanese": "しんぱいします",
+            "romaji": "shinpai shimasu"
+          },
+          {
+            "romaji": "zangyou shimasu",
+            "vietnameseMeaning": "Làm thêm giờ",
+            "japanese": "ざんぎょうします"
+          },
+          {
+            "vietnameseMeaning": "Đi công tác",
+            "japanese": "しゅっちょうします",
+            "romaji": "shutchou shimasu"
+          },
+          {
+            "romaji": "kusuri",
+            "japanese": "くすり",
+            "vietnameseMeaning": "Thuốc"
+          },
+          {
+            "vietnameseMeaning": "Bồn tắm",
+            "japanese": "おふろ",
+            "romaji": "ofuro"
+          },
+          {
+            "japanese": "パスポート",
+            "vietnameseMeaning": "Hộ chiếu",
+            "romaji": "pasupooto"
+          }
+        ],
+        "category": "Minna Bài 17",
+        "id": 17,
+        "description": "Học cách chia động từ thể phủ định ngắn ない, khuyên đừng làm gì, bắt buộc phải làm.",
+        "title": "Bài 17: Thể Nai & Nghĩa vụ bắt buộc",
+        "level": "N5"
+      }
+    },
+    {
+      "id": "18",
+      "data": {
+        "title": "Bài 18: Thể Từ điển & Khả năng",
+        "level": "N5",
+        "description": "Chia động từ sang thể từ điển じしょけい, nói về năng lực bản thân, sở thích, trước khi làm gì.",
+        "id": 18,
+        "category": "Minna Bài 18",
+        "words": [
+          {
+            "japanese": "できます",
+            "vietnameseMeaning": "Có thể",
+            "romaji": "dekimasu"
+          },
+          {
+            "romaji": "araimasu",
+            "japanese": "あらいます",
+            "vietnameseMeaning": "Rửa, giặt giũ"
+          },
+          {
+            "vietnameseMeaning": "Chơi đàn (nhạc cụ)",
+            "japanese": "ひきます",
+            "romaji": "hikimasu"
+          },
+          {
+            "romaji": "utaimasu",
+            "japanese": "うたいます",
+            "vietnameseMeaning": "Hát"
+          },
+          {
+            "japanese": "あつめます",
+            "vietnameseMeaning": "Thu gom, sưu tầm",
+            "romaji": "atsumemasu"
+          },
+          {
+            "japanese": "すてます",
+            "vietnameseMeaning": "Vứt bỏ",
+            "romaji": "sutemasu"
+          },
+          {
+            "japanese": "かえます",
+            "vietnameseMeaning": "Thay đổi",
+            "romaji": "kaemasu"
+          },
+          {
+            "romaji": "unten shimasu",
+            "vietnameseMeaning": "Lái xe",
+            "japanese": "うんてんします"
+          },
+          {
+            "japanese": "よやくします",
+            "vietnameseMeaning": "Đặt trước",
+            "romaji": "yoyaku shimasu"
+          },
+          {
+            "romaji": "kengaku shimasu",
+            "japanese": "けんがくします",
+            "vietnameseMeaning": "Tham quan kiến tập"
+          },
+          {
+            "romaji": "piano",
+            "vietnameseMeaning": "Đàn Piano",
+            "japanese": "ピアノ"
+          },
+          {
+            "japanese": "カード",
+            "vietnameseMeaning": "Thẻ, Card",
+            "romaji": "kaado"
+          },
+          {
+            "vietnameseMeaning": "Tiền mặt",
+            "japanese": "げんきん",
+            "romaji": "genkin"
+          },
+          {
+            "japanese": "しゅみ",
+            "vietnameseMeaning": "Sở thích",
+            "romaji": "shumi"
+          },
+          {
+            "romaji": "nikki",
+            "japanese": "にっき",
+            "vietnameseMeaning": "Nhật ký"
+          }
+        ],
+        "grammar": {
+          "explanation": "Diễn tả khả năng bẩm sinh hoặc được rèn luyện, giới thiệu sở thích cá nhân, trình tự hành động.",
+          "exampleMeaning": "Tôi có thể nói được tiếng Nhật.",
+          "example": "にほんご を はなす こと が できます。",
+          "pattern": "V-る こと が できます | わたしのしゅみ は V-る こと です | V-る / Nの / Thời gian まえに"
+        }
+      }
+    },
+    {
+      "id": "19",
+      "data": {
+        "description": "Chia động từ sang thể quá khứ ngắn た, diễn tả kinh nghiệm, liệt kê hành động tiêu biểu.",
+        "level": "N5",
+        "title": "Bài 19: Thể Ta & Liệt kê hành động",
+        "id": 19,
+        "category": "Minna Bài 19",
+        "words": [
+          {
+            "vietnameseMeaning": "Leo (núi)",
+            "japanese": "のぼります",
+            "romaji": "noborimasu"
+          },
+          {
+            "japanese": "とまります",
+            "vietnameseMeaning": "Trọ lại",
+            "romaji": "tomarimasu"
+          },
+          {
+            "romaji": "soujishimasu",
+            "vietnameseMeaning": "Dọn dẹp dọn vệ sinh",
+            "japanese": "そうじします"
+          },
+          {
+            "romaji": "sentakushimasu",
+            "vietnameseMeaning": "Giặt giũ quần áo",
+            "japanese": "せんたくします"
+          },
+          {
+            "romaji": "narimasu",
+            "japanese": "なります",
+            "vietnameseMeaning": "Trở nên, trở thành"
+          },
+          {
+            "japanese": "ねむい",
+            "vietnameseMeaning": "Buồn ngủ",
+            "romaji": "nemui"
+          },
+          {
+            "romaji": "tsuyoi",
+            "japanese": "つよい",
+            "vietnameseMeaning": "Mạnh mẽ"
+          },
+          {
+            "japanese": "よわい",
+            "vietnameseMeaning": "Yếu ớt",
+            "romaji": "yowai"
+          },
+          {
+            "romaji": "karada ni ii",
+            "japanese": "からだにいい",
+            "vietnameseMeaning": "Tốt cho sức khỏe"
+          },
+          {
+            "romaji": "muri",
+            "vietnameseMeaning": "Quá sức, vô lý",
+            "japanese": "むり [な]"
+          },
+          {
+            "romaji": "gorufu",
+            "vietnameseMeaning": "Trò chơi Golf",
+            "japanese": "ごるふ"
+          },
+          {
+            "japanese": "すもう",
+            "vietnameseMeaning": "Vật Sumo",
+            "romaji": "sumou"
+          },
+          {
+            "romaji": "ocha",
+            "vietnameseMeaning": "Trà đạo",
+            "japanese": "おちゃ"
+          },
+          {
+            "japanese": "てんき",
+            "vietnameseMeaning": "Thời tiết",
+            "romaji": "tenki"
+          },
+          {
+            "japanese": "いちど",
+            "vietnameseMeaning": "Một lần",
+            "romaji": "ichido"
+          }
+        ],
+        "grammar": {
+          "pattern": "V-た こと が あります | V-たり, V-たり します | Adj-く/に なります",
+          "example": "富士山（ふじさん）に のぼった こと が あります。",
+          "exampleMeaning": "Tôi đã từng leo núi Phú Sĩ.",
+          "explanation": "Nói về trải nghiệm trong quá khứ, liệt kê một số hành động đại diện, và biến đổi trạng thái."
+        }
+      }
+    },
+    {
+      "id": "2",
+      "data": {
+        "description": "Nhận diện các đồ vật học tập, đồ dùng cá nhân và cấu trúc sở hữu của ai đó.",
+        "categorizedVocab": [
+          {
+            "words": [
+              {
+                "romaji": "kore",
+                "japanese": "これ",
+                "vietnameseMeaning": "Cái này"
+              },
+              {
+                "japanese": "それ",
+                "vietnameseMeaning": "Cái đó",
+                "romaji": "sore"
+              },
+              {
+                "japanese": "あれ",
+                "vietnameseMeaning": "Cái kia",
+                "romaji": "are"
+              },
+              {
+                "romaji": "kono",
+                "japanese": "この",
+                "vietnameseMeaning": "Này (đi kèm danh từ)"
+              },
+              {
+                "romaji": "sono",
+                "japanese": "その",
+                "vietnameseMeaning": "Đó (đi kèm danh từ)"
+              },
+              {
+                "romaji": "ano",
+                "japanese": "あの",
+                "vietnameseMeaning": "Kia (đi kèm danh từ)"
+              },
+              {
+                "japanese": "ここ",
+                "vietnameseMeaning": "Chỗ này, đây",
+                "romaji": "koko"
+              },
+              {
+                "japanese": "そこ",
+                "vietnameseMeaning": "Chỗ đó, đó",
+                "romaji": "soko"
+              },
+              {
+                "romaji": "asoko",
+                "vietnameseMeaning": "Chỗ kia, kia",
+                "japanese": "あそこ"
+              },
+              {
+                "japanese": "どこ",
+                "vietnameseMeaning": "Chỗ nào, đâu",
+                "romaji": "doko"
+              },
+              {
+                "romaji": "kochira",
+                "vietnameseMeaning": "Phía này, đây (lịch sự)",
+                "japanese": "こちら"
+              },
+              {
+                "romaji": "sochira",
+                "vietnameseMeaning": "Phía đó, đó (lịch sự)",
+                "japanese": "そちら"
+              },
+              {
+                "vietnameseMeaning": "Phía kia, kia (lịch sự)",
+                "japanese": "あちら",
+                "romaji": "achira"
+              },
+              {
+                "japanese": "どちら",
+                "vietnameseMeaning": "Phía nào, đâu (lịch sự)",
+                "romaji": "dochira"
+              }
+            ],
+            "categoryName": "Đại Từ Chỉ Định & Địa Điểm",
+            "context": "Khi muốn chỉ vào một vật, địa điểm cụ thể, hỏi về vị trí của chúng, hoặc khi muốn chỉ dẫn một cách lịch sự.",
+            "categoryDescription": "Nhóm các đại từ và từ ngữ dùng để chỉ định vật thể, vị trí hoặc phương hướng tương đối với người nói và người nghe, bao gồm cả dạng lịch sự."
+          },
+          {
+            "words": [
+              {
+                "japanese": "ほん",
+                "vietnameseMeaning": "Quyển sách",
+                "romaji": "hon"
+              },
+              {
+                "japanese": "じしょ",
+                "vietnameseMeaning": "Cuốn từ điển",
+                "romaji": "jisho"
+              },
+              {
+                "romaji": "zasshi",
+                "japanese": "ざっし",
+                "vietnameseMeaning": "Cuốn tạp chí"
+              },
+              {
+                "japanese": "しんぶん",
+                "vietnameseMeaning": "Tờ báo",
+                "romaji": "shinbun"
+              },
+              {
+                "romaji": "nooto",
+                "japanese": "ノート",
+                "vietnameseMeaning": "Cuốn vở, tập ghi chép"
+              },
+              {
+                "japanese": "てちょう",
+                "vietnameseMeaning": "Sổ tay cá nhân",
+                "romaji": "techou"
+              },
+              {
+                "romaji": "meishi",
+                "japanese": "めいし",
+                "vietnameseMeaning": "Danh thiếp"
+              },
+              {
+                "japanese": "えんぴつ",
+                "vietnameseMeaning": "Bút chì",
+                "romaji": "enpitsu"
+              },
+              {
+                "romaji": "boorupen",
+                "japanese": "ボールペン",
+                "vietnameseMeaning": "Bút bi"
+              },
+              {
+                "vietnameseMeaning": "Bút chì bấm",
+                "japanese": "シャープペンシル",
+                "romaji": "shaapupenshiru"
+              }
+            ],
+            "categoryName": "Đồ Dùng Học Tập & Văn Phòng Phẩm",
+            "context": "Khi nói về hoặc mua sắm các vật phẩm phục vụ học tập và làm việc.",
+            "categoryDescription": "Các vật dụng cần thiết cho việc học tập, ghi chép và công việc văn phòng."
+          },
+          {
+            "categoryName": "Vật Dụng Cá Nhân & Thiết Bị Sinh Hoạt",
+            "words": [
+              {
+                "romaji": "kaban",
+                "japanese": "かばん",
+                "vietnameseMeaning": "Cái cặp, túi xách"
+              },
+              {
+                "vietnameseMeaning": "Điện thoại",
+                "japanese": "でんわ",
+                "romaji": "denwa"
+              },
+              {
+                "vietnameseMeaning": "Giày",
+                "japanese": "くつ",
+                "romaji": "kutsu"
+              },
+              {
+                "romaji": "nekutai",
+                "vietnameseMeaning": "Cà vạt",
+                "japanese": "ネクタイ"
+              },
+              {
+                "vietnameseMeaning": "Thẻ",
+                "japanese": "カード",
+                "romaji": "kaado"
+              },
+              {
+                "japanese": "かぎ",
+                "vietnameseMeaning": "Chìa khóa",
+                "romaji": "kagi"
+              },
+              {
+                "vietnameseMeaning": "Đồng hồ",
+                "japanese": "とけい",
+                "romaji": "tokei"
+              },
+              {
+                "romaji": "kasa",
+                "vietnameseMeaning": "Ô, dù",
+                "japanese": "かさ"
+              },
+              {
+                "romaji": "terebi",
+                "japanese": "テレビ",
+                "vietnameseMeaning": "Tivi"
+              },
+              {
+                "vietnameseMeaning": "Đài",
+                "japanese": "ラジオ",
+                "romaji": "rajio"
+              },
+              {
+                "vietnameseMeaning": "Máy ảnh",
+                "japanese": "カメラ",
+                "romaji": "kamera"
+              },
+              {
+                "japanese": "コンピュータ",
+                "vietnameseMeaning": "Máy vi tính",
+                "romaji": "konpyuuta"
+              },
+              {
+                "japanese": "じどうしゃ",
+                "vietnameseMeaning": "Ô tô",
+                "romaji": "jidousha"
+              },
+              {
+                "vietnameseMeaning": "Cái bàn",
+                "japanese": "つくえ",
+                "romaji": "tsukue"
+              },
+              {
+                "romaji": "isu",
+                "vietnameseMeaning": "Cái ghế",
+                "japanese": "いす"
+              }
+            ],
+            "categoryDescription": "Nhóm các vật phẩm cá nhân mang theo, thiết bị điện tử, nội thất và đồ dùng gia đình thông dụng.",
+            "context": "Khi mô tả đồ vật mình sở hữu, tìm kiếm một món đồ, hoặc khi nói về các thiết bị trong nhà."
+          },
+          {
+            "words": [
+              {
+                "japanese": "きょうしつ",
+                "vietnameseMeaning": "Phòng học",
+                "romaji": "kyoushitsu"
+              },
+              {
+                "vietnameseMeaning": "Nhà ăn",
+                "japanese": "しょくどう",
+                "romaji": "shokudou"
+              },
+              {
+                "japanese": "じむしょ",
+                "vietnameseMeaning": "Văn phòng",
+                "romaji": "jimusho"
+              },
+              {
+                "romaji": "kaigishitsu",
+                "vietnameseMeaning": "Phòng họp",
+                "japanese": "かいぎしつ"
+              },
+              {
+                "romaji": "uketsuke",
+                "japanese": "うけつけ",
+                "vietnameseMeaning": "Quầy tiếp tân"
+              },
+              {
+                "japanese": "ロビー",
+                "vietnameseMeaning": "Sảnh, phòng chờ",
+                "romaji": "robii"
+              },
+              {
+                "romaji": "heya",
+                "japanese": "へや",
+                "vietnameseMeaning": "Căn phòng"
+              },
+              {
+                "romaji": "toire",
+                "japanese": "トイレ",
+                "vietnameseMeaning": "Nhà vệ sinh"
+              },
+              {
+                "japanese": "かいだん",
+                "vietnameseMeaning": "Cầu thang",
+                "romaji": "kaidan"
+              },
+              {
+                "romaji": "erebeetaa",
+                "japanese": "エレベーター",
+                "vietnameseMeaning": "Thang máy"
+              },
+              {
+                "japanese": "エスカレーター",
+                "vietnameseMeaning": "Thang cuốn",
+                "romaji": "esukareetaa"
+              },
+              {
+                "vietnameseMeaning": "Đất nước (lịch sự)",
+                "japanese": "おくに",
+                "romaji": "okuni"
+              },
+              {
+                "vietnameseMeaning": "Công ty",
+                "japanese": "かいしゃ",
+                "romaji": "kaisha"
+              },
+              {
+                "romaji": "uchi",
+                "japanese": "うち",
+                "vietnameseMeaning": "Nhà"
+              },
+              {
+                "japanese": "うりば",
+                "vietnameseMeaning": "Quầy bán hàng",
+                "romaji": "uriba"
+              }
+            ],
+            "categoryName": "Địa Điểm & Cơ Sở Vật Chất",
+            "context": "Khi hỏi hoặc nói về vị trí của một nơi chốn nào đó, hoặc khi chỉ dẫn đường đi trong một tòa nhà.",
+            "categoryDescription": "Các từ vựng chỉ các không gian, phòng ốc cụ thể bên trong các tòa nhà, các công trình di chuyển và các địa điểm tổng quát hơn."
+          },
+          {
+            "categoryName": "Số Lượng, Giá Cả & Đơn Vị",
+            "words": [
+              {
+                "japanese": "ちか",
+                "vietnameseMeaning": "Tầng hầm",
+                "romaji": "chika"
+              },
+              {
+                "romaji": "kai",
+                "japanese": "かい",
+                "vietnameseMeaning": "Tầng"
+              },
+              {
+                "romaji": "nangai",
+                "japanese": "なんがい",
+                "vietnameseMeaning": "Tầng mấy"
+              },
+              {
+                "vietnameseMeaning": "Bao nhiêu tiền",
+                "japanese": "いくら",
+                "romaji": "ikura"
+              },
+              {
+                "romaji": "hyaku",
+                "japanese": "ひゃく",
+                "vietnameseMeaning": "Trăm"
+              },
+              {
+                "vietnameseMeaning": "Nghìn",
+                "japanese": "せん",
+                "romaji": "sen"
+              },
+              {
+                "romaji": "man",
+                "japanese": "まん",
+                "vietnameseMeaning": "Mười nghìn/Vạn"
+              }
+            ],
+            "categoryDescription": "Nhóm từ vựng liên quan đến việc đếm tầng, hỏi giá, và các đơn vị số cơ bản trong tiếng Nhật.",
+            "context": "Khi mua sắm, hỏi giá, hoặc nói về số lượng hay tầng lầu."
+          },
+          {
+            "words": [
+              {
+                "vietnameseMeaning": "Rượu vang",
+                "japanese": "ワイン",
+                "romaji": "wain"
+              },
+              {
+                "japanese": "たばこ",
+                "vietnameseMeaning": "Thuốc lá",
+                "romaji": "tabako"
+              },
+              {
+                "japanese": "チョコレート",
+                "vietnameseMeaning": "Sô-cô-la",
+                "romaji": "chokoreeto"
+              },
+              {
+                "romaji": "koohii",
+                "japanese": "コーヒー",
+                "vietnameseMeaning": "Cà phê"
+              },
+              {
+                "romaji": "omiyage",
+                "vietnameseMeaning": "Quà",
+                "japanese": "おみやげ"
+              }
+            ],
+            "categoryName": "Thực Phẩm & Đồ Lưu Niệm",
+            "context": "Khi mua sắm đồ ăn, thức uống, thuốc lá, hoặc khi tặng quà.",
+            "categoryDescription": "Các từ vựng chỉ một số loại đồ ăn, thức uống, thuốc lá và quà tặng."
+          },
+          {
+            "words": [
+              {
+                "romaji": "sumimasen",
+                "vietnameseMeaning": "Xin lỗi",
+                "japanese": "すみません"
+              },
+              {
+                "romaji": "irasshaimase",
+                "vietnameseMeaning": "Xin kính chào quý khách",
+                "japanese": "いらっしゃいませ"
+              },
+              {
+                "romaji": "~o misete kudasai",
+                "japanese": "～を　みせてください",
+                "vietnameseMeaning": "Cho tôi xem ~"
+              },
+              {
+                "romaji": "~o kudasai",
+                "vietnameseMeaning": "Cho tôi ~",
+                "japanese": "～を　ください"
+              },
+              {
+                "romaji": "sou",
+                "japanese": "そう",
+                "vietnameseMeaning": "Đúng vậy"
+              },
+              {
+                "vietnameseMeaning": "Không phải",
+                "japanese": "ちがいます",
+                "romaji": "chigaimasu"
+              },
+              {
+                "romaji": "anou",
+                "japanese": "あのう",
+                "vietnameseMeaning": "À, ừ (cách nói lịch sự)"
+              },
+              {
+                "romaji": "douzo",
+                "japanese": "どうぞ",
+                "vietnameseMeaning": "Xin mời"
+              },
+              {
+                "romaji": "doumo arigatou gozaimasu",
+                "vietnameseMeaning": "Xin cảm ơn",
+                "japanese": "どうもありがとうございます"
+              },
+              {
+                "romaji": "sou desu ka",
+                "japanese": "そうですか",
+                "vietnameseMeaning": "Thế à"
+              },
+              {
+                "vietnameseMeaning": "Từ nay mong được giúp đỡ",
+                "japanese": "これから おせわに なります",
+                "romaji": "korekara osewani narimasu"
+              },
+              {
+                "romaji": "kochirakoso yoroshiku onegaishimasu",
+                "japanese": "こちらこそ よろしく おねがいします",
+                "vietnameseMeaning": "Chính tôi mới cần được giúp đỡ"
+              }
+            ],
+            "categoryName": "Giao Tiếp & Xã Giao",
+            "context": "Khi gặp gỡ người khác, mua sắm, thể hiện sự lịch sự hoặc phản ứng lại thông tin, đặc biệt trong các tình huống cần sự nhã nhặn.",
+            "categoryDescription": "Các câu và cụm từ thông dụng dùng để chào hỏi, xin lỗi, cảm ơn, đưa ra yêu cầu hoặc phản hồi trong giao tiếp hàng ngày và những tình huống xã giao cơ bản."
+          },
+          {
+            "context": "Khi hỏi về ngôn ngữ, hoặc khi muốn biết thông tin về một vật hoặc sự việc không rõ.",
+            "categoryDescription": "Nhóm các từ vựng dùng để chỉ các loại ngôn ngữ và từ để hỏi về vật thể hoặc thông tin.",
+            "words": [
+              {
+                "romaji": "eigo",
+                "japanese": "えいご",
+                "vietnameseMeaning": "Tiếng Anh"
+              },
+              {
+                "japanese": "にほんご",
+                "vietnameseMeaning": "Tiếng Nhật",
+                "romaji": "nihongo"
+              },
+              {
+                "romaji": "~go",
+                "vietnameseMeaning": "Tiếng...",
+                "japanese": "～ご"
+              },
+              {
+                "romaji": "nan",
+                "japanese": "なん",
+                "vietnameseMeaning": "Cái gì"
+              }
+            ],
+            "categoryName": "Ngôn Ngữ & Từ Hỏi"
+          }
+        ],
+        "level": "N5",
+        "title": "Bài 2: Sở hữu & Đồ vật quanh ta",
+        "grammar": {
+          "example": "これ は わたし の ほん です。",
+          "pattern": "これ/それ/あれ は N です | この/その/あの N1 は N2 です",
+          "explanation": "Chỉ thị từ chỉ vật và cấu trúc diễn tả sự sở hữu 'N1 の N2' (N2 của N1).",
+          "exampleMeaning": "Đây là cuốn sách của tôi."
+        },
+        "id": 2,
+        "category": "Minna Bài 2",
+        "words": [
+          {
+            "japanese": "これ",
+            "vietnameseMeaning": "Cái này",
+            "romaji": "kore"
+          },
+          {
+            "romaji": "sore",
+            "vietnameseMeaning": "Cái đó",
+            "japanese": "それ"
+          },
+          {
+            "vietnameseMeaning": "Cái kia",
+            "japanese": "あれ",
+            "romaji": "are"
+          },
+          {
+            "romaji": "kono",
+            "japanese": "この",
+            "vietnameseMeaning": "Này (đi kèm danh từ)"
+          },
+          {
+            "romaji": "sono",
+            "japanese": "その",
+            "vietnameseMeaning": "Đó (đi kèm danh từ)"
+          },
+          {
+            "japanese": "あの",
+            "vietnameseMeaning": "Kia (đi kèm danh từ)",
+            "romaji": "ano"
+          },
+          {
+            "romaji": "hon",
+            "japanese": "ほん",
+            "vietnameseMeaning": "Quyển sách"
+          },
+          {
+            "japanese": "じしょ",
+            "vietnameseMeaning": "Cuốn từ điển",
+            "romaji": "jisho"
+          },
+          {
+            "romaji": "zasshi",
+            "japanese": "ざっし",
+            "vietnameseMeaning": "Cuốn tạp chí"
+          },
+          {
+            "vietnameseMeaning": "Tờ báo",
+            "japanese": "しんぶん",
+            "romaji": "shinbun"
+          },
+          {
+            "japanese": "ノート",
+            "vietnameseMeaning": "Cuốn vở, tập ghi chép",
+            "romaji": "nooto"
+          },
+          {
+            "vietnameseMeaning": "Sổ tay cá nhân",
+            "japanese": "てちょう",
+            "romaji": "techou"
+          },
+          {
+            "romaji": "meishi",
+            "japanese": "めいし",
+            "vietnameseMeaning": "Danh thiếp"
+          },
+          {
+            "romaji": "kaban",
+            "vietnameseMeaning": "Cái cặp, túi xách",
+            "japanese": "かばん"
+          },
+          {
+            "japanese": "ここ",
+            "vietnameseMeaning": "Chỗ này, đây",
+            "romaji": "koko"
+          },
+          {
+            "romaji": "soko",
+            "japanese": "そこ",
+            "vietnameseMeaning": "Chỗ đó, đó"
+          },
+          {
+            "vietnameseMeaning": "Chỗ kia, kia",
+            "japanese": "あそこ",
+            "romaji": "asoko"
+          },
+          {
+            "vietnameseMeaning": "Chỗ nào, đâu",
+            "japanese": "どこ",
+            "romaji": "doko"
+          },
+          {
+            "vietnameseMeaning": "Phía này, đây (lịch sự)",
+            "japanese": "こちら",
+            "romaji": "kochira"
+          },
+          {
+            "romaji": "sochira",
+            "japanese": "そちら",
+            "vietnameseMeaning": "Phía đó, đó (lịch sự)"
+          },
+          {
+            "japanese": "あちら",
+            "vietnameseMeaning": "Phía kia, kia (lịch sự)",
+            "romaji": "achira"
+          },
+          {
+            "romaji": "dochira",
+            "vietnameseMeaning": "Phía nào, đâu (lịch sự)",
+            "japanese": "どちら"
+          },
+          {
+            "japanese": "きょうしつ",
+            "vietnameseMeaning": "Phòng học",
+            "romaji": "kyoushitsu"
+          },
+          {
+            "romaji": "shokudou",
+            "japanese": "しょくどう",
+            "vietnameseMeaning": "Nhà ăn"
+          },
+          {
+            "romaji": "jimusho",
+            "vietnameseMeaning": "Văn phòng",
+            "japanese": "じむしょ"
+          },
+          {
+            "vietnameseMeaning": "Phòng họp",
+            "japanese": "かいぎしつ",
+            "romaji": "kaigishitsu"
+          },
+          {
+            "romaji": "uketsuke",
+            "vietnameseMeaning": "Quầy tiếp tân",
+            "japanese": "うけつけ"
+          },
+          {
+            "romaji": "robii",
+            "vietnameseMeaning": "Sảnh, phòng chờ",
+            "japanese": "ロビー"
+          },
+          {
+            "vietnameseMeaning": "Căn phòng",
+            "japanese": "へや",
+            "romaji": "heya"
+          },
+          {
+            "vietnameseMeaning": "Nhà vệ sinh",
+            "japanese": "トイレ",
+            "romaji": "toire"
+          },
+          {
+            "romaji": "kaidan",
+            "japanese": "かいだん",
+            "vietnameseMeaning": "Cầu thang"
+          },
+          {
+            "vietnameseMeaning": "Thang máy",
+            "japanese": "エレベーター",
+            "romaji": "erebeetaa"
+          },
+          {
+            "romaji": "esukareetaa",
+            "japanese": "エスカレーター",
+            "vietnameseMeaning": "Thang cuốn"
+          },
+          {
+            "vietnameseMeaning": "Đất nước (lịch sự)",
+            "japanese": "おくに",
+            "romaji": "okuni"
+          },
+          {
+            "vietnameseMeaning": "Công ty",
+            "japanese": "かいしゃ",
+            "romaji": "kaisha"
+          },
+          {
+            "vietnameseMeaning": "Nhà",
+            "japanese": "うち",
+            "romaji": "uchi"
+          },
+          {
+            "japanese": "でんわ",
+            "vietnameseMeaning": "Điện thoại",
+            "romaji": "denwa"
+          },
+          {
+            "romaji": "kutsu",
+            "vietnameseMeaning": "Giày",
+            "japanese": "くつ"
+          },
+          {
+            "romaji": "nekutai",
+            "japanese": "ネクタイ",
+            "vietnameseMeaning": "Cà vạt"
+          },
+          {
+            "japanese": "ワイン",
+            "vietnameseMeaning": "Rượu vang",
+            "romaji": "wain"
+          },
+          {
+            "romaji": "tabako",
+            "vietnameseMeaning": "Thuốc lá",
+            "japanese": "たばこ"
+          },
+          {
+            "romaji": "uriba",
+            "japanese": "うりば",
+            "vietnameseMeaning": "Quầy bán hàng"
+          },
+          {
+            "romaji": "chika",
+            "vietnameseMeaning": "Tầng hầm",
+            "japanese": "ちか"
+          },
+          {
+            "japanese": "かい",
+            "vietnameseMeaning": "Tầng",
+            "romaji": "kai"
+          },
+          {
+            "japanese": "なんがい",
+            "vietnameseMeaning": "Tầng mấy",
+            "romaji": "nangai"
+          },
+          {
+            "vietnameseMeaning": "Bao nhiêu tiền",
+            "japanese": "いくら",
+            "romaji": "ikura"
+          },
+          {
+            "vietnameseMeaning": "Trăm",
+            "japanese": "ひゃく",
+            "romaji": "hyaku"
+          },
+          {
+            "vietnameseMeaning": "Nghìn",
+            "japanese": "せん",
+            "romaji": "sen"
+          },
+          {
+            "vietnameseMeaning": "Mười nghìn/Vạn",
+            "japanese": "まん",
+            "romaji": "man"
+          },
+          {
+            "japanese": "すみません",
+            "vietnameseMeaning": "Xin lỗi",
+            "romaji": "sumimasen"
+          },
+          {
+            "romaji": "irasshaimase",
+            "vietnameseMeaning": "Xin kính chào quý khách",
+            "japanese": "いらっしゃいませ"
+          },
+          {
+            "romaji": "~o misete kudasai",
+            "vietnameseMeaning": "Cho tôi xem ~",
+            "japanese": "～を　みせてください"
+          },
+          {
+            "romaji": "~o kudasai",
+            "vietnameseMeaning": "Cho tôi ~",
+            "japanese": "～を　ください"
+          },
+          {
+            "romaji": "kaado",
+            "vietnameseMeaning": "Thẻ",
+            "japanese": "カード"
+          },
+          {
+            "japanese": "えんぴつ",
+            "vietnameseMeaning": "Bút chì",
+            "romaji": "enpitsu"
+          },
+          {
+            "romaji": "boorupen",
+            "japanese": "ボールペン",
+            "vietnameseMeaning": "Bút bi"
+          },
+          {
+            "vietnameseMeaning": "Bút chì bấm",
+            "japanese": "シャープペンシル",
+            "romaji": "shaapupenshiru"
+          },
+          {
+            "japanese": "かぎ",
+            "vietnameseMeaning": "Chìa khóa",
+            "romaji": "kagi"
+          },
+          {
+            "romaji": "tokei",
+            "vietnameseMeaning": "Đồng hồ",
+            "japanese": "とけい"
+          },
+          {
+            "romaji": "kasa",
+            "japanese": "かさ",
+            "vietnameseMeaning": "Ô, dù"
+          },
+          {
+            "japanese": "テレビ",
+            "vietnameseMeaning": "Tivi",
+            "romaji": "terebi"
+          },
+          {
+            "vietnameseMeaning": "Đài",
+            "japanese": "ラジオ",
+            "romaji": "rajio"
+          },
+          {
+            "vietnameseMeaning": "Máy ảnh",
+            "japanese": "カメラ",
+            "romaji": "kamera"
+          },
+          {
+            "romaji": "konpyuuta",
+            "vietnameseMeaning": "Máy vi tính",
+            "japanese": "コンピュータ"
+          },
+          {
+            "vietnameseMeaning": "Ô tô",
+            "japanese": "じどうしゃ",
+            "romaji": "jidousha"
+          },
+          {
+            "romaji": "tsukue",
+            "vietnameseMeaning": "Cái bàn",
+            "japanese": "つくえ"
+          },
+          {
+            "romaji": "isu",
+            "japanese": "いす",
+            "vietnameseMeaning": "Cái ghế"
+          },
+          {
+            "romaji": "chokoreeto",
+            "vietnameseMeaning": "Sô-cô-la",
+            "japanese": "チョコレート"
+          },
+          {
+            "vietnameseMeaning": "Cà phê",
+            "japanese": "コーヒー",
+            "romaji": "koohii"
+          },
+          {
+            "romaji": "omiyage",
+            "japanese": "おみやげ",
+            "vietnameseMeaning": "Quà"
+          },
+          {
+            "romaji": "eigo",
+            "japanese": "えいご",
+            "vietnameseMeaning": "Tiếng Anh"
+          },
+          {
+            "vietnameseMeaning": "Tiếng Nhật",
+            "japanese": "にほんご",
+            "romaji": "nihongo"
+          },
+          {
+            "romaji": "~go",
+            "vietnameseMeaning": "Tiếng...",
+            "japanese": "～ご"
+          },
+          {
+            "vietnameseMeaning": "Cái gì",
+            "japanese": "なん",
+            "romaji": "nan"
+          },
+          {
+            "romaji": "sou",
+            "japanese": "そう",
+            "vietnameseMeaning": "Đúng vậy"
+          },
+          {
+            "romaji": "chigaimasu",
+            "vietnameseMeaning": "Không phải",
+            "japanese": "ちがいます"
+          },
+          {
+            "vietnameseMeaning": "À, ừ (cách nói lịch sự)",
+            "japanese": "あのう",
+            "romaji": "anou"
+          },
+          {
+            "romaji": "douzo",
+            "japanese": "どうぞ",
+            "vietnameseMeaning": "Xin mời"
+          },
+          {
+            "japanese": "どうもありがとうございます",
+            "vietnameseMeaning": "Xin cảm ơn",
+            "romaji": "doumo arigatou gozaimasu"
+          },
+          {
+            "vietnameseMeaning": "Thế à",
+            "japanese": "そうですか",
+            "romaji": "sou desu ka"
+          },
+          {
+            "vietnameseMeaning": "Từ nay mong được giúp đỡ",
+            "japanese": "これから おせわに なります",
+            "romaji": "korekara osewani narimasu"
+          },
+          {
+            "romaji": "kochirakoso yoroshiku onegaishimasu",
+            "japanese": "こちらこそ よろしく おねがいします",
+            "vietnameseMeaning": "Chính tôi mới cần được giúp đỡ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20",
+      "data": {
+        "id": 20,
+        "category": "Minna Bài 20",
+        "words": [
+          {
+            "romaji": "irimasu",
+            "japanese": "いります",
+            "vietnameseMeaning": "Cần"
+          },
+          {
+            "vietnameseMeaning": "Kiểm tra, tra cứu",
+            "japanese": "しらべます",
+            "romaji": "shirabemasu"
+          },
+          {
+            "romaji": "naoshimasu",
+            "vietnameseMeaning": "Sửa chữa",
+            "japanese": "なおします"
+          },
+          {
+            "romaji": "shuri shimasu",
+            "japanese": "しゅりします",
+            "vietnameseMeaning": "Sửa chữa lớn"
+          },
+          {
+            "romaji": "denwashimasu",
+            "vietnameseMeaning": "Gọi điện thoại",
+            "japanese": "でんわします"
+          },
+          {
+            "romaji": "boku",
+            "vietnameseMeaning": "Tớ (nam giới xưng hô)",
+            "japanese": "ぼく"
+          },
+          {
+            "romaji": "kimi",
+            "vietnameseMeaning": "Cậu, em",
+            "japanese": "きみ"
+          },
+          {
+            "romaji": "un",
+            "japanese": "うん",
+            "vietnameseMeaning": "Ừ, vâng (thân mật)"
+          },
+          {
+            "romaji": "uun",
+            "japanese": "うーん",
+            "vietnameseMeaning": "Không (thân mật)"
+          },
+          {
+            "romaji": "sarariiman",
+            "vietnameseMeaning": "Nhân viên văn phòng",
+            "japanese": "サラリーマン"
+          },
+          {
+            "vietnameseMeaning": "Từ vựng, ngôn từ",
+            "japanese": "ことば",
+            "romaji": "kotoba"
+          },
+          {
+            "vietnameseMeaning": "Vật giá, giá cả",
+            "japanese": "ぶっか",
+            "romaji": "bukka"
+          },
+          {
+            "vietnameseMeaning": "Trang phục Kimono",
+            "japanese": "きもの",
+            "romaji": "kimono"
+          },
+          {
+            "japanese": "ビザ",
+            "vietnameseMeaning": "Visa, thị thực",
+            "romaji": "biza"
+          },
+          {
+            "romaji": "hajime",
+            "vietnameseMeaning": "Sự bắt đầu",
+            "japanese": "はじめ"
+          }
+        ],
+        "grammar": {
+          "example": "あした とうきょう へ いく？ - うん、いく。",
+          "pattern": "Thể thông thường (Futsuukei) (Động từ, Tính từ, Danh từ)",
+          "explanation": "Sử dụng thể ngắn (Futsuukei) thay thế hoàn toàn ます / です trong hội thoại không trang trọng.",
+          "exampleMeaning": "Mai đi Tokyo không? - Ừ, đi chứ."
+        },
+        "description": "Học cách nói chuyện suồng sã, thân mật với bạn bè, đồng nghiệp thân bằng thể thông thường.",
+        "level": "N5",
+        "title": "Bài 20: Thể Thông thường"
+      }
+    },
+    {
+      "id": "21",
+      "data": {
+        "category": "Minna Bài 21",
+        "words": [
+          {
+            "romaji": "omoimasu",
+            "vietnameseMeaning": "Nghĩ, tưởng rằng",
+            "japanese": "おもいます"
+          },
+          {
+            "romaji": "iimasu",
+            "vietnameseMeaning": "Nói",
+            "japanese": "いいます"
+          },
+          {
+            "vietnameseMeaning": "Đầy đủ",
+            "japanese": "たります",
+            "romaji": "tarimasu"
+          },
+          {
+            "vietnameseMeaning": "Thắng",
+            "japanese": "かちます",
+            "romaji": "kachimasu"
+          },
+          {
+            "vietnameseMeaning": "Thua",
+            "japanese": "まけます",
+            "romaji": "makemasu"
+          },
+          {
+            "vietnameseMeaning": "Có (tổ chức cuộc họp/lễ hội)",
+            "japanese": "あります",
+            "romaji": "arimasu"
+          },
+          {
+            "vietnameseMeaning": "Hữu ích, có ích",
+            "japanese": "役に立ちます",
+            "romaji": "yakunitachimasu"
+          },
+          {
+            "romaji": "onaji",
+            "japanese": "おなじ",
+            "vietnameseMeaning": "Giống nhau"
+          },
+          {
+            "vietnameseMeaning": "Chắc là, có lẽ",
+            "japanese": "たぶん",
+            "romaji": "tabun"
+          },
+          {
+            "romaji": "kitto",
+            "vietnameseMeaning": "Nhất định",
+            "japanese": "きっと"
+          },
+          {
+            "japanese": "ほんとうに",
+            "vietnameseMeaning": "Thật sự, thực sự",
+            "romaji": "hentouni"
+          },
+          {
+            "vietnameseMeaning": "Tin tức",
+            "japanese": "ニュース",
+            "romaji": "nyuusu"
+          },
+          {
+            "vietnameseMeaning": "Bài diễn văn, phát biểu",
+            "japanese": "スピーチ",
+            "romaji": "supiichi"
+          },
+          {
+            "japanese": "しあい",
+            "vietnameseMeaning": "Trận đấu",
+            "romaji": "shiai"
+          },
+          {
+            "japanese": "じけん",
+            "vietnameseMeaning": "Vụ án, sự cố",
+            "romaji": "jiken"
+          }
+        ],
+        "id": 21,
+        "grammar": {
+          "exampleMeaning": "Tôi nghĩ là ngày mai trời sẽ mưa.",
+          "explanation": "Đưa ra phán đoán/suy nghĩ cá nhân, trích dẫn câu nói gián tiếp, và biểu thị sự đồng tình.",
+          "pattern": "V-る/Adj/N(thông thường) と おmoいます | ～ と いいました | ～ でしょう",
+          "example": "あした は あめ が fuる と おmoいます。"
+        },
+        "description": "Bày tỏ suy nghĩ cá nhân về thời tiết, sự việc, và cách nói câu gián tiếp trích dẫn ai đó.",
+        "title": "Bài 21: Ý kiến & Suy nghĩ cá nhân",
+        "level": "N5"
+      }
+    },
+    {
+      "id": "22",
+      "data": {
+        "grammar": {
+          "explanation": "Động từ thể ngắn đứng trước bổ ngữ trực tiếp cho danh từ, biến mệnh đề thành tính chất danh từ.",
+          "exampleMeaning": "Đây là bức tranh mà tôi đã vẽ.",
+          "example": "これは わたし が かいた え です。",
+          "pattern": "Mệnh đề bổ ngữ (V thể thông thường) + Danh từ"
+        },
+        "id": 22,
+        "category": "Minna Bài 22",
+        "words": [
+          {
+            "vietnameseMeaning": "Mặc (áo, sơ mi)",
+            "japanese": "きます",
+            "romaji": "kimasu"
+          },
+          {
+            "romaji": "hakimasu",
+            "vietnameseMeaning": "Mặc (quần, váy), đi giày",
+            "japanese": "はきます"
+          },
+          {
+            "romaji": "kaburimasu",
+            "japanese": "かぶります",
+            "vietnameseMeaning": "Đội (mũ)"
+          },
+          {
+            "vietnameseMeaning": "Đeo (kính)",
+            "japanese": "かけます",
+            "romaji": "kakemasu"
+          },
+          {
+            "romaji": "umaremasu",
+            "japanese": "うまれます",
+            "vietnameseMeaning": "Sinh ra"
+          },
+          {
+            "vietnameseMeaning": "Áo khoác",
+            "japanese": "コート",
+            "romaji": "kooto"
+          },
+          {
+            "vietnameseMeaning": "Áo len",
+            "japanese": "セーター",
+            "romaji": "seetaa"
+          },
+          {
+            "romaji": "suutsu",
+            "vietnameseMeaning": "Comple, Suit",
+            "japanese": "スーツ"
+          },
+          {
+            "romaji": "boushi",
+            "vietnameseMeaning": "Mũ, nón",
+            "japanese": "ぼうし"
+          },
+          {
+            "vietnameseMeaning": "Kính mắt",
+            "japanese": "めがね",
+            "romaji": "megane"
+          },
+          {
+            "romaji": "yoku",
+            "vietnameseMeaning": "Thường xuyên",
+            "japanese": "よく"
+          },
+          {
+            "romaji": "omedetou",
+            "japanese": "おめでとう",
+            "vietnameseMeaning": "Chúc mừng"
+          },
+          {
+            "japanese": "やちん",
+            "vietnameseMeaning": "Tiền thuê nhà",
+            "romaji": "yachin"
+          },
+          {
+            "vietnameseMeaning": "Bếp ăn",
+            "japanese": "ダイニングキッチン",
+            "romaji": "dainingu kicchin"
+          },
+          {
+            "japanese": "わしつ",
+            "vietnameseMeaning": "Phòng kiểu Nhật",
+            "romaji": "washitsu"
+          }
+        ],
+        "level": "N5",
+        "title": "Bài 22: Định ngữ bổ nghĩa Danh từ",
+        "description": "Học cách sử dụng cả một mệnh đề hành động để bổ nghĩa cho danh từ, làm câu chi tiết hơn."
+      }
+    },
+    {
+      "id": "23",
+      "data": {
+        "grammar": {
+          "explanation": "Dùng とき khi nói về mốc thời điểm, dùng と diễn tả hành động dẫn đến kết quả tất yếu tự nhiên.",
+          "exampleMeaning": "Hễ băng qua cây cầu là sẽ thấy ngân hàng.",
+          "example": "はし を わたる と, ぎんこう が あります。",
+          "pattern": "V-る / V-た / Adj / N の とき | V-ると, ~"
+        },
+        "id": 23,
+        "category": "Minna Bài 23",
+        "words": [
+          {
+            "romaji": "kikimasu",
+            "japanese": "ききます",
+            "vietnameseMeaning": "Hỏi"
+          },
+          {
+            "japanese": "まわします",
+            "vietnameseMeaning": "Xoay, vặn",
+            "romaji": "mawashimasu"
+          },
+          {
+            "romaji": "hikimasu",
+            "japanese": "ひきます",
+            "vietnameseMeaning": "Kéo, giật"
+          },
+          {
+            "japanese": "かえます",
+            "vietnameseMeaning": "Thay đổi",
+            "romaji": "kaemasu"
+          },
+          {
+            "romaji": "sawarimasu",
+            "vietnameseMeaning": "Chạm vào, sờ",
+            "japanese": "さわります"
+          },
+          {
+            "vietnameseMeaning": "Ra (tiền thừa thối lại)",
+            "japanese": "でます",
+            "romaji": "demasu"
+          },
+          {
+            "japanese": "あるきます",
+            "vietnameseMeaning": "Đi bộ",
+            "romaji": "arukimasu"
+          },
+          {
+            "japanese": "わたります",
+            "vietnameseMeaning": "Băng qua",
+            "romaji": "watarimasu"
+          },
+          {
+            "romaji": "magarimasu",
+            "japanese": "まがります",
+            "vietnameseMeaning": "Rẽ, quẹo"
+          },
+          {
+            "romaji": "sabishii",
+            "japanese": "さびしい",
+            "vietnameseMeaning": "Cô đơn, buồn"
+          },
+          {
+            "vietnameseMeaning": "Nước nóng",
+            "japanese": "おゆ",
+            "romaji": "oyu"
+          },
+          {
+            "romaji": "oto",
+            "japanese": "おと",
+            "vietnameseMeaning": "Âm thanh"
+          },
+          {
+            "romaji": "saizu",
+            "vietnameseMeaning": "Kích cỡ",
+            "japanese": "サイズ"
+          },
+          {
+            "vietnameseMeaning": "Sự hỏng hóc",
+            "japanese": "こしょう",
+            "romaji": "koshou"
+          },
+          {
+            "japanese": "みち",
+            "vietnameseMeaning": "Con đường",
+            "romaji": "michi"
+          }
+        ],
+        "title": "Bài 23: Chỉ thời điểm & Hệ quả tự nhiên",
+        "level": "N5",
+        "description": "Liên kết sự việc xảy ra ở một thời điểm nhất định (Khi...) và diễn tả quy luật nhân quả (Hễ...)."
+      }
+    },
+    {
+      "id": "24",
+      "data": {
+        "grammar": {
+          "example": "さとうさん は わたし に にほんgo を おしえて くれました。",
+          "pattern": "N は わたし に くれる | V-て あげます / もらいます / くれます",
+          "explanation": "Mô tả hành vi hỗ trợ, làm điều tốt giúp đỡ cho người khác hoặc được người khác ban ơn.",
+          "exampleMeaning": "Chị Sato đã dạy tiếng Nhật cho tôi."
+        },
+        "category": "Minna Bài 24",
+        "words": [
+          {
+            "japanese": "くれます",
+            "vietnameseMeaning": "Cho tôi, tặng tôi",
+            "romaji": "kuremasu"
+          },
+          {
+            "romaji": "tsurete ikimasu",
+            "vietnameseMeaning": "Dẫn đi",
+            "japanese": "つれていきます"
+          },
+          {
+            "romaji": "tsurete kimasu",
+            "vietnameseMeaning": "Dẫn đến",
+            "japanese": "つれてきます"
+          },
+          {
+            "romaji": "okurimasu",
+            "japanese": "おくります",
+            "vietnameseMeaning": "Tiễn đưa, tiễn khách"
+          },
+          {
+            "romaji": "shoukaishimasu",
+            "vietnameseMeaning": "Giới thiệu",
+            "japanese": "しょうかいします"
+          },
+          {
+            "japanese": "あんないします",
+            "vietnameseMeaning": "Hướng dẫn, dẫn đường",
+            "romaji": "annaishimasu"
+          },
+          {
+            "japanese": "せつめいします",
+            "vietnameseMeaning": "Giải thích",
+            "romaji": "setsumeishimasu"
+          },
+          {
+            "romaji": "kopii shimasu",
+            "vietnameseMeaning": "In sao, Copy",
+            "japanese": "コピーします"
+          },
+          {
+            "vietnameseMeaning": "Ông nội/ngoại",
+            "japanese": "おじいさん",
+            "romaji": "ojiisan"
+          },
+          {
+            "romaji": "obaasan",
+            "vietnameseMeaning": "Bà nội/ngoại",
+            "japanese": "おばあさん"
+          },
+          {
+            "vietnameseMeaning": "Sự chuẩn bị",
+            "japanese": "じゅんび",
+            "romaji": "junbi"
+          },
+          {
+            "romaji": "hikkoshi",
+            "japanese": "ひっこし",
+            "vietnameseMeaning": "Chuyển nhà"
+          },
+          {
+            "vietnameseMeaning": "Bánh kẹo",
+            "japanese": "おかし",
+            "romaji": "okashi"
+          },
+          {
+            "romaji": "hoomusutei",
+            "vietnameseMeaning": "Homestay",
+            "japanese": "ホームステイ"
+          },
+          {
+            "romaji": "zenbu",
+            "vietnameseMeaning": "Toàn bộ",
+            "japanese": "ぜんぶ"
+          }
+        ],
+        "id": 24,
+        "description": "Thể hiện hành động đem lại lợi ích cho ai đó bằng cách kết hợp Thể Te với cho nhận.",
+        "title": "Bài 24: Cho nhận hành động",
+        "level": "N5"
+      }
+    },
+    {
+      "id": "25",
+      "data": {
+        "description": "Cách nói nếu thời tiết/sự việc xảy ra thì sẽ làm gì (Nếu... thì) và cho dù... thì vẫn.",
+        "level": "N5",
+        "title": "Bài 25: Câu giả định & Điều kiện",
+        "id": 25,
+        "category": "Minna Bài 25",
+        "words": [
+          {
+            "vietnameseMeaning": "Suy nghĩ, cân nhắc",
+            "japanese": "かんgえます",
+            "romaji": "kangaemasu"
+          },
+          {
+            "romaji": "tsukimasu",
+            "japanese": "つきます",
+            "vietnameseMeaning": "Đến nơi"
+          },
+          {
+            "vietnameseMeaning": "Du học",
+            "japanese": "りゅうがくします",
+            "romaji": "ryuugaku shimasu"
+          },
+          {
+            "japanese": "とります",
+            "vietnameseMeaning": "Thêm (tuổi), lấy",
+            "romaji": "torimasu"
+          },
+          {
+            "vietnameseMeaning": "Nông thôn, quê hương",
+            "japanese": "いなか",
+            "romaji": "inaka"
+          },
+          {
+            "japanese": "たいしかん",
+            "vietnameseMeaning": "Đại sứ quán",
+            "romaji": "taishikan"
+          },
+          {
+            "japanese": "グループ",
+            "vietnameseMeaning": "Nhóm, Group",
+            "romaji": "guruupu"
+          },
+          {
+            "vietnameseMeaning": "Cơ hội, Chance",
+            "japanese": "チャンス",
+            "romaji": "chansu"
+          },
+          {
+            "romaji": "oku",
+            "japanese": "おく",
+            "vietnameseMeaning": "Trăm triệu"
+          },
+          {
+            "romaji": "moshi",
+            "vietnameseMeaning": "Nếu",
+            "japanese": "もし"
+          },
+          {
+            "romaji": "ikura",
+            "vietnameseMeaning": "Bao nhiêu",
+            "japanese": "いくら"
+          },
+          {
+            "romaji": "tenkin",
+            "japanese": "てんきん",
+            "vietnameseMeaning": "Chuyển công tác"
+          },
+          {
+            "japanese": "こと",
+            "vietnameseMeaning": "Việc, chuyện",
+            "romaji": "koto"
+          },
+          {
+            "vietnameseMeaning": "Đầy, nhiều",
+            "japanese": "いっぱい",
+            "romaji": "ippai"
+          },
+          {
+            "japanese": "おせわになりました",
+            "vietnameseMeaning": "Cảm ơn đã giúp đỡ",
+            "romaji": "osewa ni narimashita"
+          }
+        ],
+        "grammar": {
+          "exampleMeaning": "Nếu trời mưa, tôi sẽ không đi.",
+          "explanation": "Diễn đạt điều kiện giả định xảy ra trong tương lai, hoặc điều kiện nhượng bộ mặc dù vẫn.",
+          "pattern": "V-たら, ~ (Nếu...) | V-ても, ~ (Mặc dù...)",
+          "example": "あめ が ふったら, いきません。 "
+        }
+      }
+    },
+    {
+      "id": "3",
+      "data": {
+        "grammar": {
+          "explanation": "Chỉ thị vị trí nơi chốn, hỏi địa điểm ở đâu, nguồn gốc xuất xứ của sản phẩm.",
+          "exampleMeaning": "Văn phòng ở đằng kia.",
+          "example": "じむしょ は あそこ です。",
+          "pattern": "ここ/そこ/あそこ は Địa điểm です | N は Địa điểm です"
+        },
+        "id": 3,
+        "words": [
+          {
+            "romaji": "koko",
+            "japanese": "ここ",
+            "vietnameseMeaning": "Chỗ này"
+          },
+          {
+            "romaji": "soko",
+            "japanese": "そこ",
+            "vietnameseMeaning": "Chỗ đó"
+          },
+          {
+            "romaji": "asoko",
+            "vietnameseMeaning": "Chỗ kia",
+            "japanese": "あそこ"
+          },
+          {
+            "romaji": "doko",
+            "japanese": "どこ",
+            "vietnameseMeaning": "Chỗ nào"
+          },
+          {
+            "romaji": "kochira",
+            "japanese": "こちら",
+            "vietnameseMeaning": "Phía này (lịch sự)"
+          },
+          {
+            "romaji": "sochira",
+            "vietnameseMeaning": "Phía đó (lịch sự)",
+            "japanese": "そちら"
+          },
+          {
+            "vietnameseMeaning": "Phía kia (lịch sự)",
+            "japanese": "あちら",
+            "romaji": "achira"
+          },
+          {
+            "romaji": "kyoushitsu",
+            "japanese": "きょうしつ",
+            "vietnameseMeaning": "Lớp học, phòng học"
+          },
+          {
+            "romaji": "shokudou",
+            "japanese": "しょくどう",
+            "vietnameseMeaning": "Nhà ăn, phòng ăn"
+          },
+          {
+            "japanese": "じむしょ",
+            "vietnameseMeaning": "Văn phòng",
+            "romaji": "jimusho"
+          },
+          {
+            "vietnameseMeaning": "Phòng họp",
+            "japanese": "かいぎしつ",
+            "romaji": "kaigishitsu"
+          },
+          {
+            "japanese": "うけつけ",
+            "vietnameseMeaning": "Quầy tiếp tân",
+            "romaji": "uketsuke"
+          },
+          {
+            "romaji": "toire",
+            "vietnameseMeaning": "Nhà vệ sinh",
+            "japanese": "といれ"
+          },
+          {
+            "vietnameseMeaning": "Phòng vệ sinh (lịch sự)",
+            "japanese": "おてあらい",
+            "romaji": "otearai"
+          },
+          {
+            "romaji": "uchi",
+            "japanese": "うち",
+            "vietnameseMeaning": "Ngôi nhà"
+          },
+          {
+            "vietnameseMeaning": "Tôi",
+            "japanese": "わたし",
+            "romaji": "watashi"
+          },
+          {
+            "vietnameseMeaning": "Bạn, anh/chị",
+            "japanese": "あなた",
+            "romaji": "anata"
+          },
+          {
+            "vietnameseMeaning": "Vị kia (lịch sự)",
+            "japanese": "あの かた",
+            "romaji": "ano kata"
+          },
+          {
+            "vietnameseMeaning": "Phía nào, đằng nào (lịch sự)",
+            "japanese": "どちら",
+            "romaji": "dochira"
+          },
+          {
+            "vietnameseMeaning": "Sảnh, phòng chờ",
+            "japanese": "ロビー",
+            "romaji": "robii"
+          },
+          {
+            "romaji": "heya",
+            "vietnameseMeaning": "Căn phòng",
+            "japanese": "へや"
+          },
+          {
+            "romaji": "toire",
+            "vietnameseMeaning": "Nhà vệ sinh",
+            "japanese": "トイレ"
+          },
+          {
+            "romaji": "kaidan",
+            "vietnameseMeaning": "Cầu thang",
+            "japanese": "かいだん"
+          },
+          {
+            "romaji": "erebeetaa",
+            "vietnameseMeaning": "Thang máy",
+            "japanese": "エレベーター"
+          },
+          {
+            "japanese": "エスカレーター",
+            "vietnameseMeaning": "Thang cuốn",
+            "romaji": "esukareetaa"
+          },
+          {
+            "japanese": "おくに",
+            "vietnameseMeaning": "Đất nước (lịch sự)",
+            "romaji": "okuni"
+          },
+          {
+            "japanese": "かいしゃ",
+            "vietnameseMeaning": "Công ty",
+            "romaji": "kaisha"
+          },
+          {
+            "romaji": "denwa",
+            "vietnameseMeaning": "Điện thoại",
+            "japanese": "でんわ"
+          },
+          {
+            "romaji": "kutsu",
+            "japanese": "くつ",
+            "vietnameseMeaning": "Giày"
+          },
+          {
+            "romaji": "nekutai",
+            "japanese": "ネクタイ",
+            "vietnameseMeaning": "Cà vạt"
+          },
+          {
+            "japanese": "ワイン",
+            "vietnameseMeaning": "Rượu vang",
+            "romaji": "wain"
+          },
+          {
+            "romaji": "tabako",
+            "vietnameseMeaning": "Thuốc lá",
+            "japanese": "たばこ"
+          },
+          {
+            "romaji": "uriba",
+            "vietnameseMeaning": "Quầy bán hàng",
+            "japanese": "うりば"
+          },
+          {
+            "romaji": "chika",
+            "vietnameseMeaning": "Tầng hầm",
+            "japanese": "ちか"
+          },
+          {
+            "romaji": "~kai",
+            "japanese": "～かい",
+            "vietnameseMeaning": "Tầng thứ ~"
+          },
+          {
+            "romaji": "nangai",
+            "vietnameseMeaning": "Tầng mấy",
+            "japanese": "なんがい"
+          },
+          {
+            "vietnameseMeaning": "~ Yên (tiền Nhật)",
+            "japanese": "～えん",
+            "romaji": "~en"
+          },
+          {
+            "romaji": "hyaku",
+            "japanese": "ひゃく",
+            "vietnameseMeaning": "Trăm"
+          },
+          {
+            "romaji": "sen",
+            "vietnameseMeaning": "Nghìn",
+            "japanese": "せん"
+          },
+          {
+            "japanese": "まん",
+            "vietnameseMeaning": "Vạn (10 nghìn)",
+            "romaji": "man"
+          },
+          {
+            "romaji": "sumimasen",
+            "vietnameseMeaning": "Xin lỗi",
+            "japanese": "すみません"
+          },
+          {
+            "japanese": "いらっしゃいませ",
+            "vietnameseMeaning": "Xin kính chào quý khách",
+            "romaji": "irasshaimase"
+          },
+          {
+            "romaji": "~o misete kudasai",
+            "japanese": "～をみせてください",
+            "vietnameseMeaning": "Cho tôi xem ~"
+          },
+          {
+            "vietnameseMeaning": "Cho tôi ~",
+            "japanese": "～をください",
+            "romaji": "~o kudasai"
+          }
+        ],
+        "category": "Minna Bài 3",
+        "level": "N5",
+        "title": "Bài 3: Địa điểm & Hỏi đường",
+        "description": "Cách hỏi và chỉ đường đến văn phòng, nhà ăn, nhà vệ sinh hay địa danh công cộng."
+      }
+    },
+    {
+      "id": "4",
+      "data": {
+        "grammar": {
+          "explanation": "Nói giờ giấc, diễn đạt khoảng thời gian làm việc và chia động từ ở các thời.",
+          "exampleMeaning": "Ngân hàng mở cửa từ 9 giờ đến 3 giờ.",
+          "example": "ぎんこう は ９じ から ３じ まで です。",
+          "pattern": "いま ～じ ～ぷん です | Vます / Vました / Vません | Nから Nまで"
+        },
+        "id": 4,
+        "category": "Minna Bài 4",
+        "words": [
+          {
+            "vietnameseMeaning": "Bây giờ",
+            "japanese": "いま",
+            "romaji": "ima"
+          },
+          {
+            "vietnameseMeaning": "Thức dậy",
+            "japanese": "おきます",
+            "romaji": "okimasu"
+          },
+          {
+            "japanese": "ねます",
+            "vietnameseMeaning": "Đi ngủ",
+            "romaji": "nemasu"
+          },
+          {
+            "romaji": "hatarakimasu",
+            "japanese": "はたらきます",
+            "vietnameseMeaning": "Làm việc"
+          },
+          {
+            "romaji": "yasumimasu",
+            "vietnameseMeaning": "Nghỉ ngơi",
+            "japanese": "やすみます"
+          },
+          {
+            "vietnameseMeaning": "Học tập",
+            "japanese": "べんきょうします",
+            "romaji": "benkyou shimasu"
+          },
+          {
+            "romaji": "owarimasu",
+            "japanese": "おわります",
+            "vietnameseMeaning": "Kết thúc"
+          },
+          {
+            "romaji": "asa",
+            "japanese": "あさ",
+            "vietnameseMeaning": "Buổi sáng"
+          },
+          {
+            "romaji": "hiru",
+            "vietnameseMeaning": "Buổi trưa",
+            "japanese": "ひる"
+          },
+          {
+            "romaji": "ban",
+            "vietnameseMeaning": "Buổi tối",
+            "japanese": "ばん"
+          },
+          {
+            "japanese": "きょう",
+            "vietnameseMeaning": "Hôm nay",
+            "romaji": "kyou"
+          },
+          {
+            "japanese": "あした",
+            "vietnameseMeaning": "Ngày mai",
+            "romaji": "ashita"
+          },
+          {
+            "japanese": "げつようび",
+            "vietnameseMeaning": "Thứ Hai",
+            "romaji": "getsuyoubi"
+          },
+          {
+            "romaji": "suiyoubi",
+            "vietnameseMeaning": "Thứ Tư",
+            "japanese": "すいようび"
+          },
+          {
+            "vietnameseMeaning": "Thứ Sáu",
+            "japanese": "きんようび",
+            "romaji": "kinyoubi"
+          },
+          {
+            "japanese": "でぱーと",
+            "vietnameseMeaning": "Cửa hàng bách hóa",
+            "romaji": "depaato"
+          },
+          {
+            "vietnameseMeaning": "Ngân hàng",
+            "japanese": "ぎんこう",
+            "romaji": "ginkou"
+          },
+          {
+            "romaji": "toshokan",
+            "vietnameseMeaning": "Thư viện",
+            "japanese": "としょかん"
+          },
+          {
+            "romaji": "bijutsukan",
+            "japanese": "びじゅつかん",
+            "vietnameseMeaning": "Bảo tàng mỹ thuật"
+          },
+          {
+            "romaji": "ji",
+            "vietnameseMeaning": "Giờ",
+            "japanese": "じ"
+          },
+          {
+            "romaji": "fun/pun",
+            "vietnameseMeaning": "Phút",
+            "japanese": "ふん"
+          },
+          {
+            "vietnameseMeaning": "Rưỡi",
+            "japanese": "はん",
+            "romaji": "han"
+          },
+          {
+            "romaji": "nanji",
+            "japanese": "なんじ",
+            "vietnameseMeaning": "Mấy giờ"
+          },
+          {
+            "vietnameseMeaning": "Mấy phút",
+            "japanese": "なんぷん",
+            "romaji": "nanpun"
+          },
+          {
+            "romaji": "gozen",
+            "vietnameseMeaning": "Buổi sáng",
+            "japanese": "ごぜん"
+          },
+          {
+            "vietnameseMeaning": "Buổi chiều",
+            "japanese": "ごご",
+            "romaji": "gogo"
+          },
+          {
+            "romaji": "ototoi",
+            "vietnameseMeaning": "Hôm kia",
+            "japanese": "おととい"
+          },
+          {
+            "japanese": "きのう",
+            "vietnameseMeaning": "Hôm qua",
+            "romaji": "kinou"
+          },
+          {
+            "japanese": "あさって",
+            "vietnameseMeaning": "Ngày kia",
+            "romaji": "asatte"
+          },
+          {
+            "romaji": "kesa",
+            "vietnameseMeaning": "Sáng nay",
+            "japanese": "けさ"
+          },
+          {
+            "japanese": "こんばん",
+            "vietnameseMeaning": "Tối nay",
+            "romaji": "konban"
+          },
+          {
+            "romaji": "yasumi",
+            "japanese": "やすみ",
+            "vietnameseMeaning": "Nghỉ, ngày nghỉ"
+          },
+          {
+            "vietnameseMeaning": "Nghỉ trưa",
+            "japanese": "ひるやすみ",
+            "romaji": "hiruyasumi"
+          },
+          {
+            "romaji": "shiken",
+            "vietnameseMeaning": "Kỳ thi",
+            "japanese": "しけん"
+          },
+          {
+            "vietnameseMeaning": "Phim",
+            "japanese": "えいが",
+            "romaji": "eiga"
+          },
+          {
+            "vietnameseMeaning": "Mỗi tối",
+            "japanese": "まいばん",
+            "romaji": "maiban"
+          },
+          {
+            "vietnameseMeaning": "Thứ ba",
+            "japanese": "かようび",
+            "romaji": "kayoubi"
+          },
+          {
+            "romaji": "mokuyoubi",
+            "japanese": "もくようび",
+            "vietnameseMeaning": "Thứ năm"
+          },
+          {
+            "romaji": "doyoubi",
+            "japanese": "どようび",
+            "vietnameseMeaning": "Thứ bảy"
+          },
+          {
+            "japanese": "にちようび",
+            "vietnameseMeaning": "Chủ nhật",
+            "romaji": "nichiyoubi"
+          },
+          {
+            "japanese": "なんようび",
+            "vietnameseMeaning": "Thứ mấy",
+            "romaji": "nanyoubi"
+          },
+          {
+            "vietnameseMeaning": "Từ",
+            "japanese": "から",
+            "romaji": "kara"
+          },
+          {
+            "romaji": "made",
+            "vietnameseMeaning": "Đến",
+            "japanese": "まで"
+          },
+          {
+            "romaji": "to",
+            "japanese": "と",
+            "vietnameseMeaning": "Và"
+          },
+          {
+            "japanese": "たいへんですね",
+            "vietnameseMeaning": "Anh/chị vất vả quá nhỉ",
+            "romaji": "taihen desu ne"
+          },
+          {
+            "japanese": "ばんごう",
+            "vietnameseMeaning": "Số",
+            "romaji": "bangou"
+          },
+          {
+            "romaji": "nanban",
+            "japanese": "なんばん",
+            "vietnameseMeaning": "Số mấy"
+          },
+          {
+            "romaji": "sochira",
+            "japanese": "そちら",
+            "vietnameseMeaning": "Phía ông bà, phía bên đó"
+          }
+        ],
+        "title": "Bài 4: Giờ giấc & Ngày làm việc",
+        "level": "N5",
+        "description": "Học cách đọc giờ, phút, các ngày trong tuần và các động từ cơ bản thời hiện tại/quá khứ."
+      }
+    },
+    {
+      "id": "5",
+      "data": {
+        "category": "Minna Bài 5",
+        "words": [
+          {
+            "romaji": "ikimasu",
+            "englishMeaning": "To go",
+            "vietnameseMeaning": "Đi",
+            "japanese": "いきます"
+          },
+          {
+            "romaji": "kimasu",
+            "japanese": "きます",
+            "vietnameseMeaning": "Đến",
+            "englishMeaning": "To come"
+          },
+          {
+            "englishMeaning": "To return",
+            "vietnameseMeaning": "Trở về",
+            "japanese": "かえります",
+            "romaji": "kaerimasu"
+          },
+          {
+            "romaji": "gakkou",
+            "japanese": "がっこう",
+            "vietnameseMeaning": "Trường học",
+            "englishMeaning": "School"
+          },
+          {
+            "romaji": "suupaa",
+            "japanese": "スーパー",
+            "vietnameseMeaning": "Siêu thị",
+            "englishMeaning": "Supermarket"
+          },
+          {
+            "japanese": "えき",
+            "vietnameseMeaning": "Nhà ga",
+            "englishMeaning": "Station",
+            "romaji": "eki"
+          },
+          {
+            "romaji": "densha",
+            "japanese": "でんしゃ",
+            "vietnameseMeaning": "Tàu điện",
+            "englishMeaning": "Train"
+          },
+          {
+            "romaji": "jitensha",
+            "englishMeaning": "Bicycle",
+            "vietnameseMeaning": "Xe đạp",
+            "japanese": "じてんしゃ"
+          },
+          {
+            "romaji": "hikouki",
+            "japanese": "ひこうき",
+            "englishMeaning": "Airplane",
+            "vietnameseMeaning": "Máy bay"
+          },
+          {
+            "romaji": "fune",
+            "englishMeaning": "Ship, Boat",
+            "vietnameseMeaning": "Thuyền, tàu thủy",
+            "japanese": "ふね"
+          },
+          {
+            "romaji": "aruite",
+            "japanese": "あるいて",
+            "englishMeaning": "On foot",
+            "vietnameseMeaning": "Đi bộ"
+          },
+          {
+            "romaji": "tomodachi",
+            "japanese": "ともだち",
+            "englishMeaning": "Friend",
+            "vietnameseMeaning": "Bạn bè"
+          },
+          {
+            "romaji": "hito",
+            "englishMeaning": "Person",
+            "vietnameseMeaning": "Người",
+            "japanese": "ひと"
+          },
+          {
+            "englishMeaning": "Subway",
+            "vietnameseMeaning": "Tàu điện ngầm",
+            "japanese": "ちかてつ",
+            "romaji": "chikatetsu"
+          },
+          {
+            "englishMeaning": "Shinkansen",
+            "vietnameseMeaning": "Tàu siêu tốc",
+            "japanese": "しんかんせん",
+            "romaji": "shinkansen"
+          },
+          {
+            "vietnameseMeaning": "Xe buýt",
+            "englishMeaning": "Bus",
+            "japanese": "バス",
+            "romaji": "basu"
+          },
+          {
+            "vietnameseMeaning": "Taxi",
+            "englishMeaning": "Taxi",
+            "japanese": "タクシー",
+            "romaji": "takushi-"
+          },
+          {
+            "romaji": "kare",
+            "englishMeaning": "He, Boyfriend",
+            "vietnameseMeaning": "Anh ấy, bạn trai",
+            "japanese": "かれ"
+          },
+          {
+            "japanese": "かのじょ",
+            "englishMeaning": "She, Girlfriend",
+            "vietnameseMeaning": "Cô ấy, bạn gái",
+            "romaji": "kanojo"
+          },
+          {
+            "romaji": "kazoku",
+            "vietnameseMeaning": "Gia đình",
+            "englishMeaning": "Family",
+            "japanese": "かぞく"
+          },
+          {
+            "vietnameseMeaning": "Một mình",
+            "englishMeaning": "Alone",
+            "japanese": "ひとりで",
+            "romaji": "hitori de"
+          },
+          {
+            "romaji": "senshuu",
+            "vietnameseMeaning": "Tuần trước",
+            "englishMeaning": "Last week",
+            "japanese": "せんしゅう"
+          },
+          {
+            "romaji": "konshuu",
+            "japanese": "こんしゅう",
+            "englishMeaning": "This week",
+            "vietnameseMeaning": "Tuần này"
+          },
+          {
+            "japanese": "らいしゅう",
+            "englishMeaning": "Next week",
+            "vietnameseMeaning": "Tuần sau",
+            "romaji": "raishuu"
+          },
+          {
+            "japanese": "こんげつ",
+            "vietnameseMeaning": "Tháng này",
+            "englishMeaning": "This month",
+            "romaji": "kongetsu"
+          },
+          {
+            "vietnameseMeaning": "Tháng trước",
+            "englishMeaning": "Last month",
+            "japanese": "せんげつ",
+            "romaji": "sengetsu"
+          },
+          {
+            "japanese": "らいげつ",
+            "vietnameseMeaning": "Tháng sau",
+            "englishMeaning": "Next month",
+            "romaji": "raigetsu"
+          },
+          {
+            "romaji": "kyonen",
+            "japanese": "きょねん",
+            "englishMeaning": "Last year",
+            "vietnameseMeaning": "Năm ngoái"
+          },
+          {
+            "vietnameseMeaning": "Năm nay",
+            "englishMeaning": "This year",
+            "japanese": "ことし",
+            "romaji": "kotoshi"
+          },
+          {
+            "romaji": "rainen",
+            "japanese": "らいねん",
+            "vietnameseMeaning": "Năm sau",
+            "englishMeaning": "Next year"
+          },
+          {
+            "englishMeaning": "Which month",
+            "vietnameseMeaning": "Tháng mấy",
+            "japanese": "なんがつ",
+            "romaji": "nangatsu"
+          },
+          {
+            "romaji": "itsu",
+            "japanese": "いつ",
+            "vietnameseMeaning": "Khi nào",
+            "englishMeaning": "When"
+          },
+          {
+            "romaji": "tanjoubi",
+            "japanese": "たんじょうび",
+            "vietnameseMeaning": "Sinh nhật",
+            "englishMeaning": "Birthday"
+          },
+          {
+            "japanese": "そうですね",
+            "englishMeaning": "That's right, Let me see",
+            "vietnameseMeaning": "Ừ nhỉ/Để tôi xem",
+            "romaji": "sou desu ne"
+          },
+          {
+            "japanese": "ありがとうございます",
+            "vietnameseMeaning": "Xin cảm ơn",
+            "englishMeaning": "Thank you very much",
+            "romaji": "arigatou gozaimasu"
+          },
+          {
+            "romaji": "douitashimashite",
+            "englishMeaning": "You're welcome",
+            "vietnameseMeaning": "Không có gì",
+            "japanese": "どういたしまして"
+          },
+          {
+            "vietnameseMeaning": "Đường số (tàu)",
+            "englishMeaning": "Platform number",
+            "japanese": "ばんせん",
+            "romaji": "bansen"
+          },
+          {
+            "vietnameseMeaning": "Tiếp theo",
+            "englishMeaning": "Next",
+            "japanese": "つぎの",
+            "romaji": "tsugi no"
+          },
+          {
+            "romaji": "futsuu",
+            "japanese": "ふつう",
+            "vietnameseMeaning": "Tàu thường",
+            "englishMeaning": "Local train"
+          },
+          {
+            "vietnameseMeaning": "Tàu tốc hành",
+            "englishMeaning": "Express train",
+            "japanese": "きゅうこう",
+            "romaji": "kyuukou"
+          },
+          {
+            "romaji": "tokkyuu",
+            "japanese": "とっきゅう",
+            "vietnameseMeaning": "Tàu tốc hành đặc biệt",
+            "englishMeaning": "Limited express train"
+          },
+          {
+            "romaji": "tsuitachi",
+            "japanese": "ついたち",
+            "vietnameseMeaning": "Ngày mồng một"
+          },
+          {
+            "japanese": "ふつか",
+            "vietnameseMeaning": "Mồng hai; ngày 2",
+            "romaji": "futsuka"
+          },
+          {
+            "romaji": "mikka",
+            "japanese": "みっか",
+            "vietnameseMeaning": "Mồng ba; ngày 3"
+          },
+          {
+            "romaji": "yokka",
+            "vietnameseMeaning": "Mồng bốn; ngày 4",
+            "japanese": "よっか"
+          },
+          {
+            "japanese": "いつか",
+            "vietnameseMeaning": "Mồng năm; ngày 5",
+            "romaji": "itsuka"
+          },
+          {
+            "vietnameseMeaning": "Mồng sáu; ngày 6",
+            "japanese": "むいか",
+            "romaji": "muika"
+          },
+          {
+            "japanese": "なのか",
+            "vietnameseMeaning": "Mồng bảy; ngày 7",
+            "romaji": "nanoka"
+          },
+          {
+            "japanese": "ようか",
+            "vietnameseMeaning": "Mồng tám; ngày 8",
+            "romaji": "youka"
+          },
+          {
+            "romaji": "kokonoka",
+            "vietnameseMeaning": "Mồng chín; ngày 9",
+            "japanese": "ここのか"
+          },
+          {
+            "romaji": "tooka",
+            "vietnameseMeaning": "Mồng mười; ngày 10",
+            "japanese": "とおか"
+          },
+          {
+            "romaji": "juuyokka",
+            "vietnameseMeaning": "Mồng mười bốn; ngày 14",
+            "japanese": "じゅうよっか"
+          },
+          {
+            "vietnameseMeaning": "Ngày 20",
+            "japanese": "はつか",
+            "romaji": "hatsuka"
+          },
+          {
+            "vietnameseMeaning": "Ngày 24",
+            "japanese": "にじゅうよっか",
+            "romaji": "nijuuyokka"
+          },
+          {
+            "romaji": "~ nichi",
+            "japanese": "~ にち",
+            "vietnameseMeaning": "~ ngày"
+          },
+          {
+            "japanese": "なんにち",
+            "vietnameseMeaning": "Ngày mấy; mấy ngày",
+            "romaji": "nannichi"
+          },
+          {
+            "japanese": "おおさか　じょう",
+            "vietnameseMeaning": "Lâu đài osaka",
+            "romaji": "oosaka jou"
+          }
+        ],
+        "id": 5,
+        "grammar": {
+          "exampleMeaning": "Tôi đi về nhà bằng tàu điện.",
+          "explanation": "Di chuyển đến địa điểm bằng phương tiện cụ thể sử dụng các trợ từ へ (e), で (de), と (to).",
+          "pattern": "Địa điểm へ いきます/きます/かえります | Phương tiện で いきます | Người と いきます",
+          "example": "わたし は でんしゃ で うち へ かえります。"
+        },
+        "title": "Bài 5: Di chuyển & Phương tiện",
+        "level": "N5",
+        "description": "Cách nói đi, đến, về một địa danh nào đó bằng phương tiện gì và đi cùng với ai.",
+        "categorizedVocab": [
+          {
+            "categoryDescription": "Các động từ cơ bản để diễn tả sự đi, đến, và trở về, là nền tảng cho việc mô tả các hoạt động hàng ngày.",
+            "context": "Sử dụng khi nói về việc di chuyển từ địa điểm này sang địa điểm khác, bao gồm cả việc đi học, đi làm hay về nhà.",
+            "categoryName": "Hành động Di chuyển",
+            "words": [
+              {
+                "japanese": "いきます",
+                "vietnameseMeaning": "Đi",
+                "romaji": "ikimasu"
+              },
+              {
+                "romaji": "kimasu",
+                "japanese": "きます",
+                "vietnameseMeaning": "Đến"
+              },
+              {
+                "japanese": "かえります",
+                "vietnameseMeaning": "Trở về",
+                "romaji": "kaerimasu"
+              }
+            ]
+          },
+          {
+            "categoryName": "Địa điểm & Địa danh",
+            "words": [
+              {
+                "vietnameseMeaning": "Trường học",
+                "japanese": "がっこう",
+                "romaji": "gakkou"
+              },
+              {
+                "romaji": "suupaa",
+                "japanese": "スーパー",
+                "vietnameseMeaning": "Siêu thị"
+              },
+              {
+                "romaji": "eki",
+                "vietnameseMeaning": "Nhà ga",
+                "japanese": "えき"
+              },
+              {
+                "romaji": "oosaka jou",
+                "vietnameseMeaning": "Lâu đài Osaka",
+                "japanese": "おおさか　じょう"
+              }
+            ],
+            "categoryDescription": "Các danh từ chỉ địa điểm công cộng, cơ sở vật chất và địa danh nổi tiếng, giúp học viên xác định nơi chốn.",
+            "context": "Dùng để hỏi hoặc trả lời về nơi bạn đang ở, nơi bạn sẽ đến, hoặc nhắc đến các địa điểm quen thuộc."
+          },
+          {
+            "categoryName": "Phương tiện Giao thông & Cách thức Di chuyển",
+            "words": [
+              {
+                "romaji": "densha",
+                "vietnameseMeaning": "Tàu điện",
+                "japanese": "でんしゃ"
+              },
+              {
+                "romaji": "jitensha",
+                "japanese": "じてんしゃ",
+                "vietnameseMeaning": "Xe đạp"
+              },
+              {
+                "romaji": "hikouki",
+                "vietnameseMeaning": "Máy bay",
+                "japanese": "ひこうき"
+              },
+              {
+                "vietnameseMeaning": "Thuyền, tàu thủy",
+                "japanese": "ふね",
+                "romaji": "fune"
+              },
+              {
+                "japanese": "あるいて",
+                "vietnameseMeaning": "Đi bộ",
+                "romaji": "aruite"
+              },
+              {
+                "romaji": "chikatetsu",
+                "vietnameseMeaning": "Tàu điện ngầm",
+                "japanese": "ちかてつ"
+              },
+              {
+                "romaji": "shinkansen",
+                "vietnameseMeaning": "Tàu siêu tốc",
+                "japanese": "しんかんせん"
+              },
+              {
+                "vietnameseMeaning": "Xe buýt",
+                "japanese": "バス",
+                "romaji": "basu"
+              },
+              {
+                "vietnameseMeaning": "Taxi",
+                "japanese": "タクシー",
+                "romaji": "takushi-"
+              },
+              {
+                "romaji": "hitori de",
+                "japanese": "ひとりで",
+                "vietnameseMeaning": "Một mình"
+              }
+            ],
+            "categoryDescription": "Từ vựng về các loại hình giao thông phổ biến và cách thức di chuyển, hữu ích cho việc lên kế hoạch đi lại.",
+            "context": "Khi bạn muốn hỏi hoặc nói về việc bạn đi bằng phương tiện gì, hoặc bạn di chuyển một mình hay cùng ai."
+          },
+          {
+            "categoryName": "Người & Quan hệ Xã hội",
+            "words": [
+              {
+                "romaji": "tomodachi",
+                "japanese": "ともだち",
+                "vietnameseMeaning": "Bạn bè"
+              },
+              {
+                "romaji": "hito",
+                "vietnameseMeaning": "Người",
+                "japanese": "ひと"
+              },
+              {
+                "romaji": "kare",
+                "vietnameseMeaning": "Anh ấy, bạn trai",
+                "japanese": "かれ"
+              },
+              {
+                "romaji": "kanojo",
+                "japanese": "かのじょ",
+                "vietnameseMeaning": "Cô ấy, bạn gái"
+              },
+              {
+                "vietnameseMeaning": "Gia đình",
+                "japanese": "かぞく",
+                "romaji": "kazoku"
+              }
+            ],
+            "categoryDescription": "Các từ chỉ người, đại từ nhân xưng và mối quan hệ, giúp bạn giao tiếp về bản thân và những người xung quanh.",
+            "context": "Sử dụng khi giới thiệu về bạn bè, gia đình, hoặc nói về một người thứ ba trong cuộc trò chuyện."
+          },
+          {
+            "categoryDescription": "Từ vựng liên quan đến các mốc thời gian, đơn vị thời gian và cách hỏi về thời gian, cần thiết cho việc sắp xếp lịch trình.",
+            "context": "Dùng để nói về thời điểm diễn ra sự việc, lên kế hoạch cho các hoạt động hoặc hỏi về ngày, tháng, năm.",
+            "categoryName": "Thời gian & Lịch trình",
+            "words": [
+              {
+                "romaji": "senshuu",
+                "vietnameseMeaning": "Tuần trước",
+                "japanese": "せんしゅう"
+              },
+              {
+                "romaji": "konshuu",
+                "japanese": "こんしゅう",
+                "vietnameseMeaning": "Tuần này"
+              },
+              {
+                "japanese": "らいしゅう",
+                "vietnameseMeaning": "Tuần sau",
+                "romaji": "raishuu"
+              },
+              {
+                "vietnameseMeaning": "Tháng này",
+                "japanese": "こんげつ",
+                "romaji": "kongetsu"
+              },
+              {
+                "romaji": "sengetsu",
+                "vietnameseMeaning": "Tháng trước",
+                "japanese": "せんげつ"
+              },
+              {
+                "romaji": "raigetsu",
+                "japanese": "らいげつ",
+                "vietnameseMeaning": "Tháng sau"
+              },
+              {
+                "romaji": "kyonen",
+                "japanese": "きょねん",
+                "vietnameseMeaning": "Năm ngoái"
+              },
+              {
+                "romaji": "kotoshi",
+                "vietnameseMeaning": "Năm nay",
+                "japanese": "ことし"
+              },
+              {
+                "japanese": "らいねん",
+                "vietnameseMeaning": "Năm sau",
+                "romaji": "rainen"
+              },
+              {
+                "romaji": "nangatsu",
+                "japanese": "なんがつ",
+                "vietnameseMeaning": "Tháng mấy"
+              },
+              {
+                "romaji": "itsu",
+                "vietnameseMeaning": "Khi nào",
+                "japanese": "いつ"
+              },
+              {
+                "vietnameseMeaning": "Sinh nhật",
+                "japanese": "たんじょうび",
+                "romaji": "tanjoubi"
+              }
+            ]
+          },
+          {
+            "context": "Sử dụng trong các tình huống giao tiếp cơ bản như xác nhận thông tin, bày tỏ lòng biết ơn hoặc đáp lại lời cảm ơn.",
+            "categoryDescription": "Các cụm từ xã giao thông dụng giúp duy trì cuộc trò chuyện và thể hiện phép lịch sự trong giao tiếp hàng ngày.",
+            "words": [
+              {
+                "romaji": "sou desu ne",
+                "japanese": "そうですね",
+                "vietnameseMeaning": "Ừ nhỉ/Để tôi xem"
+              },
+              {
+                "romaji": "arigatou gozaimasu",
+                "japanese": "ありがとうございます",
+                "vietnameseMeaning": "Xin cảm ơn"
+              },
+              {
+                "japanese": "どういたしまして",
+                "vietnameseMeaning": "Không có gì",
+                "romaji": "douitashimashite"
+              }
+            ],
+            "categoryName": "Giao tiếp & Ứng xử Cơ bản"
+          },
+          {
+            "categoryName": "Thuật ngữ Giao thông (Tàu hỏa)",
+            "words": [
+              {
+                "romaji": "bansen",
+                "vietnameseMeaning": "Đường số (tàu)",
+                "japanese": "ばんせん"
+              },
+              {
+                "japanese": "つぎの",
+                "vietnameseMeaning": "Tiếp theo",
+                "romaji": "tsugi no"
+              },
+              {
+                "romaji": "futsuu",
+                "vietnameseMeaning": "Tàu thường",
+                "japanese": "ふつう"
+              },
+              {
+                "japanese": "きゅうこう",
+                "vietnameseMeaning": "Tàu tốc hành",
+                "romaji": "kyuukou"
+              },
+              {
+                "romaji": "tokkyuu",
+                "vietnameseMeaning": "Tàu tốc hành đặc biệt",
+                "japanese": "とっきゅう"
+              }
+            ],
+            "categoryDescription": "Các từ vựng chuyên biệt liên quan đến hệ thống tàu hỏa và nhà ga, giúp bạn sử dụng tàu hiệu quả hơn.",
+            "context": "Khi bạn đang ở nhà ga, tìm kiếm thông tin về các chuyến tàu hoặc nói về loại tàu bạn đang đi."
+          },
+          {
+            "words": [
+              {
+                "romaji": "tsuitachi",
+                "vietnameseMeaning": "Ngày mồng một",
+                "japanese": "ついたち"
+              },
+              {
+                "romaji": "futsuka",
+                "japanese": "ふつか",
+                "vietnameseMeaning": "Mồng hai; ngày 2"
+              },
+              {
+                "vietnameseMeaning": "Mồng ba; ngày 3",
+                "japanese": "みっか",
+                "romaji": "mikka"
+              },
+              {
+                "japanese": "よっか",
+                "vietnameseMeaning": "Mồng bốn; ngày 4",
+                "romaji": "yokka"
+              },
+              {
+                "romaji": "itsuka",
+                "japanese": "いつか",
+                "vietnameseMeaning": "Mồng năm; ngày 5"
+              },
+              {
+                "japanese": "むいか",
+                "vietnameseMeaning": "Mồng sáu; ngày 6",
+                "romaji": "muika"
+              },
+              {
+                "romaji": "nanoka",
+                "japanese": "なのか",
+                "vietnameseMeaning": "Mồng bảy; ngày 7"
+              },
+              {
+                "romaji": "youka",
+                "vietnameseMeaning": "Mồng tám; ngày 8",
+                "japanese": "ようか"
+              },
+              {
+                "romaji": "kokonoka",
+                "vietnameseMeaning": "Mồng chín; ngày 9",
+                "japanese": "ここのか"
+              },
+              {
+                "romaji": "tooka",
+                "vietnameseMeaning": "Mồng mười; ngày 10",
+                "japanese": "とおか"
+              },
+              {
+                "japanese": "じゅうよっか",
+                "vietnameseMeaning": "Mồng mười bốn; ngày 14",
+                "romaji": "juuyokka"
+              },
+              {
+                "romaji": "hatsuka",
+                "japanese": "はつか",
+                "vietnameseMeaning": "Ngày 20"
+              },
+              {
+                "vietnameseMeaning": "Ngày 24",
+                "japanese": "にじゅうよっか",
+                "romaji": "nijuuyokka"
+              },
+              {
+                "romaji": "~ nichi",
+                "vietnameseMeaning": "~ ngày",
+                "japanese": "~ にち"
+              },
+              {
+                "vietnameseMeaning": "Ngày mấy; mấy ngày",
+                "japanese": "なんにち",
+                "romaji": "nannichi"
+              }
+            ],
+            "categoryName": "Ngày trong tháng & Cách hỏi ngày",
+            "context": "Khi bạn muốn nói về một ngày cụ thể trong tháng, hỏi ngày sinh nhật, hoặc xác nhận ngày diễn ra sự kiện.",
+            "categoryDescription": "Cách đếm và hỏi về ngày cụ thể trong tháng, bao gồm các trường hợp đặc biệt, quan trọng khi hẹn hò hoặc lên lịch."
+          }
+        ]
+      }
+    },
+    {
+      "id": "6",
+      "data": {
+        "description": "Diễn tả hành động ăn, uống, xem, đọc tác động trực tiếp lên đồ vật và đề nghị cùng thực hiện.",
+        "level": "N5",
+        "title": "Bài 6: Hành động tác động & Trợ từ を",
+        "words": [
+          {
+            "romaji": "tabemasu",
+            "japanese": "たべます",
+            "vietnameseMeaning": "Ăn"
+          },
+          {
+            "romaji": "nomimasu",
+            "japanese": "のみます",
+            "vietnameseMeaning": "Uống"
+          },
+          {
+            "vietnameseMeaning": "Hút (thuốc)",
+            "japanese": "すいます",
+            "romaji": "suimasu"
+          },
+          {
+            "vietnameseMeaning": "Nhìn, xem",
+            "japanese": "みます",
+            "romaji": "mimasu"
+          },
+          {
+            "vietnameseMeaning": "Nghe",
+            "japanese": "ききます",
+            "romaji": "kikimasu"
+          },
+          {
+            "romaji": "yomimasu",
+            "vietnameseMeaning": "Đọc",
+            "japanese": "よみます"
+          },
+          {
+            "romaji": "kakimasu",
+            "japanese": "かきます",
+            "vietnameseMeaning": "Viết, vẽ"
+          },
+          {
+            "romaji": "kaimasu",
+            "vietnameseMeaning": "Mua",
+            "japanese": "かいます"
+          },
+          {
+            "romaji": "torimasu",
+            "japanese": "とります",
+            "vietnameseMeaning": "Chụp ảnh, lấy"
+          },
+          {
+            "vietnameseMeaning": "Làm, chơi thể thao",
+            "japanese": "します",
+            "romaji": "shimasu"
+          },
+          {
+            "japanese": "あいます",
+            "vietnameseMeaning": "Gặp gỡ (bạn bè)",
+            "romaji": "aimasu"
+          },
+          {
+            "romaji": "gohan",
+            "vietnameseMeaning": "Cơm, bữa ăn",
+            "japanese": "ごはん"
+          },
+          {
+            "japanese": "おちゃ",
+            "vietnameseMeaning": "Trà",
+            "romaji": "ocha"
+          },
+          {
+            "vietnameseMeaning": "Rượu",
+            "japanese": "おさけ",
+            "romaji": "osake"
+          },
+          {
+            "romaji": "mizu",
+            "japanese": "みず",
+            "vietnameseMeaning": "Nước uống"
+          },
+          {
+            "romaji": "asagohan",
+            "vietnameseMeaning": "Bữa sáng",
+            "japanese": "あさごはん"
+          },
+          {
+            "vietnameseMeaning": "Bữa trưa",
+            "japanese": "ひるごはん",
+            "romaji": "hirugohan"
+          },
+          {
+            "vietnameseMeaning": "Bữa tối",
+            "japanese": "ばんごはん",
+            "romaji": "bangohan"
+          },
+          {
+            "japanese": "パン",
+            "vietnameseMeaning": "Bánh mì",
+            "romaji": "pan"
+          },
+          {
+            "romaji": "tamago",
+            "vietnameseMeaning": "Trứng",
+            "japanese": "たまご"
+          },
+          {
+            "japanese": "にく",
+            "vietnameseMeaning": "Thịt",
+            "romaji": "niku"
+          },
+          {
+            "japanese": "さかな",
+            "vietnameseMeaning": "Cá",
+            "romaji": "sakana"
+          },
+          {
+            "romaji": "yasai",
+            "japanese": "やさい",
+            "vietnameseMeaning": "Rau"
+          },
+          {
+            "romaji": "kocha",
+            "vietnameseMeaning": "Trà đen",
+            "japanese": "こうちゃ"
+          },
+          {
+            "romaji": "gyunyu",
+            "vietnameseMeaning": "Sữa bò",
+            "japanese": "ぎゅうにゅう"
+          },
+          {
+            "romaji": "jusu",
+            "vietnameseMeaning": "Nước ép trái cây",
+            "japanese": "ジュース"
+          },
+          {
+            "vietnameseMeaning": "Bia",
+            "japanese": "ビール",
+            "romaji": "biru"
+          },
+          {
+            "japanese": "たばこ",
+            "vietnameseMeaning": "Thuốc lá",
+            "romaji": "tabako"
+          },
+          {
+            "vietnameseMeaning": "Thư",
+            "japanese": "てがみ",
+            "romaji": "tegami"
+          },
+          {
+            "vietnameseMeaning": "Báo cáo",
+            "japanese": "レポート",
+            "romaji": "reporto"
+          },
+          {
+            "romaji": "shashin",
+            "vietnameseMeaning": "Ảnh",
+            "japanese": "しゃしん"
+          },
+          {
+            "romaji": "bideo",
+            "japanese": "ビデオ",
+            "vietnameseMeaning": "Video"
+          },
+          {
+            "vietnameseMeaning": "Cửa hàng",
+            "japanese": "みせ",
+            "romaji": "mise"
+          },
+          {
+            "romaji": "niwa",
+            "japanese": "にわ",
+            "vietnameseMeaning": "Vườn"
+          },
+          {
+            "vietnameseMeaning": "Bài tập về nhà",
+            "japanese": "しゅくだい",
+            "romaji": "shukudai"
+          },
+          {
+            "romaji": "tenisu",
+            "japanese": "テニス",
+            "vietnameseMeaning": "Quần vợt"
+          },
+          {
+            "romaji": "sakka",
+            "vietnameseMeaning": "Bóng đá",
+            "japanese": "サッカー"
+          },
+          {
+            "romaji": "nani",
+            "vietnameseMeaning": "Cái gì",
+            "japanese": "なに"
+          },
+          {
+            "romaji": "isshoni",
+            "japanese": "いっしょに",
+            "vietnameseMeaning": "Cùng nhau"
+          },
+          {
+            "romaji": "chotto",
+            "vietnameseMeaning": "Một chút",
+            "japanese": "ちょっと"
+          },
+          {
+            "romaji": "itsumo",
+            "japanese": "いつも",
+            "vietnameseMeaning": "Luôn luôn"
+          },
+          {
+            "japanese": "ときどき",
+            "vietnameseMeaning": "Thỉnh thoảng",
+            "romaji": "tokidoki"
+          },
+          {
+            "romaji": "sorekara",
+            "japanese": "それから",
+            "vietnameseMeaning": "Sau đó"
+          },
+          {
+            "japanese": "ええ",
+            "vietnameseMeaning": "Vâng/Ừ",
+            "romaji": "ee"
+          },
+          {
+            "romaji": "ii desu ne",
+            "vietnameseMeaning": "Hay nhỉ/Được đấy nhỉ",
+            "japanese": "いいですね"
+          },
+          {
+            "japanese": "わかりました",
+            "vietnameseMeaning": "Tôi hiểu rồi ạ",
+            "romaji": "wakarimashita"
+          },
+          {
+            "vietnameseMeaning": "Cái gì vậy ạ?",
+            "japanese": "なんですか",
+            "romaji": "nan desu ka"
+          },
+          {
+            "japanese": "またあした",
+            "vietnameseMeaning": "Hẹn gặp lại ngày mai",
+            "romaji": "mata ashita"
+          }
+        ],
+        "category": "Minna Bài 6",
+        "id": 6,
+        "grammar": {
+          "example": "いっしょに おちゃ を のみませんか。",
+          "pattern": "N を Vます | Địa điểm で Vます | いっしょに Vませんか / Vましょう",
+          "explanation": "Tác động hành động lên một tân ngữ, nơi chốn xảy ra hành động và rủ rê cùng làm gì.",
+          "exampleMeaning": "Cùng uống trà với tôi nhé?"
+        }
+      }
+    },
+    {
+      "id": "7",
+      "data": {
+        "level": "N5",
+        "title": "Bài 7: Công cụ & Cho nhận cơ bản",
+        "description": "Diễn đạt việc làm điều gì bằng công cụ/ngôn ngữ gì, trao nhận quà cáp.",
+        "category": "Minna Bài 7",
+        "words": [
+          {
+            "romaji": "kirimasu",
+            "japanese": "きります",
+            "vietnameseMeaning": "Cắt"
+          },
+          {
+            "japanese": "おくります",
+            "vietnameseMeaning": "Gửi",
+            "romaji": "okurimasu"
+          },
+          {
+            "romaji": "agemasu",
+            "japanese": "あげます",
+            "vietnameseMeaning": "Cho, tặng"
+          },
+          {
+            "vietnameseMeaning": "Nhận",
+            "japanese": "もらいます",
+            "romaji": "moraimasu"
+          },
+          {
+            "romaji": "kashimasu",
+            "japanese": "かします",
+            "vietnameseMeaning": "Cho mượn"
+          },
+          {
+            "romaji": "karimasu",
+            "vietnameseMeaning": "Mượn",
+            "japanese": "かりまs"
+          },
+          {
+            "romaji": "oshiemasu",
+            "vietnameseMeaning": "Dạy, chỉ bảo",
+            "japanese": "おしえます"
+          },
+          {
+            "vietnameseMeaning": "Học hỏi (từ ai)",
+            "japanese": "ならいます",
+            "romaji": "naraimasu"
+          },
+          {
+            "vietnameseMeaning": "Gọi (điện thoại)",
+            "japanese": "かけます",
+            "romaji": "kakemasu"
+          },
+          {
+            "romaji": "te",
+            "vietnameseMeaning": "Bàn tay",
+            "japanese": "て"
+          },
+          {
+            "vietnameseMeaning": "Đũa",
+            "japanese": "はし",
+            "romaji": "hashi"
+          },
+          {
+            "japanese": "はさみ",
+            "vietnameseMeaning": "Cái kéo",
+            "romaji": "hasami"
+          },
+          {
+            "romaji": "pasokon",
+            "vietnameseMeaning": "Máy tính cá nhân",
+            "japanese": "ぱそこん"
+          },
+          {
+            "romaji": "tegami",
+            "vietnameseMeaning": "Bức thư",
+            "japanese": "てがみ"
+          },
+          {
+            "romaji": "purezento",
+            "vietnameseMeaning": "Quà tặng",
+            "japanese": "ぷれぜんと"
+          },
+          {
+            "japanese": "かります",
+            "vietnameseMeaning": "Mượn",
+            "romaji": "karimasu"
+          },
+          {
+            "romaji": "supuun",
+            "japanese": "スプーン",
+            "vietnameseMeaning": "Thìa"
+          },
+          {
+            "japanese": "ナイフ",
+            "vietnameseMeaning": "Dao",
+            "romaji": "naifu"
+          },
+          {
+            "romaji": "fooku",
+            "japanese": "フォーク",
+            "vietnameseMeaning": "Dĩa, nĩa"
+          },
+          {
+            "romaji": "pasokon",
+            "japanese": "パソコン",
+            "vietnameseMeaning": "Máy tính cá nhân"
+          },
+          {
+            "vietnameseMeaning": "Cái đục lỗ",
+            "japanese": "パンチ",
+            "romaji": "panchi"
+          },
+          {
+            "vietnameseMeaning": "Cái dập ghim",
+            "japanese": "ホッチキス",
+            "romaji": "hotchikisu"
+          },
+          {
+            "romaji": "seroteepu",
+            "japanese": "セロテープ",
+            "vietnameseMeaning": "Băng dính"
+          },
+          {
+            "romaji": "keshigomu",
+            "japanese": "けしゴム",
+            "vietnameseMeaning": "Cục tẩy"
+          },
+          {
+            "romaji": "kami",
+            "vietnameseMeaning": "Giấy",
+            "japanese": "かみ"
+          },
+          {
+            "vietnameseMeaning": "Hoa",
+            "japanese": "はな",
+            "romaji": "hana"
+          },
+          {
+            "japanese": "シャツ",
+            "vietnameseMeaning": "Áo sơ mi",
+            "romaji": "shatsu"
+          },
+          {
+            "romaji": "purezento",
+            "japanese": "プレゼント",
+            "vietnameseMeaning": "Quà tặng"
+          },
+          {
+            "japanese": "にもつ",
+            "vietnameseMeaning": "Hành lý",
+            "romaji": "nimotsu"
+          },
+          {
+            "vietnameseMeaning": "Tiền",
+            "japanese": "おかね",
+            "romaji": "okane"
+          },
+          {
+            "vietnameseMeaning": "Vé",
+            "japanese": "きっぷ",
+            "romaji": "kippu"
+          },
+          {
+            "japanese": "クリスマス",
+            "vietnameseMeaning": "Giáng sinh",
+            "romaji": "kurisumasu"
+          },
+          {
+            "japanese": "ちち",
+            "vietnameseMeaning": "Bố (của mình)",
+            "romaji": "chichi"
+          },
+          {
+            "romaji": "haha",
+            "japanese": "はは",
+            "vietnameseMeaning": "Mẹ (của mình)"
+          },
+          {
+            "japanese": "おとうさん",
+            "vietnameseMeaning": "Bố (của người khác)",
+            "romaji": "otousan"
+          },
+          {
+            "vietnameseMeaning": "Mẹ (của người khác)",
+            "japanese": "おかあさん",
+            "romaji": "okaasan"
+          },
+          {
+            "vietnameseMeaning": "Đã, rồi",
+            "japanese": "もう",
+            "romaji": "mou"
+          },
+          {
+            "romaji": "mada",
+            "vietnameseMeaning": "Chưa",
+            "japanese": "まだ"
+          },
+          {
+            "romaji": "korekara",
+            "vietnameseMeaning": "Từ bây giờ",
+            "japanese": "これから"
+          },
+          {
+            "vietnameseMeaning": "Đẹp quá nhỉ",
+            "japanese": "きれいですね",
+            "romaji": "kirei desu ne"
+          },
+          {
+            "romaji": "gomen kudasai",
+            "japanese": "ごめんください",
+            "vietnameseMeaning": "Xin lỗi, có ai ở nhà không?"
+          },
+          {
+            "romaji": "irasshai",
+            "japanese": "いらっしゃい",
+            "vietnameseMeaning": "Chào mừng bạn đã đến"
+          },
+          {
+            "vietnameseMeaning": "Xin mời anh/chị vào nhà",
+            "japanese": "どうぞあがってください",
+            "romaji": "douzo agatte kudasai"
+          },
+          {
+            "romaji": "shitsurei shimasu",
+            "japanese": "しつれいします",
+            "vietnameseMeaning": "Xin phép (lịch sự)"
+          },
+          {
+            "romaji": "～wa ikaga desu ka",
+            "japanese": "～はいかがですか",
+            "vietnameseMeaning": "Anh/chị dùng ~ được không ạ?"
+          },
+          {
+            "vietnameseMeaning": "Tôi xin phép dùng bữa",
+            "japanese": "いただきます",
+            "romaji": "itadakimasu"
+          },
+          {
+            "vietnameseMeaning": "Xin cảm ơn vì bữa ăn",
+            "japanese": "ごちそうさまでした",
+            "romaji": "gochisousama deshita"
+          }
+        ],
+        "id": 7,
+        "grammar": {
+          "explanation": "Sử dụng công cụ thực hiện hành động, trao nhận giữa người cho - người nhận.",
+          "exampleMeaning": "Tôi cắt giấy bằng kéo.",
+          "example": "わたし は はさみ で かみ を きります。",
+          "pattern": "Công cụ/Ngôn ngữ で Vます | Người に あげます / もらいます | もう Vました"
+        }
+      }
+    },
+    {
+      "id": "8",
+      "data": {
+        "description": "Miêu tả tính chất, trạng thái của người hay vật bằng tính từ đuôi -i và tính từ đuôi -na.",
+        "title": "Bài 8: Tính từ miêu tả sự vật",
+        "level": "N5",
+        "grammar": {
+          "pattern": "N は Adj(な) です / Adj(い) です | Adj N | N は どうですか / どんな N ですか",
+          "example": "にほん の たべもの は おいしい です。",
+          "exampleMeaning": "Đồ ăn Nhật Bản ngon.",
+          "explanation": "Dùng tính từ để biểu thị thuộc tính sự vật, nối ý nghĩa bằng trợ từ và từ nối."
+        },
+        "id": 8,
+        "category": "Minna Bài 8",
+        "words": [
+          {
+            "romaji": "kirei",
+            "vietnameseMeaning": "Đẹp, sạch sẽ",
+            "japanese": "きれい [な]"
+          },
+          {
+            "japanese": "しずか [な]",
+            "vietnameseMeaning": "Yên tĩnh",
+            "romaji": "shizuka"
+          },
+          {
+            "japanese": "にぎやか [な]",
+            "vietnameseMeaning": "Náo nhiệt",
+            "romaji": "nigiyaka"
+          },
+          {
+            "romaji": "yuumei",
+            "vietnameseMeaning": "Nổi tiếng",
+            "japanese": "ゆうめい [な]"
+          },
+          {
+            "vietnameseMeaning": "Tốt bụng, thân thiện",
+            "japanese": "しんせつ [な]",
+            "romaji": "shinsetsu"
+          },
+          {
+            "vietnameseMeaning": "Tiện lợi",
+            "japanese": "べんり [な]",
+            "romaji": "benri"
+          },
+          {
+            "romaji": "ii",
+            "japanese": "いい",
+            "vietnameseMeaning": "Tốt, hay"
+          },
+          {
+            "vietnameseMeaning": "Xấu, tồi",
+            "japanese": "わるい",
+            "romaji": "warui"
+          },
+          {
+            "japanese": "あつい",
+            "vietnameseMeaning": "Nóng (thời tiết/cảm giác)",
+            "romaji": "atsui"
+          },
+          {
+            "vietnameseMeaning": "Lạnh (thời tiết)",
+            "japanese": "さむい",
+            "romaji": "samui"
+          },
+          {
+            "romaji": "tsumetai",
+            "vietnameseMeaning": "Lạnh (đồ uống/sờ chạm)",
+            "japanese": "つめたい"
+          },
+          {
+            "japanese": "むずかしい",
+            "vietnameseMeaning": "Khó",
+            "romaji": "muzukashii"
+          },
+          {
+            "romaji": "yasashii",
+            "japanese": "やさしい",
+            "vietnameseMeaning": "Dễ, hiền từ"
+          },
+          {
+            "romaji": "takai",
+            "vietnameseMeaning": "Đắt, cao",
+            "japanese": "たかい"
+          },
+          {
+            "romaji": "yasui",
+            "japanese": "やすい",
+            "vietnameseMeaning": "Rẻ"
+          },
+          {
+            "romaji": "hansamu",
+            "japanese": "ハンサム",
+            "vietnameseMeaning": "Đẹp trai"
+          },
+          {
+            "romaji": "kirei",
+            "vietnameseMeaning": "Đẹp, sạch",
+            "japanese": "きれい"
+          },
+          {
+            "japanese": "しずか",
+            "vietnameseMeaning": "Yên tĩnh",
+            "romaji": "shizuka"
+          },
+          {
+            "japanese": "にぎやか",
+            "vietnameseMeaning": "Náo nhiệt",
+            "romaji": "nigiyaka"
+          },
+          {
+            "japanese": "ゆうめい",
+            "vietnameseMeaning": "Nổi tiếng",
+            "romaji": "yuumei"
+          },
+          {
+            "romaji": "shinsetsu",
+            "japanese": "しんせつ",
+            "vietnameseMeaning": "Tốt bụng, thân thiện"
+          },
+          {
+            "romaji": "genki",
+            "japanese": "げんき",
+            "vietnameseMeaning": "Khỏe mạnh"
+          },
+          {
+            "romaji": "hima",
+            "japanese": "ひま",
+            "vietnameseMeaning": "Rảnh rỗi"
+          },
+          {
+            "japanese": "べんり",
+            "vietnameseMeaning": "Tiện lợi",
+            "romaji": "benri"
+          },
+          {
+            "vietnameseMeaning": "Đẹp, hay",
+            "japanese": "すてき",
+            "romaji": "suteki"
+          },
+          {
+            "romaji": "ookii",
+            "japanese": "おおきい",
+            "vietnameseMeaning": "To, lớn"
+          },
+          {
+            "japanese": "ちいさい",
+            "vietnameseMeaning": "Nhỏ, bé",
+            "romaji": "chiisai"
+          },
+          {
+            "romaji": "atarashii",
+            "vietnameseMeaning": "Mới",
+            "japanese": "あたらしい"
+          },
+          {
+            "vietnameseMeaning": "Cũ",
+            "japanese": "ふるい",
+            "romaji": "furui"
+          },
+          {
+            "vietnameseMeaning": "Tốt",
+            "japanese": "いい (よい)",
+            "romaji": "ii (yoi)"
+          },
+          {
+            "vietnameseMeaning": "Thấp",
+            "japanese": "ひくい",
+            "romaji": "hikui"
+          },
+          {
+            "romaji": "omoshiroi",
+            "vietnameseMeaning": "Thú vị",
+            "japanese": "おもしろい"
+          },
+          {
+            "japanese": "おいしい",
+            "vietnameseMeaning": "Ngon",
+            "romaji": "oishii"
+          },
+          {
+            "romaji": "isogashii",
+            "japanese": "いそがしい",
+            "vietnameseMeaning": "Bận rộn"
+          },
+          {
+            "romaji": "tanoshii",
+            "japanese": "たのしい",
+            "vietnameseMeaning": "Vui"
+          },
+          {
+            "romaji": "shiroi",
+            "vietnameseMeaning": "Màu trắng",
+            "japanese": "しろい"
+          },
+          {
+            "vietnameseMeaning": "Màu đen",
+            "japanese": "くろい",
+            "romaji": "kuroi"
+          },
+          {
+            "japanese": "あかい",
+            "vietnameseMeaning": "Màu đỏ",
+            "romaji": "akai"
+          },
+          {
+            "japanese": "あおい",
+            "vietnameseMeaning": "Màu xanh",
+            "romaji": "aoi"
+          },
+          {
+            "romaji": "sakura",
+            "japanese": "さくら",
+            "vietnameseMeaning": "Hoa anh đào"
+          },
+          {
+            "romaji": "yama",
+            "vietnameseMeaning": "Núi",
+            "japanese": "やま"
+          },
+          {
+            "japanese": "まち",
+            "vietnameseMeaning": "Thành phố, thị trấn",
+            "romaji": "machi"
+          },
+          {
+            "romaji": "tabemono",
+            "vietnameseMeaning": "Đồ ăn",
+            "japanese": "たべもの"
+          },
+          {
+            "vietnameseMeaning": "Nơi, chỗ",
+            "japanese": "ところ",
+            "romaji": "tokoro"
+          },
+          {
+            "romaji": "ryou",
+            "japanese": "りょう",
+            "vietnameseMeaning": "Ký túc xá"
+          },
+          {
+            "japanese": "レストラン",
+            "vietnameseMeaning": "Nhà hàng",
+            "romaji": "resutoran"
+          },
+          {
+            "romaji": "seikatsu",
+            "vietnameseMeaning": "Cuộc sống, sinh hoạt",
+            "japanese": "せいかつ"
+          },
+          {
+            "romaji": "dou",
+            "vietnameseMeaning": "Thế nào",
+            "japanese": "どう"
+          },
+          {
+            "japanese": "とても",
+            "vietnameseMeaning": "Rất, lắm",
+            "romaji": "totemo"
+          },
+          {
+            "romaji": "amari",
+            "vietnameseMeaning": "Không... lắm",
+            "japanese": "あまり"
+          },
+          {
+            "romaji": "soshite",
+            "japanese": "そして",
+            "vietnameseMeaning": "Và (nối câu)"
+          },
+          {
+            "vietnameseMeaning": "Nhưng",
+            "japanese": "が",
+            "romaji": "ga"
+          },
+          {
+            "romaji": "ogenki desu ka",
+            "japanese": "おげんきですか",
+            "vietnameseMeaning": "Anh/chị có khỏe không"
+          },
+          {
+            "vietnameseMeaning": "À, thế à",
+            "japanese": "そうですね",
+            "romaji": "sou desu ne"
+          },
+          {
+            "romaji": "mou ippai ikaga desu ka",
+            "vietnameseMeaning": "Anh/chị dùng thêm một chén/phần nữa nhé",
+            "japanese": "～もういっぱいいかがですか"
+          },
+          {
+            "vietnameseMeaning": "Không, tôi đủ rồi ạ",
+            "japanese": "いいえ、けっこうです",
+            "romaji": "iie, kekkou desu"
+          },
+          {
+            "romaji": "sorosoro shitsurei shimasu",
+            "japanese": "そろそろしつれいします",
+            "vietnameseMeaning": "Đã đến lúc tôi phải xin phép về"
+          },
+          {
+            "romaji": "mata irashite kudasai",
+            "vietnameseMeaning": "Lần sau anh/chị lại đến chơi nhé",
+            "japanese": "またいらしてください"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9",
+      "data": {
+        "description": "Học cách nói mình thích gì, giỏi gì, có sở hữu cái gì và cách giải thích lý do vì sao.",
+        "level": "N5",
+        "title": "Bài 9: Sở thích & Năng lực",
+        "id": 9,
+        "category": "Minna Bài 9",
+        "words": [
+          {
+            "romaji": "wakarimasu",
+            "vietnameseMeaning": "Hiểu, nắm rõ",
+            "japanese": "わかります"
+          },
+          {
+            "romaji": "arimasu",
+            "vietnameseMeaning": "Có (đồ vật sở hữu)",
+            "japanese": "あります"
+          },
+          {
+            "japanese": "すき [な]",
+            "vietnameseMeaning": "Thích",
+            "romaji": "suki"
+          },
+          {
+            "romaji": "kirai",
+            "japanese": "きらい [な]",
+            "vietnameseMeaning": "Ghét, không thích"
+          },
+          {
+            "vietnameseMeaning": "Giỏi",
+            "japanese": "じょうず [な]",
+            "romaji": "jouzu"
+          },
+          {
+            "japanese": "へた [な]",
+            "vietnameseMeaning": "Kém, dở",
+            "romaji": "heta"
+          },
+          {
+            "romaji": "ryouri",
+            "vietnameseMeaning": "Món ăn, nấu ăn",
+            "japanese": "りょうり"
+          },
+          {
+            "romaji": "nomimono",
+            "vietnameseMeaning": "Đồ uống",
+            "japanese": "のみもの"
+          },
+          {
+            "romaji": "supootsu",
+            "vietnameseMeaning": "Thể thao",
+            "japanese": "スポーツ"
+          },
+          {
+            "romaji": "ongaku",
+            "japanese": "おんがく",
+            "vietnameseMeaning": "Âm nhạc"
+          },
+          {
+            "romaji": "uta",
+            "japanese": "うた",
+            "vietnameseMeaning": "Bài hát"
+          },
+          {
+            "japanese": "かんじ",
+            "vietnameseMeaning": "Chữ Hán",
+            "romaji": "kanji"
+          },
+          {
+            "japanese": "ひらがな",
+            "vietnameseMeaning": "Chữ Hiragana",
+            "romaji": "hiragana"
+          },
+          {
+            "vietnameseMeaning": "Thời gian",
+            "japanese": "じかん",
+            "romaji": "jikan"
+          },
+          {
+            "japanese": "ようじ",
+            "vietnameseMeaning": "Việc bận",
+            "romaji": "youji"
+          },
+          {
+            "romaji": "suki (na)",
+            "japanese": "すき（な）",
+            "vietnameseMeaning": "Thích"
+          },
+          {
+            "japanese": "きらい（な）",
+            "vietnameseMeaning": "Ghét",
+            "romaji": "kirai (na)"
+          },
+          {
+            "romaji": "jouzu (na)",
+            "vietnameseMeaning": "Giỏi",
+            "japanese": "じょうず（な）"
+          },
+          {
+            "japanese": "へた（な）",
+            "vietnameseMeaning": "Kém",
+            "romaji": "heta (na)"
+          },
+          {
+            "vietnameseMeaning": "Bóng chày",
+            "japanese": "やきゅう",
+            "romaji": "yakyuu"
+          },
+          {
+            "romaji": "dansu",
+            "japanese": "ダンス",
+            "vietnameseMeaning": "Nhảy"
+          },
+          {
+            "vietnameseMeaning": "Du lịch",
+            "japanese": "りょこう",
+            "romaji": "ryokou"
+          },
+          {
+            "romaji": "kurashikku",
+            "vietnameseMeaning": "Nhạc cổ điển",
+            "japanese": "クラシック"
+          },
+          {
+            "japanese": "ジャズ",
+            "vietnameseMeaning": "Nhạc Jazz",
+            "romaji": "jazu"
+          },
+          {
+            "romaji": "konsaato",
+            "vietnameseMeaning": "Buổi hòa nhạc",
+            "japanese": "コンサート"
+          },
+          {
+            "romaji": "karaoke",
+            "japanese": "カラオケ",
+            "vietnameseMeaning": "Karaoke"
+          },
+          {
+            "vietnameseMeaning": "Nhạc kịch Kabuki",
+            "japanese": "かぶき",
+            "romaji": "kabuki"
+          },
+          {
+            "romaji": "e",
+            "vietnameseMeaning": "Tranh, hội họa",
+            "japanese": "え"
+          },
+          {
+            "romaji": "ji",
+            "vietnameseMeaning": "Chữ",
+            "japanese": "じ"
+          },
+          {
+            "vietnameseMeaning": "Chữ Katakana",
+            "japanese": "かたかな",
+            "romaji": "katakana"
+          },
+          {
+            "vietnameseMeaning": "Chữ Latinh",
+            "japanese": "ローマじ",
+            "romaji": "roomaji"
+          },
+          {
+            "vietnameseMeaning": "Tiền lẻ",
+            "japanese": "こまかい おかね",
+            "romaji": "komakai okane"
+          },
+          {
+            "romaji": "chiketto",
+            "japanese": "チケット",
+            "vietnameseMeaning": "Vé"
+          },
+          {
+            "vietnameseMeaning": "Lời hứa, cuộc hẹn",
+            "japanese": "やくそく",
+            "romaji": "yakusoku"
+          },
+          {
+            "romaji": "arubaito",
+            "japanese": "アルバイト",
+            "vietnameseMeaning": "Việc làm thêm"
+          },
+          {
+            "vietnameseMeaning": "Chồng (người khác)",
+            "japanese": "ごしゅじん",
+            "romaji": "goshujin"
+          },
+          {
+            "romaji": "otto / shujin",
+            "vietnameseMeaning": "Chồng (của mình)",
+            "japanese": "おっと・しゅじん"
+          },
+          {
+            "romaji": "okusan",
+            "japanese": "おくさん",
+            "vietnameseMeaning": "Vợ (người khác)"
+          },
+          {
+            "japanese": "つま・かない",
+            "vietnameseMeaning": "Vợ (của mình)",
+            "romaji": "tsuma / kanai"
+          },
+          {
+            "romaji": "kodomo",
+            "vietnameseMeaning": "Con cái",
+            "japanese": "こども"
+          },
+          {
+            "romaji": "yoku",
+            "japanese": "よく",
+            "vietnameseMeaning": "Tốt, rõ"
+          },
+          {
+            "romaji": "daitai",
+            "vietnameseMeaning": "Đại khái",
+            "japanese": "だいたい"
+          },
+          {
+            "romaji": "takusan",
+            "japanese": "たくさん",
+            "vietnameseMeaning": "Nhiều"
+          },
+          {
+            "romaji": "sukoshi",
+            "japanese": "すこし",
+            "vietnameseMeaning": "Một chút"
+          },
+          {
+            "vietnameseMeaning": "Hoàn toàn không",
+            "japanese": "ぜんぜん",
+            "romaji": "zenzen"
+          },
+          {
+            "japanese": "はやく",
+            "vietnameseMeaning": "Nhanh, sớm",
+            "romaji": "hayaku"
+          },
+          {
+            "vietnameseMeaning": "Tại sao",
+            "japanese": "どうして",
+            "romaji": "doushite"
+          },
+          {
+            "romaji": "~ o kashite kudasai",
+            "japanese": "～を かしてください",
+            "vietnameseMeaning": "Hãy cho tôi mượn ~"
+          },
+          {
+            "romaji": "zannen desu",
+            "japanese": "ざんねんです",
+            "vietnameseMeaning": "Đáng tiếc"
+          },
+          {
+            "japanese": "あー",
+            "vietnameseMeaning": "À, ôi (ngạc nhiên)",
+            "romaji": "aa"
+          },
+          {
+            "romaji": "isshoni ikaga desu ka",
+            "vietnameseMeaning": "Cùng đi với tôi nhé",
+            "japanese": "いっしょに いかがですか"
+          },
+          {
+            "vietnameseMeaning": "...thì có lẽ không được rồi (từ chối)",
+            "japanese": "～は ちょっと…",
+            "romaji": "~ wa chotto..."
+          },
+          {
+            "romaji": "dame desu ka",
+            "vietnameseMeaning": "Không được ạ?",
+            "japanese": "だめですか"
+          },
+          {
+            "japanese": "また こんど おねがいします",
+            "vietnameseMeaning": "Hẹn anh/chị lần sau vậy",
+            "romaji": "mata kondo onegaishimasu"
+          }
+        ],
+        "grammar": {
+          "pattern": "N が あります / わかります | N が すき / きらい / じょうず / へた | から (Lý do)",
+          "example": "じかん が ありません から, ほん を よみません。",
+          "exampleMeaning": "Vì không có thời gian nên tôi không đọc sách.",
+          "explanation": "Trợ từ が đi cùng các động từ trạng thái sở hữu, khả năng, tính từ biểu thị cảm xúc."
+        }
+      }
+    }
+  ],
+  "course_accounts": [
+    {
+      "id": "sinh",
+      "data": {
+        "username": "sinh",
+        "password": "123456",
+        "role": "admin",
+        "createdAt": "2026-07-07T10:17:10.770Z"
+      }
+    }
+  ],
+  "casual_vocab": [
+    {
+      "id": "%E3%81%82%E3%81%95",
+      "data": {
+        "romaji": "asa",
+        "japanese": "あさ",
+        "vietnameseMeaning": "Buổi sáng",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%82%E3%81%AA%E3%81%9F",
+      "data": {
+        "vietnameseMeaning": "Bạn, anh, chị",
+        "englishMeaning": "",
+        "japanese": "あなた",
+        "romaji": "anata"
+      }
+    },
+    {
+      "id": "%E3%81%82%E3%81%AB",
+      "data": {
+        "japanese": "あに",
+        "vietnameseMeaning": "Anh trai tôi",
+        "englishMeaning": "",
+        "romaji": "ani"
+      }
+    },
+    {
+      "id": "%E3%81%82%E3%81%AD",
+      "data": {
+        "romaji": "ane",
+        "japanese": "あね",
+        "vietnameseMeaning": "Chị gái tôi",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%82%E3%82%81",
+      "data": {
+        "japanese": "あめ",
+        "vietnameseMeaning": "Cơn mưa / Viên kẹo",
+        "englishMeaning": "",
+        "romaji": "ame"
+      }
+    },
+    {
+      "id": "%E3%81%82%E3%82%8A%E3%81%8C%E3%81%A8%E3%81%86",
+      "data": {
+        "japanese": "ありがとう",
+        "vietnameseMeaning": "Cảm ơn",
+        "englishMeaning": "",
+        "romaji": "arigatou"
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%81%84%E3%81%88",
+      "data": {
+        "romaji": "iie",
+        "japanese": "いいえ",
+        "vietnameseMeaning": "Không, không phải",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%81%84%E3%81%A7%E3%81%99%E3%81%AD",
+      "data": {
+        "vietnameseMeaning": "Mắt nhìn hay đấy / Được đó nhỉ",
+        "englishMeaning": "",
+        "japanese": "いいですね",
+        "romaji": "ii desu ne"
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%81%9F%E3%81%A0%E3%81%8D%E3%81%BE%E3%81%99",
+      "data": {
+        "romaji": "itadakimasu",
+        "japanese": "いただきます",
+        "vietnameseMeaning": "Mời dùng bữa (nói trước khi ăn)",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%81%A3%E3%81%A6%E3%81%8D%E3%81%BE%E3%81%99",
+      "data": {
+        "vietnameseMeaning": "Tôi đi đây rồi sẽ về",
+        "englishMeaning": "",
+        "japanese": "いってきます",
+        "romaji": "ittekimasu"
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%81%A3%E3%81%A6%E3%82%89%E3%81%A3%E3%81%97%E3%82%83%E3%81%84",
+      "data": {
+        "romaji": "itterasshai",
+        "japanese": "いってらっしゃい",
+        "vietnameseMeaning": "Bạn đi nhé (đi lành về mạnh)",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%81%AC",
+      "data": {
+        "japanese": "いぬ",
+        "vietnameseMeaning": "Con chó",
+        "englishMeaning": "",
+        "romaji": "inu"
+      }
+    },
+    {
+      "id": "%E3%81%84%E3%82%82%E3%81%86%E3%81%A8",
+      "data": {
+        "romaji": "imouto",
+        "japanese": "いもうと",
+        "vietnameseMeaning": "Em gái",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%86%E3%81%A1",
+      "data": {
+        "romaji": "uchi",
+        "vietnameseMeaning": "Ngôi nhà",
+        "englishMeaning": "",
+        "japanese": "うち"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%8B%E3%81%82%E3%81%95%E3%82%93",
+      "data": {
+        "japanese": "おかあさん",
+        "vietnameseMeaning": "Mẹ (gọi mẹ người khác hoặc gọi tôn kính)",
+        "englishMeaning": "",
+        "romaji": "okaasan"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%8B%E3%81%88%E3%82%8A%E3%81%AA%E3%81%95%E3%81%84",
+      "data": {
+        "japanese": "おかえりなさい",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Chúc mừng bạn đã về nhà",
+        "romaji": "okaerinasai"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%8B%E3%81%92%E3%81%95%E3%81%BE%E3%81%A7",
+      "data": {
+        "romaji": "okagesama de",
+        "japanese": "おかげさまで",
+        "vietnameseMeaning": "Nhờ trời tôi vẫn khỏe / Nhờ sự giúp đỡ",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%92%E3%82%93%E3%81%8D%E3%81%A7%E3%81%99%E3%81%8B",
+      "data": {
+        "vietnameseMeaning": "Bạn có khỏe không?",
+        "englishMeaning": "",
+        "japanese": "おげんきですか",
+        "romaji": "ogenki desu ka"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%95%E3%81%8D%E3%81%AB",
+      "data": {
+        "romaji": "osaki ni",
+        "vietnameseMeaning": "Tôi xin phép (về/đi) trước nhé",
+        "englishMeaning": "",
+        "japanese": "おさきに"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%98%E3%82%83%E3%81%BE%E3%81%97%E3%81%BE%E3%81%99",
+      "data": {
+        "romaji": "ojamashimasu",
+        "japanese": "おじゃまします",
+        "vietnameseMeaning": "Tôi xin phép làm phiền (khi bước vào nhà ai)",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%A0%E3%81%84%E3%81%98%E3%81%AB",
+      "data": {
+        "japanese": "おだいじに",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Chúc bạn mau chóng bình phục (khi ai đó ốm)",
+        "romaji": "odaiji ni"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%A4%E3%81%8B%E3%82%8C%E3%81%95%E3%81%BE",
+      "data": {
+        "japanese": "おつかれさま",
+        "vietnameseMeaning": "Bạn đã vất vả rồi (lời chào đồng nghiệp)",
+        "englishMeaning": "",
+        "romaji": "otsukaresama"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%A8%E3%81%86%E3%81%95%E3%82%93",
+      "data": {
+        "romaji": "otousan",
+        "japanese": "おとうさん",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Bố (gọi bố người khác hoặc gọi tôn kính)"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%A8%E3%81%86%E3%81%A8",
+      "data": {
+        "englishMeaning": "",
+        "vietnameseMeaning": "Em trai",
+        "japanese": "おとうと",
+        "romaji": "otouto"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%AB%E3%81%84%E3%81%95%E3%82%93",
+      "data": {
+        "romaji": "oniisan",
+        "vietnameseMeaning": "Anh trai (người khác)",
+        "englishMeaning": "",
+        "japanese": "おにいさん"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%AD%E3%81%88%E3%81%95%E3%82%93",
+      "data": {
+        "romaji": "oneesan",
+        "japanese": "おねえさん",
+        "vietnameseMeaning": "Chị gái (người khác)",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%AD%E3%81%8C%E3%81%84%E3%81%97%E3%81%BE%E3%81%99",
+      "data": {
+        "japanese": "おねがいします",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Xin vui lòng nhờ giúp đỡ",
+        "romaji": "onegaishimasu"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%AF%E3%82%88%E3%81%86",
+      "data": {
+        "romaji": "ohayou",
+        "vietnameseMeaning": "Chào buổi sáng",
+        "englishMeaning": "",
+        "japanese": "おはよう"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%B2%E3%81%95%E3%81%97%E3%81%B6%E3%82%8A",
+      "data": {
+        "vietnameseMeaning": "Lâu quá không gặp",
+        "englishMeaning": "",
+        "japanese": "おひさしぶり",
+        "romaji": "ohisashiburi"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%81%BE%E3%81%9F%E3%81%9B",
+      "data": {
+        "vietnameseMeaning": "Xin lỗi đã bắt bạn đợi lâu",
+        "englishMeaning": "",
+        "japanese": "おまたせ",
+        "romaji": "omatase"
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%82%81%E3%81%A7%E3%81%A8%E3%81%86",
+      "data": {
+        "romaji": "omedetou",
+        "japanese": "おめでとう",
+        "vietnameseMeaning": "Chúc mừng sinh nhật, ngày lễ",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8A%E3%82%84%E3%81%99%E3%81%BF%E3%81%AA%E3%81%95%E3%81%84",
+      "data": {
+        "romaji": "oyasuminasai",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Chúc ngủ ngon",
+        "japanese": "おやすみなさい"
+      }
+    },
+    {
+      "id": "%E3%81%8B%E3%81%9C",
+      "data": {
+        "japanese": "かぜ",
+        "vietnameseMeaning": "Cơn gió / Cảm cúm",
+        "englishMeaning": "",
+        "romaji": "kaze"
+      }
+    },
+    {
+      "id": "%E3%81%8B%E3%81%9E%E3%81%8F",
+      "data": {
+        "japanese": "かぞく",
+        "vietnameseMeaning": "Gia đình",
+        "englishMeaning": "",
+        "romaji": "kazoku"
+      }
+    },
+    {
+      "id": "%E3%81%8B%E3%81%AE%E3%81%98%E3%82%87",
+      "data": {
+        "japanese": "かのじょ",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Cô ấy, bạn gái",
+        "romaji": "kanojo"
+      }
+    },
+    {
+      "id": "%E3%81%8B%E3%82%8C",
+      "data": {
+        "englishMeaning": "",
+        "vietnameseMeaning": "Anh ấy, bạn trai",
+        "japanese": "かれ",
+        "romaji": "kare"
+      }
+    },
+    {
+      "id": "%E3%81%8B%E3%82%8F",
+      "data": {
+        "japanese": "かわ",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Con sông",
+        "romaji": "kawa"
+      }
+    },
+    {
+      "id": "%E3%81%8C%E3%81%8F%E3%81%9B%E3%81%84",
+      "data": {
+        "japanese": "がくせい",
+        "vietnameseMeaning": "Học sinh, sinh viên",
+        "englishMeaning": "",
+        "romaji": "gakusei"
+      }
+    },
+    {
+      "id": "%E3%81%8C%E3%82%93%E3%81%B0%E3%81%A3%E3%81%A6",
+      "data": {
+        "romaji": "ganbatte",
+        "japanese": "がんばって",
+        "vietnameseMeaning": "Cố gắng lên nhé",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8D%E3%82%92%E3%81%A4%E3%81%91%E3%81%A6",
+      "data": {
+        "romaji": "ki o tsukete",
+        "japanese": "きをつけて",
+        "vietnameseMeaning": "Cẩn thận nhé, bảo trọng nhé",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8F%E3%82%82",
+      "data": {
+        "romaji": "kumo",
+        "japanese": "くも",
+        "vietnameseMeaning": "Đám mây / Con nhện",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%8F%E3%82%8B%E3%81%BE",
+      "data": {
+        "romaji": "kuruma",
+        "japanese": "くるま",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Xe hơi, ô tô"
+      }
+    },
+    {
+      "id": "%E3%81%92%E3%82%93%E3%81%8D%E3%81%A7%E3%81%99",
+      "data": {
+        "romaji": "genki desu",
+        "japanese": "げんきです",
+        "vietnameseMeaning": "Tôi khỏe",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF",
+      "data": {
+        "romaji": "konnichiwa",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Chào buổi chiều / xin chào",
+        "japanese": "こんにちは"
+      }
+    },
+    {
+      "id": "%E3%81%93%E3%82%93%E3%81%B0%E3%82%93%E3%81%AF",
+      "data": {
+        "japanese": "こんばんは",
+        "vietnameseMeaning": "Chào buổi tối",
+        "englishMeaning": "",
+        "romaji": "konbanwa"
+      }
+    },
+    {
+      "id": "%E3%81%94%E3%81%A1%E3%81%9D%E3%81%86%E3%81%95%E3%81%BE",
+      "data": {
+        "romaji": "gochizousama",
+        "japanese": "ごちそうさま",
+        "vietnameseMeaning": "Cảm ơn vì bữa ăn ngon (nói sau khi ăn)",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%94%E3%82%81%E3%82%93%E3%81%AA%E3%81%95%E3%81%84",
+      "data": {
+        "romaji": "gomennasai",
+        "vietnameseMeaning": "Xin tha lỗi, xin lỗi",
+        "englishMeaning": "",
+        "japanese": "ごめんなさい"
+      }
+    },
+    {
+      "id": "%E3%81%95%E3%81%8B%E3%81%AA",
+      "data": {
+        "vietnameseMeaning": "Con cá",
+        "englishMeaning": "",
+        "japanese": "さかな",
+        "romaji": "sakana"
+      }
+    },
+    {
+      "id": "%E3%81%95%E3%81%8F%E3%82%89",
+      "data": {
+        "vietnameseMeaning": "Hoa anh đào",
+        "englishMeaning": "",
+        "japanese": "さくら",
+        "romaji": "sakura"
+      }
+    },
+    {
+      "id": "%E3%81%95%E3%82%88%E3%81%86%E3%81%AA%E3%82%89",
+      "data": {
+        "romaji": "sayounara",
+        "vietnameseMeaning": "Chào tạm biệt (lâu dài)",
+        "englishMeaning": "",
+        "japanese": "さようなら"
+      }
+    },
+    {
+      "id": "%E3%81%97%E3%81%A4%E3%82%8C%E3%81%84%E3%81%97%E3%81%BE%E3%81%99",
+      "data": {
+        "japanese": "しつれいします",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Tôi xin phép thất lễ (khi vào phòng, cúp máy)",
+        "romaji": "shitsureishimasu"
+      }
+    },
+    {
+      "id": "%E3%81%97%E3%82%85%E3%81%A3%E3%81%97%E3%82%93",
+      "data": {
+        "japanese": "しゅっしん",
+        "vietnameseMeaning": "Quê quán, xuất thân",
+        "englishMeaning": "",
+        "romaji": "shusshin"
+      }
+    },
+    {
+      "id": "%E3%81%97%E3%82%85%E3%81%BF",
+      "data": {
+        "romaji": "shumi",
+        "vietnameseMeaning": "Sở thích cá nhân",
+        "englishMeaning": "",
+        "japanese": "しゅみ"
+      }
+    },
+    {
+      "id": "%E3%81%98%E3%82%85%E3%81%86%E3%81%97%E3%82%87",
+      "data": {
+        "japanese": "じゅうしょ",
+        "vietnameseMeaning": "Địa chỉ nơi ở",
+        "englishMeaning": "",
+        "romaji": "juusho"
+      }
+    },
+    {
+      "id": "%E3%81%99%E3%81%97",
+      "data": {
+        "romaji": "sushi",
+        "vietnameseMeaning": "Món ăn Sushi",
+        "englishMeaning": "",
+        "japanese": "すし"
+      }
+    },
+    {
+      "id": "%E3%81%99%E3%81%BF%E3%81%BE%E3%81%9B%E3%82%93",
+      "data": {
+        "japanese": "すみません",
+        "vietnameseMeaning": "Xin lỗi / Xin hỏi (gọi phục vụ)",
+        "englishMeaning": "",
+        "romaji": "sumimasen"
+      }
+    },
+    {
+      "id": "%E3%81%9B%E3%82%93%E3%81%9B%E3%81%84",
+      "data": {
+        "romaji": "sensei",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Thầy cô giáo",
+        "japanese": "せんせい"
+      }
+    },
+    {
+      "id": "%E3%81%9D%E3%81%86%E3%81%A7%E3%81%99%E3%81%8B",
+      "data": {
+        "romaji": "sou desu ka",
+        "japanese": "そうですか",
+        "vietnameseMeaning": "Thế à? Vậy sao?",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%9F%E3%81%84%E3%82%88%E3%81%86",
+      "data": {
+        "englishMeaning": "",
+        "vietnameseMeaning": "Mặt trời",
+        "japanese": "たいよう",
+        "romaji": "taiyou"
+      }
+    },
+    {
+      "id": "%E3%81%9F%E3%81%97%E3%81%8B%E3%81%AB",
+      "data": {
+        "japanese": "たしかに",
+        "vietnameseMeaning": "Chắc chắn là như vậy",
+        "englishMeaning": "",
+        "romaji": "tashikani"
+      }
+    },
+    {
+      "id": "%E3%81%9F%E3%81%A0%E3%81%84%E3%81%BE",
+      "data": {
+        "vietnameseMeaning": "Tôi đã về rồi đây",
+        "englishMeaning": "",
+        "japanese": "ただいま",
+        "romaji": "tadaima"
+      }
+    },
+    {
+      "id": "%E3%81%9F%E3%81%B9%E3%81%BE%E3%81%99",
+      "data": {
+        "romaji": "tabemasu",
+        "vietnameseMeaning": "Hành động Ăn",
+        "englishMeaning": "",
+        "japanese": "たべます"
+      }
+    },
+    {
+      "id": "%E3%81%A0%E3%81%84%E3%81%98%E3%82%87%E3%83%BC%E3%81%B6",
+      "data": {
+        "romaji": "daijoubu",
+        "vietnameseMeaning": "Không sao đâu, ổn mà",
+        "englishMeaning": "",
+        "japanese": "だいじょーぶ"
+      }
+    },
+    {
+      "id": "%E3%81%A0%E3%82%8C",
+      "data": {
+        "vietnameseMeaning": "Ai đó",
+        "englishMeaning": "",
+        "japanese": "だれ",
+        "romaji": "dare"
+      }
+    },
+    {
+      "id": "%E3%81%A1%E3%81%A1",
+      "data": {
+        "romaji": "chichi",
+        "vietnameseMeaning": "Bố tôi (khi nói với người khác)",
+        "englishMeaning": "",
+        "japanese": "ちち"
+      }
+    },
+    {
+      "id": "%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8",
+      "data": {
+        "romaji": "chotto",
+        "japanese": "ちょっと",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Một chút, một lát / Có chút bất tiện"
+      }
+    },
+    {
+      "id": "%E3%81%A4%E3%81%8D",
+      "data": {
+        "romaji": "tsuki",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Mặt trăng",
+        "japanese": "つき"
+      }
+    },
+    {
+      "id": "%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89",
+      "data": {
+        "romaji": "tenpura",
+        "japanese": "てんぷら",
+        "vietnameseMeaning": "Món chiên Tempura",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%A7%E3%81%AF%E3%81%BE%E3%81%9F",
+      "data": {
+        "japanese": "ではまた",
+        "vietnameseMeaning": "Hẹn gặp lại nhé",
+        "englishMeaning": "",
+        "romaji": "dewa mata"
+      }
+    },
+    {
+      "id": "%E3%81%A8%E3%82%82%E3%81%A0%E3%81%A1",
+      "data": {
+        "romaji": "tomodachi",
+        "japanese": "ともだち",
+        "vietnameseMeaning": "Bạn bè",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%A8%E3%82%8A",
+      "data": {
+        "romaji": "tori",
+        "vietnameseMeaning": "Con chim",
+        "englishMeaning": "",
+        "japanese": "とり"
+      }
+    },
+    {
+      "id": "%E3%81%A9%E3%81%86%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%A6",
+      "data": {
+        "japanese": "どういたしまして",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Không có chi, đừng khách sáo",
+        "romaji": "douitashimashite"
+      }
+    },
+    {
+      "id": "%E3%81%A9%E3%81%86%E3%81%9E",
+      "data": {
+        "romaji": "douzo",
+        "vietnameseMeaning": "Xin mời (dùng bữa, vào phòng, ngồi...)",
+        "englishMeaning": "",
+        "japanese": "どうぞ"
+      }
+    },
+    {
+      "id": "%E3%81%AA%E3%81%BE%E3%81%88",
+      "data": {
+        "vietnameseMeaning": "Họ và tên",
+        "englishMeaning": "",
+        "japanese": "なまえ",
+        "romaji": "namae"
+      }
+    },
+    {
+      "id": "%E3%81%AA%E3%82%8B%E3%81%BB%E3%81%A9",
+      "data": {
+        "romaji": "naruhodo",
+        "japanese": "なるほど",
+        "vietnameseMeaning": "Hóa ra là vậy / Tôi hiểu rồi",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%AB%E3%81%BB%E3%82%93",
+      "data": {
+        "romaji": "nihon",
+        "vietnameseMeaning": "Nước Nhật Bản",
+        "englishMeaning": "",
+        "japanese": "にほん"
+      }
+    },
+    {
+      "id": "%E3%81%AD%E3%81%93",
+      "data": {
+        "romaji": "neko",
+        "vietnameseMeaning": "Con mèo",
+        "englishMeaning": "",
+        "japanese": "ねこ"
+      }
+    },
+    {
+      "id": "%E3%81%AF%E3%81%84",
+      "data": {
+        "englishMeaning": "",
+        "vietnameseMeaning": "Vâng, dạ, đúng vậy",
+        "japanese": "はい",
+        "romaji": "hai"
+      }
+    },
+    {
+      "id": "%E3%81%AF%E3%81%98%E3%82%81%E3%81%BE%E3%81%97%E3%81%A6",
+      "data": {
+        "vietnameseMeaning": "Rất vui được gặp bạn (lần đầu)",
+        "englishMeaning": "",
+        "japanese": "はじめまして",
+        "romaji": "hajimemashite"
+      }
+    },
+    {
+      "id": "%E3%81%AF%E3%81%AA",
+      "data": {
+        "vietnameseMeaning": "Bông hoa / Cái mũi",
+        "englishMeaning": "",
+        "japanese": "はな",
+        "romaji": "hana"
+      }
+    },
+    {
+      "id": "%E3%81%AF%E3%81%AF",
+      "data": {
+        "romaji": "haha",
+        "vietnameseMeaning": "Mẹ tôi (khi nói với người khác)",
+        "englishMeaning": "",
+        "japanese": "はは"
+      }
+    },
+    {
+      "id": "%E3%81%BB%E3%82%93",
+      "data": {
+        "romaji": "hon",
+        "japanese": "ほん",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Quyển sách"
+      }
+    },
+    {
+      "id": "%E3%81%BB%E3%82%93%E3%81%A8%E3%81%86%E3%81%AB",
+      "data": {
+        "romaji": "hontou ni",
+        "japanese": "ほんとうに",
+        "vietnameseMeaning": "Thực sự là...",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%81%BE%E3%81%9F%E3%81%82%E3%81%97%E3%81%9F",
+      "data": {
+        "japanese": "またあした",
+        "vietnameseMeaning": "Hẹn gặp lại vào ngày mai",
+        "englishMeaning": "",
+        "romaji": "mata ashita"
+      }
+    },
+    {
+      "id": "%E3%81%BF%E3%81%9A",
+      "data": {
+        "vietnameseMeaning": "Nước uống",
+        "englishMeaning": "",
+        "japanese": "みず",
+        "romaji": "mizu"
+      }
+    },
+    {
+      "id": "%E3%81%BF%E3%81%BE%E3%81%99",
+      "data": {
+        "japanese": "みます",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Hành động Nhìn / Xem",
+        "romaji": "mimasu"
+      }
+    },
+    {
+      "id": "%E3%81%BF%E3%82%93%E3%81%AA",
+      "data": {
+        "japanese": "みんな",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Mọi người, tất cả",
+        "romaji": "minna"
+      }
+    },
+    {
+      "id": "%E3%82%80%E3%81%99%E3%81%93",
+      "data": {
+        "vietnameseMeaning": "Con trai tôi",
+        "englishMeaning": "",
+        "japanese": "むすこ",
+        "romaji": "musuko"
+      }
+    },
+    {
+      "id": "%E3%82%80%E3%81%99%E3%82%81",
+      "data": {
+        "japanese": "むすめ",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Con gái tôi",
+        "romaji": "musume"
+      }
+    },
+    {
+      "id": "%E3%82%82%E3%81%97%E3%82%82%E3%81%97",
+      "data": {
+        "romaji": "moshimoshi",
+        "japanese": "もしもし",
+        "vietnameseMeaning": "Alo (khi nghe điện thoại)",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%82%82%E3%81%A1%E3%82%8D%E3%82%93",
+      "data": {
+        "vietnameseMeaning": "Tất nhiên rồi",
+        "englishMeaning": "",
+        "japanese": "もちろん",
+        "romaji": "mochiron"
+      }
+    },
+    {
+      "id": "%E3%82%84%E3%81%BE",
+      "data": {
+        "vietnameseMeaning": "Ngọn núi",
+        "englishMeaning": "",
+        "japanese": "やま",
+        "romaji": "yama"
+      }
+    },
+    {
+      "id": "%E3%82%86%E3%81%8D",
+      "data": {
+        "romaji": "yuki",
+        "vietnameseMeaning": "Tuyết rơi",
+        "englishMeaning": "",
+        "japanese": "ゆき"
+      }
+    },
+    {
+      "id": "%E3%82%88%E3%82%8B",
+      "data": {
+        "romaji": "yoru",
+        "japanese": "よる",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Buổi tối, ban đêm"
+      }
+    },
+    {
+      "id": "%E3%82%88%E3%82%8D%E3%81%97%E3%81%8F",
+      "data": {
+        "romaji": "yoroshiku",
+        "japanese": "よろしく",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Mong được giúp đỡ (thân mật)"
+      }
+    },
+    {
+      "id": "%E3%82%88%E3%82%8D%E3%81%97%E3%81%8F%E3%81%AD",
+      "data": {
+        "vietnameseMeaning": "Nhờ bạn cả nhé (thân mật)",
+        "englishMeaning": "",
+        "japanese": "よろしくね",
+        "romaji": "yoroshiku ne"
+      }
+    },
+    {
+      "id": "%E3%82%8A%E3%82%87%E3%81%86%E3%81%97%E3%82%93",
+      "data": {
+        "japanese": "りょうしん",
+        "vietnameseMeaning": "Cha mẹ, phụ huynh",
+        "englishMeaning": "",
+        "romaji": "ryoushin"
+      }
+    },
+    {
+      "id": "%E3%82%8F%E3%81%9F%E3%81%97",
+      "data": {
+        "romaji": "watashi",
+        "japanese": "わたし",
+        "vietnameseMeaning": "Tôi",
+        "englishMeaning": ""
+      }
+    },
+    {
+      "id": "%E3%82%8F%E3%81%9F%E3%81%97%E3%81%9F%E3%81%A1",
+      "data": {
+        "vietnameseMeaning": "Chúng tôi, chúng ta",
+        "englishMeaning": "",
+        "japanese": "わたしたち",
+        "romaji": "watashitachi"
+      }
+    },
+    {
+      "id": "%E3%83%90%E3%82%A4%E3%83%90%E3%82%A4",
+      "data": {
+        "japanese": "バイバイ",
+        "englishMeaning": "",
+        "vietnameseMeaning": "Tạm biệt (thân mật)",
+        "romaji": "baibai"
+      }
+    }
+  ]
+}

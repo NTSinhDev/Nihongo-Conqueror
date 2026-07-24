@@ -1,30 +1,31 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
-  N5_LESSONS, 
-  Lesson, 
-  getUnlockedLessons, 
+import {
+  N5_LESSONS,
+  Lesson,
+  getUnlockedLessons,
   saveUnlockLesson,
   getCompletedLessons,
   saveCompleteLesson
 } from "../data/lessons";
 import { VocabularyWord, JAPANESE_VOCABULARY } from "../data/vocabulary";
-import { 
-  BookOpen, 
-  CheckCircle, 
-  Lock, 
-  Unlock, 
-  ArrowRight, 
-  Award, 
-  Volume2, 
-  RotateCcw, 
-  Check, 
-  X, 
-  GraduationCap, 
-  Layers, 
-  Play, 
-  BookMarked, 
-  Trophy, 
+import { LessonExercise, LessonGrammarExample, LessonGrammarItem } from "../data/lessons";
+import {
+  BookOpen,
+  CheckCircle,
+  Lock,
+  Unlock,
+  ArrowRight,
+  Award,
+  Volume2,
+  RotateCcw,
+  Check,
+  X,
+  GraduationCap,
+  Layers,
+  Play,
+  BookMarked,
+  Trophy,
   HelpCircle,
   Lightbulb,
   CornerDownRight,
@@ -53,9 +54,9 @@ import {
   PlusCircle
 } from "lucide-react";
 import { sounds } from "../utils/audio";
-import { 
-  authenticateAnonymously, 
-  saveProgressToCloud, 
+import {
+  authenticateAnonymously,
+  saveProgressToCloud,
   loadProgressFromCloud,
   getLessonsFromCloud,
   seedLessonsToCloud,
@@ -103,11 +104,11 @@ const JP_CONFUSABLES: Record<string, string[]> = {
 
 function generateConfusableAnswers(correct: string, currentLessonWords: VocabularyWord[]): string[] {
   const distractors: Set<string> = new Set();
-  
+
   for (let attempt = 0; attempt < 15; attempt++) {
     let perturbed = "";
     const indexToChange = Math.floor(Math.random() * correct.length);
-    
+
     for (let i = 0; i < correct.length; i++) {
       const char = correct[i];
       if (i === indexToChange && JP_CONFUSABLES[char]) {
@@ -118,13 +119,13 @@ function generateConfusableAnswers(correct: string, currentLessonWords: Vocabula
         perturbed += char;
       }
     }
-    
+
     if (perturbed && perturbed !== correct && !distractors.has(perturbed)) {
       distractors.add(perturbed);
     }
     if (distractors.size >= 3) break;
   }
-  
+
   if (distractors.size < 3) {
     const modifications = [
       correct.replace(/か/g, "g").replace(/さ/g, "za").replace(/た/g, "da").replace(/は/g, "ba"),
@@ -157,17 +158,17 @@ const speakJapanese = (text: string) => {
   try {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    const cleanText = text.replace(/\s*\(.*?\)\s*/g, ""); 
+    const cleanText = text.replace(/\s*\(.*?\)\s*/g, "");
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = "ja-JP";
-    utterance.rate = 0.85; 
-    
+    utterance.rate = 0.85;
+
     const voices = window.speechSynthesis.getVoices();
     const jaVoice = voices.find(v => v.lang.includes("JP") || v.lang.includes("ja"));
     if (jaVoice) {
       utterance.voice = jaVoice;
     }
-    
+
     window.speechSynthesis.speak(utterance);
   } catch (e) {
     console.error("Speech Synthesis failure", e);
@@ -176,7 +177,7 @@ const speakJapanese = (text: string) => {
 
 function generateEssayQuestions(lesson: Lesson): { question: string; hint: string; answers: string[] }[] {
   const list: { question: string; hint: string; answers: string[] }[] = [];
-  
+
   if (lesson.id === 1) {
     list.push({
       question: "Hãy dịch câu sau sang Hiragana: 'Tôi là học sinh'",
@@ -524,8 +525,8 @@ interface BasicJapaneseCourseProps {
   setSelectedModel?: (val: string) => void;
 }
 
-export default function BasicJapaneseCourse({ 
-  activeLevel: propActiveLevel, 
+export default function BasicJapaneseCourse({
+  activeLevel: propActiveLevel,
   onLevelChange,
   isLoggedIn: propIsLoggedIn,
   setIsLoggedIn: propSetIsLoggedIn,
@@ -549,7 +550,7 @@ export default function BasicJapaneseCourse({
   const setActiveLevel = onLevelChange !== undefined ? onLevelChange : setInternalActiveLevel;
   const [unlockedLessons, setUnlockedLessons] = useState<number[]>([]);
   const [completedLessons, setCompletedLessons] = useState<number[]>([]);
-  
+
   const [user, setUser] = useState<any | null>(null);
   const [syncStatus, setSyncStatus] = useState<"idle" | "authenticating" | "syncing" | "synced" | "failed">("idle");
 
@@ -585,7 +586,7 @@ export default function BasicJapaneseCourse({
   const [lessonToEnterAfterLogin, setLessonToEnterAfterLogin] = useState<Lesson | null>(null);
 
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-  
+
   // --- Vocabulary Editing States with parent synchronization & fallbacks ---
   const [internalIsEditingVocab, setInternalIsEditingVocab] = useState<boolean>(false);
   const isEditingVocab = propIsEditingVocab !== undefined ? propIsEditingVocab : internalIsEditingVocab;
@@ -603,7 +604,7 @@ export default function BasicJapaneseCourse({
   const [movingWordIndex, setMovingWordIndex] = useState<number | null>(null);
   const [deletingWordIndex, setDeletingWordIndex] = useState<number | null>(null);
   const [moveTargetLessonId, setMoveTargetLessonId] = useState<number | null>(null);
-  
+
   // --- AI Auto-Categorize States with parent synchronization & fallbacks ---
   const [vocabViewMode, setVocabViewMode] = useState<"list" | "ai">("list");
   const [isCategorizingByAi, setIsCategorizingByAi] = useState<boolean>(false);
@@ -621,7 +622,7 @@ export default function BasicJapaneseCourse({
   const [builderLoading, setBuilderLoading] = useState<boolean>(false);
   const [builderError, setBuilderError] = useState<string | null>(null);
   const [builderSuccess, setBuilderSuccess] = useState<string | null>(null);
-  
+
   const [builderWords, setBuilderWords] = useState<Array<{
     japanese: string;
     romaji: string;
@@ -846,7 +847,7 @@ export default function BasicJapaneseCourse({
 
       setBuilderSuccess("Chúc mừng! Giáo trình đã được cập nhật thành công!");
       sounds.playSuccess();
-      
+
       // Delay closing modal slightly so the user sees the success state
       setTimeout(() => {
         setIsLessonBuilderOpen(false);
@@ -866,18 +867,18 @@ export default function BasicJapaneseCourse({
       setBuilderLoading(false);
     }
   };
-  
+
   // --- AI Auto-Translate States ---
   const [isTranslatingEn, setIsTranslatingEn] = useState<boolean>(false);
   const [translationError, setTranslationError] = useState<string | null>(null);
   const [translationSuccess, setTranslationSuccess] = useState<string | null>(null);
-  
+
   // Temporary fields for editing
   const [editJp, setEditJp] = useState<string>("");
   const [editRomaji, setEditRomaji] = useState<string>("");
   const [editVn, setEditVn] = useState<string>("");
   const [editEn, setEditEn] = useState<string>("");
-  
+
   // Tab-based lesson learning structure
   // "vocab" | "flashcard" | "grammar" | "practice" | "choukai" | "kaiwa" | "reading"
   const [studySubMode, setStudySubMode] = useState<"vocab" | "flashcard" | "grammar" | "practice" | "choukai" | "kaiwa" | "reading">("vocab");
@@ -899,7 +900,7 @@ export default function BasicJapaneseCourse({
   const [singleVietnamese, setSingleVietnamese] = useState("");
 
   // New fields for custom topic (lesson) creation & grammar import
-  const [importScope, setImportScope] = useState<"existing" | "new">("existing");
+  const [importScope, setImportScope] = useState<"existing" | "new">("new");
   const [newLessonTitle, setNewLessonTitle] = useState("");
   const [newLessonDesc, setNewLessonDesc] = useState("");
   const [newLessonLevel, setNewLessonLevel] = useState<"N5" | "N4" | "N3" | "N2" | "N1">("N5");
@@ -908,6 +909,11 @@ export default function BasicJapaneseCourse({
   const [newLessonGrammarExplanation, setNewLessonGrammarExplanation] = useState("");
   const [newLessonGrammarExample, setNewLessonGrammarExample] = useState("");
   const [newLessonGrammarExampleMeaning, setNewLessonGrammarExampleMeaning] = useState("");
+  const [manualWordsText, setManualWordsText] = useState("");
+  const [manualGrammarExamplesText, setManualGrammarExamplesText] = useState("");
+  const [manualGrammarImportText, setManualGrammarImportText] = useState("");
+  const [manualGrammarItems, setManualGrammarItems] = useState<LessonGrammarItem[]>([]);
+  const [manualExercisesText, setManualExercisesText] = useState("");
 
   // --- Flashcard Tab States ---
   const [flashcardIndex, setFlashcardIndex] = useState(0);
@@ -916,7 +922,7 @@ export default function BasicJapaneseCourse({
   // --- Practice Tab States (Subdivided into three types of exams) ---
   // "vocab-exam" | "essay-exam" | "jlpt-exam"
   const [practiceType, setPracticeType] = useState<"vocab-exam" | "essay-exam" | "jlpt-exam">("vocab-exam");
-  
+
   // 1. Vocabulary MCQ Exam States (Kì thi trắc nghiệm từ vựng)
   const [examQuestions, setExamQuestions] = useState<{
     word: VocabularyWord;
@@ -986,19 +992,19 @@ export default function BasicJapaneseCourse({
       const localUnlocked = getUnlockedLessons();
       const localCompleted = getCompletedLessons();
       const cloudProgress = await loadProgressFromCloud("user_" + uName.toLowerCase());
-      
+
       if (cloudProgress) {
         const mergedUnlocked = Array.from(
           new Set([...localUnlocked, ...cloudProgress.unlockedLessons])
         ).sort((a, b) => a - b);
-        
+
         const mergedCompleted = Array.from(
           new Set([...localCompleted, ...cloudProgress.completedLessons])
         ).sort((a, b) => a - b);
 
         localStorage.setItem("japanese_course_unlocked_lessons", JSON.stringify(mergedUnlocked));
         localStorage.setItem("japanese_course_completed_lessons", JSON.stringify(mergedCompleted));
-        
+
         setUnlockedLessons(mergedUnlocked);
         setCompletedLessons(mergedCompleted);
 
@@ -1018,7 +1024,7 @@ export default function BasicJapaneseCourse({
   useEffect(() => {
     const localUnlocked = getUnlockedLessons();
     const localCompleted = getCompletedLessons();
-    
+
     setUnlockedLessons(localUnlocked);
     setCompletedLessons(localCompleted);
 
@@ -1080,16 +1086,16 @@ export default function BasicJapaneseCourse({
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     sounds.playClick();
-    
+
     const uName = loginUsername.trim();
     const pWord = loginPassword.trim();
-    
+
     if (!uName || !pWord) {
       setAuthModalError("Vui lòng điền đầy đủ tên đăng nhập và mật khẩu.");
       sounds.playFailure();
       return;
     }
-    
+
     if (uName.length < 3) {
       setAuthModalError("Tên đăng nhập phải chứa ít nhất 3 ký tự.");
       sounds.playFailure();
@@ -1111,7 +1117,7 @@ export default function BasicJapaneseCourse({
         await registerCustomAccount(uName, pWord);
         setAuthModalSuccess("Đăng ký tài khoản thành công! Đang đăng nhập...");
         sounds.playSuccess();
-        
+
         setTimeout(async () => {
           try {
             await loginUserSuccess(uName);
@@ -1139,19 +1145,19 @@ export default function BasicJapaneseCourse({
     localStorage.setItem("japanese_course_username", uName);
     setIsLoggedIn(true);
     setUsername(uName);
-    
+
     // Sync progress immediately
     await triggerProgressSync(uName);
-    
+
     // Close modal
     setIsLoginModalOpen(false);
-    
+
     // Reset form fields
     setLoginUsername("");
     setLoginPassword("");
     setAuthModalError(null);
     setAuthModalSuccess(null);
-    
+
     // Auto-enter the saved lesson if clicked earlier
     if (lessonToEnterAfterLogin) {
       setSelectedLesson(lessonToEnterAfterLogin);
@@ -1164,7 +1170,7 @@ export default function BasicJapaneseCourse({
 
   const enterLesson = (lesson: Lesson) => {
     sounds.playClick();
-    
+
     if (!isLoggedIn) {
       setLessonToEnterAfterLogin(lesson);
       setAuthModalError(null);
@@ -1177,13 +1183,13 @@ export default function BasicJapaneseCourse({
     setStudySubMode("vocab");
     setFlashcardIndex(0);
     setIsCardFlipped(false);
-    
+
     // Reset Vocab edit states
     setIsEditingVocab(false);
     setEditingWordIndex(null);
     setMovingWordIndex(null);
     setMoveTargetLessonId(null);
-    
+
     // Reset Practice / Exam states
     setExamQuestions([]);
     setEssayQuestions([]);
@@ -1315,7 +1321,7 @@ export default function BasicJapaneseCourse({
         if (selectedLesson && selectedLesson.id === targetLesson.id) {
           setSelectedLesson(updatedLesson);
         }
-        
+
         let successMsg = `Đã tích hợp thành công ${uniqueNewWords.length} từ vựng mới vào bài học "${targetLesson.title}"`;
         if (isGrammarUpdated) {
           successMsg += " và cập nhật cấu trúc ngữ pháp";
@@ -1378,7 +1384,7 @@ export default function BasicJapaneseCourse({
         setStudySubMode("vocab");
 
         setImportSuccess(`Đã tạo thành công chủ đề mới "${newLesson.title}" (Bài ${newId + 1}) với ${validatedWords.length} từ vựng và Ngữ pháp! Đang mở bài học để bạn khám phá...`);
-        
+
         // Reset các trường
         setImportJsonText("");
         setNewLessonTitle("");
@@ -1470,16 +1476,164 @@ export default function BasicJapaneseCourse({
     }
   };
 
+  const parseManualGrammarItems = (source: string): LessonGrammarItem[] => {
+    const blocks = source.replace(/\r\n?/g, "\n")
+      .split(/\n\s*-{5,}\s*\n/g)
+      .map((block) => block.trim())
+      .filter(Boolean);
+
+    if (blocks.length === 0) throw new Error("Vui lòng nhập ít nhất một mục ngữ pháp.");
+
+    return blocks.map((block, index) => {
+      const fields: Record<"title" | "pattern" | "explanation", string[]> = { title: [], pattern: [], explanation: [] };
+      const examples: LessonGrammarExample[] = [];
+      let active: "title" | "pattern" | "explanation" | "examples" | null = null;
+
+      block.split("\n").map((line) => line.trim()).filter(Boolean).forEach((line) => {
+        const heading = line.match(/^(?:tiêu đề(?:\s+mẫu\s+ngữ\s+pháp)?|title)\s*:\s*(.*)$/i);
+        const pattern = line.match(/^(?:cấu trúc|mẫu(?:\s+câu)?)\s*:\s*(.*)$/i);
+        const explanation = line.match(/^(?:giải thích|explanation)\s*:\s*(.*)$/i);
+        if (heading) { fields.title.push(heading[1].trim()); active = "title"; return; }
+        if (pattern) { fields.pattern.push(pattern[1].trim()); active = "pattern"; return; }
+        if (explanation) { fields.explanation.push(explanation[1].trim()); active = "explanation"; return; }
+        if (/^(?:ví dụ|examples?)\s*:\s*$/i.test(line)) { active = "examples"; return; }
+        if (active === "examples") {
+          const [japanese, vietnameseMeaning] = line.replace(/^[-*]\s*/, "").split("|").map((part) => part.trim());
+          if (!japanese || !vietnameseMeaning) throw new Error(`Mục ngữ pháp ${index + 1}: mỗi ví dụ cần dạng “câu tiếng Nhật | nghĩa tiếng Việt”.`);
+          examples.push({ japanese, vietnameseMeaning });
+          return;
+        }
+        if (active) fields[active].push(line);
+      });
+
+      const item: LessonGrammarItem = {
+        title: fields.title.join(" ").trim(),
+        pattern: fields.pattern.join(" ").trim(),
+        explanation: fields.explanation.join(" ").trim(),
+        examples,
+      };
+      if (!item.title || !item.pattern || !item.explanation || item.examples.length === 0) {
+        throw new Error(`Mục ngữ pháp ${index + 1} cần có Tiêu đề, Cấu trúc, Giải thích và tối thiểu một Ví dụ.`);
+      }
+      return item;
+    });
+  };
+
+  const handlePreviewManualGrammar = () => {
+    try {
+      setImportError(null);
+      const items = parseManualGrammarItems(manualGrammarImportText);
+      setManualGrammarItems(items);
+      setImportSuccess(`Đã tạo preview ${items.length} mục ngữ pháp. Bạn có thể chỉnh sửa trước khi lưu.`);
+    } catch (err: any) {
+      setManualGrammarItems([]);
+      setImportError(err.message || "Không thể phân tích dữ liệu ngữ pháp.");
+    }
+  };
+
+  const handleSaveManualLesson = async () => {
+    setImportError(null);
+    setImportSuccess(null);
+    setIsImporting(true);
+
+    try {
+      const parseRows = (value: string, label: string) => value.split("\n")
+        .map((row) => row.trim())
+        .filter(Boolean)
+        .map((row, index) => {
+          const parts = row.split("|").map((part) => part.trim());
+          if (!parts[0]) throw new Error(`${label} dòng ${index + 1} đang thiếu nội dung.`);
+          return parts;
+        });
+
+      const words: VocabularyWord[] = parseRows(manualWordsText, "Từ vựng").map((parts, index) => {
+        if (!parts[2]) {
+          throw new Error(`Từ vựng dòng ${index + 1} cần đủ: tiếng Nhật | romaji | nghĩa tiếng Việt.`);
+        }
+        return {
+          japanese: parts[0],
+          romaji: parts[1],
+          vietnameseMeaning: parts[2],
+          ...(parts[3] ? { mnemonic: parts[3] } : {}),
+        };
+      });
+      const exercises: LessonExercise[] = parseRows(manualExercisesText, "Bài tập")
+        .map((parts) => ({ question: parts[0], ...(parts[1] ? { answer: parts[1] } : {}) }));
+      if (manualGrammarItems.length === 0) {
+        throw new Error("Hãy nhập ngữ pháp và bấm “Tạo preview ngữ pháp” trước khi lưu.");
+      }
+
+      const primaryGrammarItem = manualGrammarItems[0];
+      const grammarExamples = manualGrammarItems.flatMap((item) => item.examples);
+      const draftedGrammar = {
+        pattern: primaryGrammarItem.pattern,
+        explanation: primaryGrammarItem.explanation,
+        example: primaryGrammarItem.examples[0].japanese,
+        exampleMeaning: primaryGrammarItem.examples[0].vietnameseMeaning,
+      };
+
+      let updatedLessons: Lesson[];
+      let savedLesson: Lesson;
+      if (importScope === "new") {
+        const title = newLessonTitle.trim();
+        if (!title) throw new Error("Vui lòng nhập tên bài học.");
+        const id = lessons.reduce((max, lesson) => Math.max(max, lesson.id), -1) + 1;
+        savedLesson = {
+          id,
+          title,
+          description: newLessonDesc.trim() || "Bài học được soạn thủ công.",
+          level: newLessonLevel,
+          category: newLessonCategory.trim() || "Giáo trình tự soạn",
+          grammar: draftedGrammar,
+          grammarItems: manualGrammarItems,
+          words,
+          grammarExamples,
+          exercises,
+        };
+        updatedLessons = [...lessons, savedLesson].sort((a, b) => a.id - b.id);
+        const nextUnlocked = Array.from(new Set([...unlockedLessons, id])).sort((a, b) => a - b);
+        setUnlockedLessons(nextUnlocked);
+        localStorage.setItem("japanese_course_unlocked_lessons", JSON.stringify(nextUnlocked));
+      } else {
+        const target = lessons.find((lesson) => lesson.id === importTargetLessonId) || selectedLesson || lessons[0];
+        if (!target) throw new Error("Không tìm thấy bài học cần chỉnh sửa.");
+        const existingWords = new Set(target.words.map((word) => word.japanese.trim()));
+        const newWords = words.filter((word) => !existingWords.has(word.japanese.trim()));
+        savedLesson = {
+          ...target,
+          words: [...target.words, ...newWords],
+          grammar: draftedGrammar,
+          grammarItems: manualGrammarItems,
+          grammarExamples,
+          exercises: exercises.length > 0 ? exercises : target.exercises,
+        };
+        updatedLessons = lessons.map((lesson) => lesson.id === target.id ? savedLesson : lesson);
+      }
+
+      await seedLessonsToCloud(updatedLessons);
+      setLessons(updatedLessons);
+      if (importScope === "new" || selectedLesson?.id === savedLesson.id) setSelectedLesson(savedLesson);
+      setImportSuccess(`Đã lưu bài học “${savedLesson.title}” với ${manualGrammarItems.length} mục ngữ pháp, ${savedLesson.words.length} từ vựng và ${exercises.length} bài tập.`);
+      sounds.playSuccess();
+    } catch (err: any) {
+      console.error(err);
+      setImportError(err.message || "Không thể lưu bài học.");
+      sounds.playFailure();
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
   // --- Vocabulary Word Management Handlers ---
   const handleUpdateVocabWord = async (wIdx: number) => {
     if (!selectedLesson) return;
     sounds.playClick();
-    
+
     if (!editJp.trim() || !editVn.trim()) {
       alert("Vui lòng nhập đầy đủ các trường bắt buộc (tiếng Nhật và nghĩa tiếng Việt).");
       return;
     }
-    
+
     try {
       const updatedWord: VocabularyWord = {
         ...selectedLesson.words[wIdx],
@@ -1488,17 +1642,17 @@ export default function BasicJapaneseCourse({
         vietnameseMeaning: editVn.trim(),
         englishMeaning: editEn.trim() || undefined
       };
-      
+
       const updatedWords = selectedLesson.words.map((w, idx) => idx === wIdx ? updatedWord : w);
       const updatedLesson = {
         ...selectedLesson,
         words: updatedWords
       };
-      
+
       const updatedLessons = lessons.map(les => les.id === selectedLesson.id ? updatedLesson : les);
-      
+
       await seedLessonsToCloud(updatedLessons);
-      
+
       setLessons(updatedLessons);
       setSelectedLesson(updatedLesson);
       setEditingWordIndex(null);
@@ -1513,18 +1667,18 @@ export default function BasicJapaneseCourse({
   const handleDeleteVocabWord = async (wIdx: number) => {
     if (!selectedLesson) return;
     sounds.playClick();
-    
+
     try {
       const updatedWords = selectedLesson.words.filter((_, idx) => idx !== wIdx);
       const updatedLesson = {
         ...selectedLesson,
         words: updatedWords
       };
-      
+
       const updatedLessons = lessons.map(les => les.id === selectedLesson.id ? updatedLesson : les);
-      
+
       await seedLessonsToCloud(updatedLessons);
-      
+
       setLessons(updatedLessons);
       setSelectedLesson(updatedLesson);
       setDeletingWordIndex(null);
@@ -1539,7 +1693,7 @@ export default function BasicJapaneseCourse({
   const handleMoveVocabWord = async (wIdx: number) => {
     if (!selectedLesson || moveTargetLessonId === null) return;
     sounds.playClick();
-    
+
     try {
       const wordToMove = selectedLesson.words[wIdx];
       const targetLesson = lessons.find(l => l.id === moveTargetLessonId);
@@ -1547,30 +1701,30 @@ export default function BasicJapaneseCourse({
         alert("Không tìm thấy bài học đích để di chuyển.");
         return;
       }
-      
+
       // Remove from current lesson
       const updatedCurrentWords = selectedLesson.words.filter((_, idx) => idx !== wIdx);
       const updatedCurrentLesson = {
         ...selectedLesson,
         words: updatedCurrentWords
       };
-      
+
       // Add to target lesson
       const updatedTargetWords = [...targetLesson.words, wordToMove];
       const updatedTargetLesson = {
         ...targetLesson,
         words: updatedTargetWords
       };
-      
+
       // Update the main lessons list
       const updatedLessons = lessons.map(l => {
         if (l.id === selectedLesson.id) return updatedCurrentLesson;
         if (l.id === targetLesson.id) return updatedTargetLesson;
         return l;
       });
-      
+
       await seedLessonsToCloud(updatedLessons);
-      
+
       setLessons(updatedLessons);
       setSelectedLesson(updatedCurrentLesson);
       setMovingWordIndex(null);
@@ -1589,36 +1743,36 @@ export default function BasicJapaneseCourse({
     sounds.playClick();
     setIsCategorizingByAi(true);
     setAiCategorizeError(null);
-    
+
     try {
       const response = await fetch("/api/vocab/categorize", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           words: selectedLesson.words,
           model: selectedAiModel
         })
       });
-      
+
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || "Không thể phân loại từ vựng bằng AI.");
       }
-      
+
       const data = await response.json();
       if (data.categorized && Array.isArray(data.categorized)) {
         await saveCategorizedVocabToCloud(selectedLesson.id, data.categorized);
         const updatedLesson = { ...selectedLesson, categorizedVocab: data.categorized };
         setSelectedLesson(updatedLesson);
         setLessons(lessons.map(l => l.id === selectedLesson.id ? updatedLesson : l));
-        
+
         // Auto-update model to the one that succeeded if fallback occurred
         if (data.activeModel && data.activeModel !== selectedAiModel) {
           setSelectedAiModel(data.activeModel);
         }
-        
+
         sounds.playSuccess();
       } else {
         throw new Error("Phản hồi từ AI không đúng định dạng mong đợi.");
@@ -1638,43 +1792,43 @@ export default function BasicJapaneseCourse({
     setIsTranslatingEn(true);
     setTranslationError(null);
     setTranslationSuccess(null);
-    
+
     try {
       const response = await fetch("/api/vocab/translate-english", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           words: selectedLesson.words,
           model: selectedAiModel
         })
       });
-      
+
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || "Không thể dịch từ vựng bằng AI.");
       }
-      
+
       const data = await response.json();
       if (data.words && Array.isArray(data.words)) {
-        const updatedLesson = { 
-          ...selectedLesson, 
+        const updatedLesson = {
+          ...selectedLesson,
           words: data.words,
           categorizedVocab: undefined
         };
         const updatedLessons = lessons.map(l => l.id === selectedLesson.id ? updatedLesson : l);
-        
+
         await seedLessonsToCloud(updatedLessons);
         await saveCategorizedVocabToCloud(selectedLesson.id, []);
-        
+
         setSelectedLesson(updatedLesson);
         setLessons(updatedLessons);
-        
+
         if (data.activeModel && data.activeModel !== selectedAiModel) {
           setSelectedAiModel(data.activeModel);
         }
-        
+
         if (data.updatedCount > 0) {
           setTranslationSuccess(`Bổ sung thành công ${data.updatedCount} nghĩa tiếng Anh bằng AI (${data.activeModel})!`);
         } else {
@@ -1697,7 +1851,7 @@ export default function BasicJapaneseCourse({
   // Generate Choukai Listening Question
   const currentChoukaiQuestion = useMemo(() => {
     if (!selectedLesson) return null;
-    
+
     // Explicit content for Lesson 0 and Lesson 1
     if (selectedLesson.id === 0) {
       const questions = [
@@ -1722,7 +1876,7 @@ export default function BasicJapaneseCourse({
         .filter(w => w.japanese !== word.japanese)
         .sort(() => 0.5 - Math.random())
         .slice(0, 3);
-      
+
       const options = [word.vietnameseMeaning, ...otherWords.map(o => o.vietnameseMeaning)].sort(() => 0.5 - Math.random());
 
       return {
@@ -1798,7 +1952,7 @@ export default function BasicJapaneseCourse({
 
     const currentLine = currentDialogueLines[currentDialogueIndex];
     const isUserTurn = (rolePlayMode === "A" && currentLine.speaker.includes("A") || currentLine.speaker === "Tanaka" && rolePlayMode === "A" || currentLine.speaker === "Miller" && rolePlayMode === "A") ||
-                     (rolePlayMode === "B" && currentLine.speaker.includes("B") || currentLine.speaker === "Santos" && rolePlayMode === "B" || currentLine.speaker === "Miller" && rolePlayMode === "B");
+      (rolePlayMode === "B" && currentLine.speaker.includes("B") || currentLine.speaker === "Santos" && rolePlayMode === "B" || currentLine.speaker === "Miller" && rolePlayMode === "B");
 
     if (isUserTurn) {
       // Pause automatic stream for user speaking practice
@@ -1820,10 +1974,10 @@ export default function BasicJapaneseCourse({
     if (currentDialogueIndex < currentDialogueLines.length - 1) {
       const nextLine = currentDialogueLines[currentDialogueIndex + 1];
       setCurrentDialogueIndex(prev => prev + 1);
-      
+
       const isNextUserTurn = (rolePlayMode === "A" && nextLine.speaker.includes("A") || nextLine.speaker === "Tanaka" && rolePlayMode === "A" || nextLine.speaker === "Miller" && rolePlayMode === "A") ||
-                             (rolePlayMode === "B" && nextLine.speaker.includes("B") || nextLine.speaker === "Santos" && rolePlayMode === "B" || nextLine.speaker === "Miller" && rolePlayMode === "B");
-      
+        (rolePlayMode === "B" && nextLine.speaker.includes("B") || nextLine.speaker === "Santos" && rolePlayMode === "B" || nextLine.speaker === "Miller" && rolePlayMode === "B");
+
       if (!isNextUserTurn) {
         speakJapanese(nextLine.voice);
       }
@@ -1910,7 +2064,7 @@ export default function BasicJapaneseCourse({
   const startVocabExam = () => {
     if (!selectedLesson) return;
     sounds.playClick();
-    
+
     const shuffledWords = [...selectedLesson.words].sort(() => Math.random() - 0.5);
     const craftedQuestions = shuffledWords.map((word) => {
       const type = Math.random() > 0.5 ? "vn-to-jp" : "jp-to-vn";
@@ -1994,12 +2148,12 @@ export default function BasicJapaneseCourse({
   const handleSubmitEssay = () => {
     if (essayAnswered) return;
     sounds.playClick();
-    
+
     const currentQuestion = essayQuestions[essayIndex];
-    const cleanStr = (s: string) => 
+    const cleanStr = (s: string) =>
       s.replace(/[\s。、.,?？・]+/g, "")
-       .toLowerCase()
-       .trim();
+        .toLowerCase()
+        .trim();
 
     const userAns = cleanStr(essayInput);
     const checkIsCorrect = currentQuestion.answers.some(ans => cleanStr(ans) === userAns);
@@ -2092,7 +2246,7 @@ export default function BasicJapaneseCourse({
 
   return (
     <div className="bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-xs min-h-[500px] w-full max-w-full min-w-0 overflow-hidden mobile-card-constraint">
-      
+
       {/* Course Top Title & Actions Header */}
       {!lessonsLoading && (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4 mb-4">
@@ -2115,7 +2269,7 @@ export default function BasicJapaneseCourse({
           </div>
         </div>
       )}
-      
+
       {lessonsLoading ? (
         <div className="flex flex-col items-center justify-center py-24 space-y-3">
           <div className="w-8 h-8 border-3 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
@@ -2145,24 +2299,23 @@ export default function BasicJapaneseCourse({
                 {lessons.map((lesson) => {
                   const isUnlocked = unlockedLessons.includes(lesson.id);
                   const isStudying = unlockedLessons[unlockedLessons.length - 1] === lesson.id || (lesson.id === 0 && unlockedLessons.length === 1);
-                  
+
                   return (
                     <motion.div
                       id={`lesson-card-${lesson.id}`}
                       key={lesson.id}
                       whileHover={isUnlocked ? { scale: 1.015, y: -2 } : {}}
-                      className={`border rounded-2xl p-5 flex flex-col justify-between transition-all relative ${
-                        isUnlocked 
-                          ? "bg-white border-stone-200 hover:border-stone-350 shadow-3xs cursor-pointer" 
-                          : "bg-stone-50 border-stone-200 opacity-75"
-                      }`}
+                      className={`border rounded-2xl p-5 flex flex-col justify-between transition-all relative ${isUnlocked
+                        ? "bg-white border-stone-200 hover:border-stone-350 shadow-3xs cursor-pointer"
+                        : "bg-stone-50 border-stone-200 opacity-75"
+                        }`}
                       onClick={() => isUnlocked && enterLesson(lesson)}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-stone-500 font-mono font-bold">
                           {lesson.category}
                         </span>
-                        
+
                         {isUnlocked ? (
                           completedLessons.includes(lesson.id) ? (
                             <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
@@ -2193,7 +2346,7 @@ export default function BasicJapaneseCourse({
                         <span className="text-[11px] text-stone-400 font-medium font-mono">
                           📚 {lesson.words.length} Từ vựng
                         </span>
-                        
+
                         {isUnlocked ? (
                           completedLessons.includes(lesson.id) ? (
                             <span className="text-xs font-bold text-emerald-600 flex items-center gap-0.5 hover:underline">
@@ -2233,7 +2386,7 @@ export default function BasicJapaneseCourse({
                   </div>
                 </div>
                 <div className="w-full sm:w-48 bg-stone-200 h-2.5 rounded-full overflow-hidden relative">
-                  <div 
+                  <div
                     className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500"
                     style={{ width: `${(completedLessons.length / lessons.length) * 100}%` }}
                   ></div>
@@ -2245,7 +2398,7 @@ export default function BasicJapaneseCourse({
       ) : (
         /* STUDY CLASSROOM (Sảnh học bài được chọn) */
         <div className="py-4 space-y-6 w-full max-w-full min-w-0 overflow-hidden">
-          
+
           {/* Breadcrumb controls & Lesson Navigation Router */}
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-stone-50 p-4 rounded-2xl border border-stone-250 shadow-3xs">
             {/* Left: Back to list */}
@@ -2257,9 +2410,9 @@ export default function BasicJapaneseCourse({
               >
                 ← Danh sách bài học
               </button>
-              
+
               <div className="h-4 w-[1px] bg-stone-200 hidden sm:block"></div>
-              
+
               {/* Quick Lesson Switcher dropdown */}
               <div className="flex items-center gap-1.5 min-w-0 flex-1 sm:flex-initial">
                 <span className="text-[10px] font-bold text-stone-400 font-mono hidden md:inline shrink-0">CHUYỂN NHANH:</span>
@@ -2305,7 +2458,7 @@ export default function BasicJapaneseCourse({
               >
                 ◀ Bài trước
               </button>
-              
+
               <span className="text-[11px] font-bold font-mono text-stone-400 px-1">
                 {lessons.findIndex(l => l.id === selectedLesson.id) + 1} / {lessons.length}
               </span>
@@ -2336,11 +2489,10 @@ export default function BasicJapaneseCourse({
                       setStudySubMode("vocab");
                     }}
                     title={!isNextUnlocked ? "Hãy đỗ kỳ thi cuối bài học hiện tại để mở khóa bài học kế tiếp!" : `Chuyển sang ${nextLesson.title}`}
-                    className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shrink-0 ${
-                      isNextUnlocked 
-                        ? "bg-rose-600 text-white hover:bg-rose-700 font-extrabold" 
-                        : "bg-stone-200 text-stone-400 cursor-not-allowed"
-                    }`}
+                    className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shrink-0 ${isNextUnlocked
+                      ? "bg-rose-600 text-white hover:bg-rose-700 font-extrabold"
+                      : "bg-stone-200 text-stone-400 cursor-not-allowed"
+                      }`}
                   >
                     <span>Bài kế tiếp {!isNextUnlocked ? "🔒" : "▶"}</span>
                   </button>
@@ -2367,11 +2519,10 @@ export default function BasicJapaneseCourse({
                   <button
                     key={tab.id}
                     onClick={() => { sounds.playClick(); setStudySubMode(tab.id as any); }}
-                    className={`px-3 sm:px-4 py-2.5 text-xs font-bold border-b-2 transition-all shrink-0 flex items-center gap-1.5 snap-start ${
-                      isActive
-                        ? "border-rose-600 text-rose-600 font-extrabold bg-rose-50/20"
-                        : "border-transparent text-stone-400 hover:text-stone-700 hover:border-stone-200"
-                    }`}
+                    className={`px-3 sm:px-4 py-2.5 text-xs font-bold border-b-2 transition-all shrink-0 flex items-center gap-1.5 snap-start ${isActive
+                      ? "border-rose-600 text-rose-600 font-extrabold bg-rose-50/20"
+                      : "border-transparent text-stone-400 hover:text-stone-700 hover:border-stone-200"
+                      }`}
                   >
                     <Icon className="w-4 h-4 shrink-0" />
                     <span>{tab.label}</span>
@@ -2393,8 +2544,8 @@ export default function BasicJapaneseCourse({
                     )}
                   </h3>
                   <p className="text-xs text-stone-400 mt-0.5">
-                    {isEditingVocab 
-                      ? "Nhấn vào các nút chức năng bên phải mỗi từ để sửa, xóa hoặc di chuyển sang bài khác." 
+                    {isEditingVocab
+                      ? "Nhấn vào các nút chức năng bên phải mỗi từ để sửa, xóa hoặc di chuyển sang bài khác."
                       : "Bấm biểu tượng loa để nghe giọng đọc bản xứ."}
                   </p>
                 </div>
@@ -2417,11 +2568,10 @@ export default function BasicJapaneseCourse({
                         sounds.playClick();
                         setVocabViewMode("list");
                       }}
-                      className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                        vocabViewMode === "list"
-                          ? "bg-white text-rose-600 shadow-5xs font-extrabold"
-                          : "text-stone-500 hover:text-stone-850"
-                      }`}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all ${vocabViewMode === "list"
+                        ? "bg-white text-rose-600 shadow-5xs font-extrabold"
+                        : "text-stone-500 hover:text-stone-850"
+                        }`}
                     >
                       <List className="w-3.5 h-3.5" /> Danh sách gốc
                     </button>
@@ -2430,11 +2580,10 @@ export default function BasicJapaneseCourse({
                         sounds.playClick();
                         setVocabViewMode("ai");
                       }}
-                      className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                        vocabViewMode === "ai"
-                          ? "bg-white text-rose-600 shadow-5xs font-extrabold"
-                          : "text-stone-500 hover:text-stone-850"
-                      }`}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all ${vocabViewMode === "ai"
+                        ? "bg-white text-rose-600 shadow-5xs font-extrabold"
+                        : "text-stone-500 hover:text-stone-850"
+                        }`}
                     >
                       <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" /> AI Phân loại
                     </button>
@@ -2537,6 +2686,7 @@ export default function BasicJapaneseCourse({
                       </div>
                     </div>
                   )}
+                  <div onClick={() => setIsTranslatingEn(true)}>x</div>
                 </div>
               )}
 
@@ -2568,13 +2718,12 @@ export default function BasicJapaneseCourse({
                             setSelectedAiModel(m.id);
                           }}
                           disabled={isCategorizingByAi}
-                          className={`p-2.5 text-xs font-bold rounded-xl border transition-all text-left relative flex flex-col justify-between h-[76px] ${
-                            selectedAiModel === m.id
-                              ? "bg-white border-rose-500 shadow-3xs ring-2 ring-rose-500/10 cursor-default"
-                              : isCategorizingByAi 
-                                ? "bg-stone-50 border-stone-200/50 opacity-50 cursor-not-allowed text-stone-400"
-                                : "bg-white/40 border-stone-200/80 hover:border-stone-300 hover:bg-white text-stone-600"
-                          }`}
+                          className={`p-2.5 text-xs font-bold rounded-xl border transition-all text-left relative flex flex-col justify-between h-[76px] ${selectedAiModel === m.id
+                            ? "bg-white border-rose-500 shadow-3xs ring-2 ring-rose-500/10 cursor-default"
+                            : isCategorizingByAi
+                              ? "bg-stone-50 border-stone-200/50 opacity-50 cursor-not-allowed text-stone-400"
+                              : "bg-white/40 border-stone-200/80 hover:border-stone-300 hover:bg-white text-stone-600"
+                            }`}
                         >
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1 justify-between">
@@ -2670,7 +2819,7 @@ export default function BasicJapaneseCourse({
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {selectedLesson.categorizedVocab.map((group, gIdx) => (
-                          <div 
+                          <div
                             key={gIdx}
                             className="p-5 rounded-2xl border border-stone-200 bg-white hover:border-stone-300 transition-all shadow-4xs space-y-3 flex flex-col justify-between"
                           >
@@ -2691,7 +2840,7 @@ export default function BasicJapaneseCourse({
 
                             <div className="border-t border-stone-100 pt-3 space-y-2">
                               {group.words.map((word: any, wIdx: number) => (
-                                <div 
+                                <div
                                   key={wIdx}
                                   className="flex items-center justify-between p-2 rounded-lg bg-stone-50 hover:bg-stone-100/75 transition-all text-stone-800"
                                 >
@@ -2728,250 +2877,251 @@ export default function BasicJapaneseCourse({
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto pr-1 scrollbar-thin">
                   {selectedLesson.words.map((word, wIdx) => {
-                  const isEditingThis = editingWordIndex === wIdx;
-                  const isMovingThis = movingWordIndex === wIdx;
-                  const isDeletingThis = deletingWordIndex === wIdx;
+                    const isEditingThis = editingWordIndex === wIdx;
+                    const isMovingThis = movingWordIndex === wIdx;
+                    const isDeletingThis = deletingWordIndex === wIdx;
 
-                  if (isEditingThis) {
-                    return (
-                      <div 
-                        key={wIdx}
-                        className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/5 flex flex-col gap-3 transition-all shadow-3xs"
-                      >
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Tiếng Nhật (JP)</label>
-                            <input 
-                              type="text" 
-                              value={editJp}
-                              onChange={(e) => setEditJp(e.target.value)}
-                              className="w-full text-xs border border-stone-200 rounded-lg p-2 font-serif-jp bg-white text-stone-850 focus:outline-none focus:border-rose-500"
-                              placeholder="Ví dụ: わたし"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Romaji</label>
-                            <input 
-                              type="text" 
-                              value={editRomaji}
-                              onChange={(e) => setEditRomaji(e.target.value)}
-                              className="w-full text-xs border border-stone-200 rounded-lg p-2 font-mono bg-white text-stone-850 focus:outline-none focus:border-rose-500"
-                              placeholder="Ví dụ: watashi"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Nghĩa tiếng Việt</label>
-                            <input 
-                              type="text" 
-                              value={editVn}
-                              onChange={(e) => setEditVn(e.target.value)}
-                              className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-rose-500"
-                              placeholder="Ví dụ: Tôi"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Nghĩa tiếng Anh (English)</label>
-                            <input 
-                              type="text" 
-                              value={editEn}
-                              onChange={(e) => setEditEn(e.target.value)}
-                              className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-rose-500"
-                              placeholder="Để trống nếu không có"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-rose-100">
-                          <button
-                            onClick={() => {
-                              sounds.playClick();
-                              setEditingWordIndex(null);
-                            }}
-                            className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
-                          >
-                            <X className="w-3.5 h-3.5" /> Hủy
-                          </button>
-                          <button
-                            onClick={() => handleUpdateVocabWord(wIdx)}
-                            className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all flex items-center gap-1"
-                          >
-                            <Check className="w-3.5 h-3.5" /> Lưu lại
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  }
-
-                  if (isMovingThis) {
-                    return (
-                      <div 
-                        key={wIdx}
-                        className="p-4 rounded-xl border-2 border-amber-500 bg-amber-50/5 flex flex-col gap-3 transition-all shadow-3xs"
-                      >
-                        <div>
-                          <p className="text-xs font-bold text-stone-850">
-                            Di chuyển từ <strong className="font-serif-jp text-rose-600 font-extrabold">{word.japanese}</strong> sang bài học khác:
-                          </p>
-                          <p className="text-[11px] text-stone-400 mt-0.5">Từ vựng sẽ được chuyển khỏi bài này sang bài mới chọn.</p>
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                          <select 
-                            value={moveTargetLessonId ?? ""}
-                            onChange={(e) => setMoveTargetLessonId(e.target.value === "" ? null : Number(e.target.value))}
-                            className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-amber-500"
-                          >
-                            <option value="">-- Chọn bài học đích --</option>
-                            {lessons.filter(l => l.id !== selectedLesson.id).map(l => (
-                              <option key={l.id} value={l.id}>{l.title}</option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-amber-100">
-                          <button
-                            onClick={() => {
-                              sounds.playClick();
-                              setMovingWordIndex(null);
-                              setMoveTargetLessonId(null);
-                            }}
-                            className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
-                          >
-                            <X className="w-3.5 h-3.5" /> Hủy
-                          </button>
-                          <button
-                            onClick={() => handleMoveVocabWord(wIdx)}
-                            disabled={moveTargetLessonId === null}
-                            className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold transition-all flex items-center gap-1"
-                          >
-                            <Check className="w-3.5 h-3.5" /> Di chuyển
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  }
-
-                  if (isDeletingThis) {
-                    return (
-                      <div 
-                        key={wIdx}
-                        className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/5 flex flex-col gap-3 transition-all shadow-3xs animate-fadeIn"
-                      >
-                        <div>
-                          <p className="text-xs font-bold text-stone-850">
-                            Bạn có chắc chắn muốn xóa từ vựng <strong className="font-serif-jp text-rose-600 font-extrabold">{word.japanese}</strong> khỏi bài học này không?
-                          </p>
-                          <p className="text-[11px] text-stone-400 mt-0.5">Thao tác này sẽ đồng bộ ngay lên đám mây Firestore.</p>
-                        </div>
-
-                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-rose-100">
-                          <button
-                            onClick={() => {
-                              sounds.playClick();
-                              setDeletingWordIndex(null);
-                            }}
-                            className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
-                          >
-                            <X className="w-3.5 h-3.5" /> Hủy
-                          </button>
-                          <button
-                            onClick={() => handleDeleteVocabWord(wIdx)}
-                            className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all flex items-center gap-1"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" /> Đồng ý xóa
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <div 
-                      key={wIdx}
-                      className="p-4 rounded-xl border border-stone-200 bg-white hover:bg-stone-50/50 flex flex-col sm:flex-row sm:items-center gap-4 transition-all shadow-4xs"
-                    >
-                      <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
-                        <button
-                          onClick={() => speakJapanese(word.japanese)}
-                          className="w-9 h-9 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center transition-all border border-rose-100 shrink-0"
-                          title="Nghe phát âm"
+                    if (isEditingThis) {
+                      return (
+                        <div
+                          key={wIdx}
+                          className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/5 flex flex-col gap-3 transition-all shadow-3xs"
                         >
-                          <Volume2 className="w-4.5 h-4.5" />
-                        </button>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-baseline gap-2 flex-wrap">
-                            <span className="font-serif-jp font-black text-stone-850 text-base">
-                              {word.japanese}
-                            </span>
-                            <span className="text-[11px] text-stone-400 font-mono font-medium lowercase">
-                              /{word.romaji}/
-                            </span>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Tiếng Nhật (JP)</label>
+                              <input
+                                type="text"
+                                value={editJp}
+                                onChange={(e) => setEditJp(e.target.value)}
+                                className="w-full text-xs border border-stone-200 rounded-lg p-2 font-serif-jp bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                                placeholder="Ví dụ: わたし"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Romaji</label>
+                              <input
+                                type="text"
+                                value={editRomaji}
+                                onChange={(e) => setEditRomaji(e.target.value)}
+                                className="w-full text-xs border border-stone-200 rounded-lg p-2 font-mono bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                                placeholder="Ví dụ: watashi"
+                              />
+                            </div>
                           </div>
-                          <span className="text-xs text-stone-600 font-semibold block mt-0.5">
-                            {word.vietnameseMeaning}
-                          </span>
-                          {word.englishMeaning && (
-                            <span className="text-[11px] text-stone-400 font-medium block mt-0.5">
-                              🇬🇧 English: {word.englishMeaning}
+
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Nghĩa tiếng Việt</label>
+                              <input
+                                type="text"
+                                value={editVn}
+                                onChange={(e) => setEditVn(e.target.value)}
+                                className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                                placeholder="Ví dụ: Tôi"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-stone-400 uppercase font-mono block mb-1">Nghĩa tiếng Anh (English)</label>
+                              <input
+                                type="text"
+                                value={editEn}
+                                onChange={(e) => setEditEn(e.target.value)}
+                                className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-rose-500"
+                                placeholder="Để trống nếu không có"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 pt-1 border-t border-rose-100">
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setEditingWordIndex(null);
+                              }}
+                              className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
+                            >
+                              <X className="w-3.5 h-3.5" /> Hủy
+                            </button>
+                            <button
+                              onClick={() => handleUpdateVocabWord(wIdx)}
+                              className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all flex items-center gap-1"
+                            >
+                              <Check className="w-3.5 h-3.5" /> Lưu lại
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    if (isMovingThis) {
+                      return (
+                        <div
+                          key={wIdx}
+                          className="p-4 rounded-xl border-2 border-amber-500 bg-amber-50/5 flex flex-col gap-3 transition-all shadow-3xs"
+                        >
+                          <div>
+                            <p className="text-xs font-bold text-stone-850">
+                              Di chuyển từ <strong className="font-serif-jp text-rose-600 font-extrabold">{word.japanese}</strong> sang bài học khác:
+                            </p>
+                            <p className="text-[11px] text-stone-400 mt-0.5">Từ vựng sẽ được chuyển khỏi bài này sang bài mới chọn.</p>
+                          </div>
+
+                          <div className="flex flex-col gap-2">
+                            <select
+                              value={moveTargetLessonId ?? ""}
+                              onChange={(e) => setMoveTargetLessonId(e.target.value === "" ? null : Number(e.target.value))}
+                              className="w-full text-xs border border-stone-200 rounded-lg p-2 bg-white text-stone-850 focus:outline-none focus:border-amber-500"
+                            >
+                              <option value="">-- Chọn bài học đích --</option>
+                              {lessons.filter(l => l.id !== selectedLesson.id).map(l => (
+                                <option key={l.id} value={l.id}>{l.title}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 pt-1 border-t border-amber-100">
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setMovingWordIndex(null);
+                                setMoveTargetLessonId(null);
+                              }}
+                              className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
+                            >
+                              <X className="w-3.5 h-3.5" /> Hủy
+                            </button>
+                            <button
+                              onClick={() => handleMoveVocabWord(wIdx)}
+                              disabled={moveTargetLessonId === null}
+                              className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold transition-all flex items-center gap-1"
+                            >
+                              <Check className="w-3.5 h-3.5" /> Di chuyển
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    if (isDeletingThis) {
+                      return (
+                        <div
+                          key={wIdx}
+                          className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/5 flex flex-col gap-3 transition-all shadow-3xs animate-fadeIn"
+                        >
+                          <div>
+                            <p className="text-xs font-bold text-stone-850">
+                              Bạn có chắc chắn muốn xóa từ vựng <strong className="font-serif-jp text-rose-600 font-extrabold">{word.japanese}</strong> khỏi bài học này không?
+                            </p>
+                            <p className="text-[11px] text-stone-400 mt-0.5">Thao tác này sẽ đồng bộ ngay lên đám mây Firestore.</p>
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 pt-1 border-t border-rose-100">
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setDeletingWordIndex(null);
+                              }}
+                              className="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-500 text-xs font-bold transition-all flex items-center gap-1"
+                            >
+                              <X className="w-3.5 h-3.5" /> Hủy
+                            </button>
+                            <button
+                              onClick={() => handleDeleteVocabWord(wIdx)}
+                              className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" /> Đồng ý xóa
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={wIdx}
+                        onClick={() => speakJapanese(word.japanese)}
+                        className="p-4 rounded-xl border border-stone-200 bg-white hover:bg-stone-50/50 flex flex-col sm:flex-row sm:items-center gap-4 transition-all shadow-4xs"
+                      >
+                        <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
+                          <button
+                            onClick={() => speakJapanese(word.japanese)}
+                            className="w-9 h-9 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center transition-all border border-rose-100 shrink-0"
+                            title="Nghe phát âm"
+                          >
+                            <Volume2 className="w-4.5 h-4.5" />
+                          </button>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-baseline gap-2 flex-wrap">
+                              <span className="font-serif-jp font-black text-stone-850 text-base">
+                                {word.japanese}
+                              </span>
+                              <span className="text-[11px] text-stone-400 font-mono font-medium lowercase">
+                                /{word.romaji}/
+                              </span>
+                            </div>
+                            <span className="text-xs text-stone-600 font-semibold block mt-0.5">
+                              {word.vietnameseMeaning}
                             </span>
-                          )}
+                            {word.englishMeaning && (
+                              <span className="text-[11px] text-stone-400 font-medium block mt-0.5">
+                                🇬🇧 English: {word.englishMeaning}
+                              </span>
+                            )}
+                          </div>
                         </div>
+
+                        {isEditingVocab && (
+                          <div className="flex items-center gap-1.5 shrink-0 ml-auto sm:border-l border-stone-150 sm:pl-3 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-stone-200/60 w-full sm:w-auto justify-end">
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setEditingWordIndex(wIdx);
+                                setMovingWordIndex(null);
+                                setDeletingWordIndex(null);
+                                setEditJp(word.japanese);
+                                setEditRomaji(word.romaji || "");
+                                setEditVn(word.vietnameseMeaning);
+                                setEditEn(word.englishMeaning || "");
+                              }}
+                              className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 transition-all"
+                              title="Sửa từ vựng"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setMovingWordIndex(wIdx);
+                                setEditingWordIndex(null);
+                                setDeletingWordIndex(null);
+                                setMoveTargetLessonId(null);
+                              }}
+                              className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-800 transition-all"
+                              title="Di chuyển sang bài học khác"
+                            >
+                              <ArrowRightLeft className="w-3.5 h-3.5" />
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setDeletingWordIndex(wIdx);
+                                setEditingWordIndex(null);
+                                setMovingWordIndex(null);
+                              }}
+                              className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-800 transition-all"
+                              title="Xóa từ vựng"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        )}
                       </div>
-
-                      {isEditingVocab && (
-                        <div className="flex items-center gap-1.5 shrink-0 ml-auto sm:border-l border-stone-150 sm:pl-3 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-stone-200/60 w-full sm:w-auto justify-end">
-                          <button
-                            onClick={() => {
-                              sounds.playClick();
-                              setEditingWordIndex(wIdx);
-                              setMovingWordIndex(null);
-                              setDeletingWordIndex(null);
-                              setEditJp(word.japanese);
-                              setEditRomaji(word.romaji || "");
-                              setEditVn(word.vietnameseMeaning);
-                              setEditEn(word.englishMeaning || "");
-                            }}
-                            className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 transition-all"
-                            title="Sửa từ vựng"
-                          >
-                            <Edit3 className="w-3.5 h-3.5" />
-                          </button>
-                          
-                          <button
-                            onClick={() => {
-                              sounds.playClick();
-                              setMovingWordIndex(wIdx);
-                              setEditingWordIndex(null);
-                              setDeletingWordIndex(null);
-                              setMoveTargetLessonId(null);
-                            }}
-                            className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-800 transition-all"
-                            title="Di chuyển sang bài học khác"
-                          >
-                            <ArrowRightLeft className="w-3.5 h-3.5" />
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              sounds.playClick();
-                              setDeletingWordIndex(wIdx);
-                              setEditingWordIndex(null);
-                              setMovingWordIndex(null);
-                            }}
-                            className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-800 transition-all"
-                            title="Xóa từ vựng"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
               )}
             </motion.div>
           )}
@@ -2988,7 +3138,7 @@ export default function BasicJapaneseCourse({
                 </span>
               </div>
 
-              <div 
+              <div
                 onClick={() => {
                   sounds.playClick();
                   setIsCardFlipped(!isCardFlipped);
@@ -3082,7 +3232,7 @@ export default function BasicJapaneseCourse({
                 <h3 className="text-sm font-extrabold uppercase tracking-wide text-stone-850 flex items-center gap-1.5 flex-wrap">
                   <Lightbulb className="w-4.5 h-4.5 text-amber-500 fill-amber-100 shrink-0" /> Cấu trúc Ngữ pháp chính thức của bài học
                 </h3>
-                
+
                 <div className="bg-white border border-stone-150 rounded-xl p-4 shadow-4xs">
                   <span className="block font-mono text-stone-500 text-[10px] uppercase font-bold tracking-wider mb-1">
                     Mẫu câu cốt lõi
@@ -3120,6 +3270,32 @@ export default function BasicJapaneseCourse({
                     </p>
                   </div>
                 </div>
+
+                {!(selectedLesson.grammarItems?.length) && (selectedLesson.grammarExamples?.length ?? 0) > 0 && (
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-stone-700 block">Ví dụ ngữ pháp bổ sung:</span>
+                    {selectedLesson.grammarExamples?.map((item, index) => (
+                      <div key={`${item.japanese}-${index}`} className="bg-white border border-stone-150 rounded-xl p-3 flex gap-2 items-start">
+                        <span className="text-xs font-bold text-rose-500">{index + 1}.</span>
+                        <div className="min-w-0 flex-1"><p className="text-sm font-bold font-serif-jp text-stone-800">{item.japanese}</p><p className="text-xs text-stone-500 mt-0.5">{item.vietnameseMeaning}</p></div>
+                        <button onClick={() => speakJapanese(item.japanese)} className="p-1 text-rose-500"><Volume2 className="w-3.5 h-3.5" /></button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {(selectedLesson.grammarItems?.length ?? 0) > 0 && (
+                  <div className="space-y-3 border-t border-stone-200 pt-4">
+                    <span className="text-xs font-extrabold text-stone-700 block">Toàn bộ mẫu ngữ pháp của bài:</span>
+                    {selectedLesson.grammarItems?.map((item, index) => (
+                      <div key={`${item.title}-${index}`} className="bg-white border border-stone-150 rounded-xl p-4 space-y-2">
+                        <div><span className="text-[10px] font-bold text-rose-500 uppercase">{index + 1}. {item.title}</span><p className="text-base font-black text-stone-800 font-serif-jp mt-1">{item.pattern}</p></div>
+                        <p className="text-xs text-stone-500 leading-relaxed">{item.explanation}</p>
+                        <div className="space-y-1.5">{item.examples.map((example, exampleIndex) => <div key={`${example.japanese}-${exampleIndex}`} className="flex items-start gap-2 text-xs"><button onClick={() => speakJapanese(example.japanese)} className="text-rose-500 mt-0.5"><Volume2 className="w-3.5 h-3.5" /></button><p><span className="font-bold font-serif-jp text-stone-800">{example.japanese}</span><span className="text-stone-400"> — {example.vietnameseMeaning}</span></p></div>)}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Extra Practice Generation */}
@@ -3127,7 +3303,7 @@ export default function BasicJapaneseCourse({
                 <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest">Ví dụ giao tiếp mở rộng thực hành</h4>
                 <div className="space-y-3 divide-y divide-stone-100">
                   {selectedLesson.words.slice(0, 3).map((word, index) => {
-                    const customPattern = selectedLesson.id === 1 
+                    const customPattern = selectedLesson.id === 1
                       ? `わたしは ${word.japanese} です。`
                       : `${word.japanese} です。`;
                     const customMeaning = selectedLesson.id === 1
@@ -3159,17 +3335,23 @@ export default function BasicJapaneseCourse({
           {/* 4. TAB: BÀI TẬP & THI VƯỢT ẢI (Gồm 3 kì thi chuyên nghiệp & chuẩn hóa) */}
           {studySubMode === "practice" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              
+
               {/* IF NO EXAM IS ACTIVE -> SHOW SELECTION DASHBOARD */}
               {examQuestions.length === 0 && essayQuestions.length === 0 && jlptQuestions.length === 0 ? (
                 <div className="space-y-6">
+                  {(selectedLesson.exercises?.length ?? 0) > 0 && (
+                    <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 space-y-3">
+                      <h3 className="text-sm font-extrabold text-amber-900">Bài tập tự soạn</h3>
+                      {selectedLesson.exercises?.map((exercise, index) => <details key={`${exercise.question}-${index}`} className="bg-white rounded-xl p-3 text-xs text-stone-700"><summary className="cursor-pointer font-bold">{index + 1}. {exercise.question}</summary>{exercise.answer && <p className="pt-2 text-stone-500">Gợi ý/đáp án: {exercise.answer}</p>}</details>)}
+                    </div>
+                  )}
                   <div className="text-center space-y-2 max-w-xl mx-auto py-4">
                     <h3 className="text-lg font-black text-stone-850">Hệ thống Kì thi & Đánh giá năng lực</h3>
                     <p className="text-xs text-stone-400 leading-relaxed">
                       Để hoàn thành bài học <strong>{selectedLesson.title}</strong> và tiếp tục mở khóa nội dung mới, bạn hãy hoàn thành tối thiểu một trong ba kì thi chuẩn hóa dưới đây.
                     </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Card 1: Trắc nghiệm Từ vựng */}
                     <div className="bg-white border border-stone-200 rounded-2xl p-6 flex flex-col justify-between hover:border-stone-350 hover:shadow-2xs transition-all relative">
@@ -3248,7 +3430,7 @@ export default function BasicJapaneseCourse({
                         {practiceType === "jlpt-exam" && `ĐỀ THI MẪU JLPT N5: CÂU ${jlptIndex + 1} / ${jlptQuestions.length}`}
                       </span>
                     </div>
-                    
+
                     <button
                       onClick={exitExam}
                       className="text-[11px] font-bold text-stone-500 hover:text-stone-800 bg-white border border-stone-200 px-3 py-1.5 rounded-xl shadow-4xs transition-all"
@@ -3311,7 +3493,7 @@ export default function BasicJapaneseCourse({
                           <div className="bg-stone-50 border border-stone-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-4xs">
                             <div className="text-center space-y-2">
                               <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider font-mono block">
-                                {examQuestions[examIndex].type === "vn-to-jp" 
+                                {examQuestions[examIndex].type === "vn-to-jp"
                                   ? "Chọn từ tiếng Nhật tương đương với nghĩa Việt sau:"
                                   : "Từ vựng tiếng Nhật dưới đây mang ý nghĩa gì?"}
                               </span>
@@ -3358,9 +3540,8 @@ export default function BasicJapaneseCourse({
 
                             {examAnswered && (
                               <div className="space-y-4">
-                                <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                                  examIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
-                                }`}>
+                                <div className={`p-4 rounded-xl border flex items-start gap-3 ${examIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
+                                  }`}>
                                   {examIsCorrect ? <CheckCircle className="w-5 h-5 shrink-0" /> : <X className="w-5 h-5 shrink-0" />}
                                   <div>
                                     <span className="text-xs font-black block">
@@ -3478,9 +3659,8 @@ export default function BasicJapaneseCourse({
                               </button>
                             ) : (
                               <div className="space-y-4">
-                                <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                                  essayIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
-                                }`}>
+                                <div className={`p-4 rounded-xl border flex items-start gap-3 ${essayIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
+                                  }`}>
                                   {essayIsCorrect ? <CheckCircle className="w-5 h-5 shrink-0" /> : <X className="w-5 h-5 shrink-0" />}
                                   <div>
                                     <span className="text-xs font-black block">
@@ -3584,7 +3764,7 @@ export default function BasicJapaneseCourse({
                                 <p className="text-sm font-serif-jp leading-relaxed text-stone-800 whitespace-pre-wrap font-medium">
                                   {jlptQuestions[jlptIndex].passage}
                                 </p>
-                                
+
                                 {jlptAnswered && (
                                   <div className="pt-2 border-t border-stone-100 mt-2">
                                     <span className="text-[10px] uppercase font-bold text-emerald-600 font-mono tracking-widest block mb-1">Dịch nghĩa tham khảo:</span>
@@ -3637,9 +3817,8 @@ export default function BasicJapaneseCourse({
                             {/* Answer response feedback with explanation */}
                             {jlptAnswered && (
                               <div className="space-y-4">
-                                <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                                  jlptIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
-                                }`}>
+                                <div className={`p-4 rounded-xl border flex items-start gap-3 ${jlptIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
+                                  }`}>
                                   {jlptIsCorrect ? <CheckCircle className="w-5 h-5 shrink-0" /> : <X className="w-5 h-5 shrink-0" />}
                                   <div>
                                     <span className="text-xs font-black block">
@@ -3686,13 +3865,13 @@ export default function BasicJapaneseCourse({
 
               {currentChoukaiQuestion && (
                 <div className="bg-stone-50 border border-stone-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-4xs">
-                  
+
                   {/* Listening player controller */}
                   <div className="text-center space-y-4">
                     <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider font-mono block">
                       Bấm nút dưới để phát âm thanh và nghe kỹ:
                     </span>
-                    
+
                     <button
                       onClick={() => {
                         sounds.playClick();
@@ -3703,7 +3882,7 @@ export default function BasicJapaneseCourse({
                     >
                       <Volume2 className="w-9 h-9 animate-pulse" />
                     </button>
-                    
+
                     <p className="text-xs text-stone-400 font-medium">Bấm lại nút tròn đỏ bất kì lúc nào để nghe lại phát âm.</p>
                   </div>
 
@@ -3742,9 +3921,8 @@ export default function BasicJapaneseCourse({
 
                   {choukaiAnswered && (
                     <div className="space-y-4">
-                      <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                        choukaiIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
-                      }`}>
+                      <div className={`p-4 rounded-xl border flex items-start gap-3 ${choukaiIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
+                        }`}>
                         {choukaiIsCorrect ? <CheckCircle className="w-5 h-5 shrink-0 text-emerald-600" /> : <X className="w-5 h-5 shrink-0 text-rose-600" />}
                         <div>
                           <span className="text-xs font-black block">
@@ -3773,13 +3951,13 @@ export default function BasicJapaneseCourse({
           {/* 6. TAB: HỘI THOẠI KAIWA (Conversational bubble role-play) */}
           {studySubMode === "kaiwa" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              
+
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-stone-50 border border-stone-200 p-4 rounded-xl">
                 <div>
                   <h3 className="text-sm font-extrabold text-stone-850">Cuộc hội thoại giao tiếp mẫu sinh động</h3>
                   <p className="text-[11px] text-stone-400 mt-0.5">Luyện phản xạ đóng vai (Role-play) và nhại âm theo chuẩn tiếng Nhật giao tiếp.</p>
                 </div>
-                
+
                 {/* Role play picker */}
                 <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-stone-200 shrink-0 max-w-full justify-center">
                   <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider pl-1.5">Vai của bạn:</span>
@@ -3793,9 +3971,8 @@ export default function BasicJapaneseCourse({
                           setCurrentDialogueIndex(0);
                           setIsDialoguePlayingAll(false);
                         }}
-                        className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
-                          rolePlayMode === role ? "bg-rose-600 text-white" : "text-stone-500 hover:text-stone-700"
-                        }`}
+                        className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${rolePlayMode === role ? "bg-rose-600 text-white" : "text-stone-500 hover:text-stone-700"
+                          }`}
                       >
                         {role === "none" ? "Nghe cả hai" : role === "A" ? "Vai A" : "Vai B"}
                       </button>
@@ -3811,31 +3988,28 @@ export default function BasicJapaneseCourse({
                   const isUserTurn = (rolePlayMode === "A" && isA) || (rolePlayMode === "B" && !isA);
                   const isPast = idx < currentDialogueIndex;
                   const isCurrent = idx === currentDialogueIndex;
-                  
+
                   return (
-                    <div 
-                      key={idx} 
-                      className={`flex flex-col ${isA ? "items-start" : "items-end"} space-y-1 ${
-                        isCurrent ? "opacity-100 scale-100" : isPast ? "opacity-60" : "opacity-30 pointer-events-none"
-                      } transition-all duration-300`}
+                    <div
+                      key={idx}
+                      className={`flex flex-col ${isA ? "items-start" : "items-end"} space-y-1 ${isCurrent ? "opacity-100 scale-100" : isPast ? "opacity-60" : "opacity-30 pointer-events-none"
+                        } transition-all duration-300`}
                     >
                       <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-1">
                         {line.speaker} {isUserTurn && "👉 (Đến lượt BẠN đọc)"}
                       </span>
-                      
-                      <div className={`max-w-[92%] sm:max-w-[85%] rounded-2xl p-3 sm:p-4 flex gap-2.5 sm:gap-3 shadow-4xs border ${
-                        isA 
-                          ? "bg-stone-50 border-stone-150 text-stone-800 rounded-tl-sm" 
-                          : "bg-rose-50 border-rose-100 text-rose-950 rounded-tr-sm"
-                      }`}>
-                        
+
+                      <div className={`max-w-[92%] sm:max-w-[85%] rounded-2xl p-3 sm:p-4 flex gap-2.5 sm:gap-3 shadow-4xs border ${isA
+                        ? "bg-stone-50 border-stone-150 text-stone-800 rounded-tl-sm"
+                        : "bg-rose-50 border-rose-100 text-rose-950 rounded-tr-sm"
+                        }`}>
+
                         {/* Audio play button for single dialogue line */}
                         <button
                           disabled={isUserTurn && rolePlayMode !== "none"}
                           onClick={() => speakJapanese(line.voice)}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
-                            isA ? "bg-white text-stone-600 border-stone-200" : "bg-white text-rose-500 border-rose-200"
-                          }`}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${isA ? "bg-white text-stone-600 border-stone-200" : "bg-white text-rose-500 border-rose-200"
+                            }`}
                           title="Bấm để nghe phát âm câu thoại"
                         >
                           {isUserTurn && rolePlayMode !== "none" ? <VolumeX className="w-4 h-4 text-stone-300" /> : <Volume2 className="w-4 h-4" />}
@@ -3865,9 +4039,8 @@ export default function BasicJapaneseCourse({
                         setIsDialoguePlayingAll(true);
                       }
                     }}
-                    className={`px-4 sm:px-5 py-3 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shadow-3xs ${
-                      isDialoguePlayingAll ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-rose-600 hover:bg-rose-700 text-white"
-                    }`}
+                    className={`px-4 sm:px-5 py-3 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shadow-3xs ${isDialoguePlayingAll ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-rose-600 hover:bg-rose-700 text-white"
+                      }`}
                   >
                     <PlayCircle className="w-4.5 h-4.5" />
                     <span>{isDialoguePlayingAll ? "Tạm dừng phát tất cả" : <><span className="hidden xs:inline">Tự động phát </span>toàn bộ</>}</span>
@@ -3896,14 +4069,14 @@ export default function BasicJapaneseCourse({
           {/* 7. TAB: ĐỌC TOPIC (Reading comprehend) */}
           {studySubMode === "reading" && currentReadingTopic && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              
+
               {/* Document Topic reading text box */}
               <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 sm:p-6 md:p-8 space-y-4 shadow-4xs">
                 <div className="flex justify-between items-center border-b border-stone-200 pb-3 flex-wrap gap-2">
                   <h3 className="font-bold text-sm text-stone-850 flex items-center gap-1.5">
                     <BookOpenCheck className="w-4.5 h-4.5 text-rose-500" /> Bài đọc: {currentReadingTopic.title}
                   </h3>
-                  
+
                   <div className="flex gap-1.5 items-center">
                     <button
                       onClick={() => {
@@ -3918,7 +4091,7 @@ export default function BasicJapaneseCourse({
                         <span className="sm:hidden">Nghe bài</span>
                       </span>
                     </button>
-                    
+
                     <button
                       onClick={() => {
                         sounds.playClick();
@@ -3941,8 +4114,8 @@ export default function BasicJapaneseCourse({
                 </p>
 
                 {showReadingTranslation && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -5 }} 
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="p-4 bg-amber-50/40 border border-amber-100 rounded-xl text-xs sm:text-sm text-stone-600 leading-relaxed font-semibold break-words"
                   >
@@ -3988,9 +4161,8 @@ export default function BasicJapaneseCourse({
                 </div>
 
                 {readingAnswered && (
-                  <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                    readingIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
-                  }`}>
+                  <div className={`p-4 rounded-xl border flex items-start gap-3 ${readingIsCorrect ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-rose-50 border-rose-100 text-rose-800"
+                    }`}>
                     {readingIsCorrect ? <CheckCircle className="w-5 h-5 shrink-0 text-emerald-600" /> : <X className="w-5 h-5 shrink-0 text-rose-600" />}
                     <div>
                       <span className="text-xs font-black block">
@@ -4010,9 +4182,52 @@ export default function BasicJapaneseCourse({
         </div>
       )}
 
-      {/* 8. MODAL: IMPORT JSON VOCABULARY */}
+      {/* MANUAL CURRICULUM COMPOSER */}
       <AnimatePresence>
         {isImportModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-xs">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white rounded-2xl border border-stone-200 shadow-xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]">
+              <div className="p-4 border-b border-stone-150 flex items-center justify-between bg-stone-50">
+                <div>
+                  <h3 className="text-sm font-extrabold text-stone-850 flex items-center gap-1.5"><Edit3 className="w-4 h-4 text-rose-500" />Soạn giáo trình thủ công</h3>
+                  <p className="text-[10px] text-stone-400 font-medium">Tạo bài học gồm từ vựng, ngữ pháp, ví dụ và bài tập.</p>
+                </div>
+                <button onClick={() => setIsImportModalOpen(false)} className="w-7 h-7 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400"><X className="w-4 h-4" /></button>
+              </div>
+              <div className="p-5 flex-1 overflow-y-auto space-y-5">
+                <div className="grid grid-cols-2 gap-2 bg-stone-100 p-1 rounded-xl">
+                  {(["new", "existing"] as const).map((scope) => <button key={scope} type="button" onClick={() => { setImportScope(scope); setImportError(null); }} className={`py-1.5 rounded-lg text-xs font-bold ${importScope === scope ? "bg-white text-rose-600 shadow-3xs" : "text-stone-500"}`}>{scope === "new" ? "Tạo bài học mới" : "Cập nhật bài học có sẵn"}</button>)}
+                </div>
+                {importScope === "existing" ? (
+                  <div><label className="text-xs font-bold text-stone-700 block mb-1">Bài học cần cập nhật</label><select value={importTargetLessonId ?? ""} onChange={(e) => setImportTargetLessonId(Number(e.target.value))} className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold">{lessons.map((lesson) => <option key={lesson.id} value={lesson.id}>{lesson.title}</option>)}</select></div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="text-xs font-bold text-stone-700">Tên bài học *<input value={newLessonTitle} onChange={(e) => setNewLessonTitle(e.target.value)} className="mt-1 w-full border border-stone-200 rounded-xl px-3 py-2 font-normal" placeholder="Ví dụ: Mua sắm" /></label>
+                    <label className="text-xs font-bold text-stone-700">Danh mục<input value={newLessonCategory} onChange={(e) => setNewLessonCategory(e.target.value)} className="mt-1 w-full border border-stone-200 rounded-xl px-3 py-2 font-normal" placeholder="Ví dụ: Đời sống" /></label>
+                    <label className="text-xs font-bold text-stone-700">Trình độ<select value={newLessonLevel} onChange={(e) => setNewLessonLevel(e.target.value as any)} className="mt-1 w-full border border-stone-200 rounded-xl px-3 py-2 font-normal"><option>N5</option><option>N4</option><option>N3</option><option>N2</option><option>N1</option></select></label>
+                    <label className="text-xs font-bold text-stone-700">Mô tả<input value={newLessonDesc} onChange={(e) => setNewLessonDesc(e.target.value)} className="mt-1 w-full border border-stone-200 rounded-xl px-3 py-2 font-normal" placeholder="Mục tiêu của bài học" /></label>
+                  </div>
+                )}
+                <section className="space-y-3 border-t border-stone-150 pt-4"><h4 className="text-xs font-extrabold text-rose-600 uppercase tracking-wide">Import ngữ pháp</h4>
+                  <p className="text-xs text-stone-500 leading-relaxed">Mỗi mục ngữ pháp được ngăn bằng <code>----------</code>. Mỗi ví dụ dùng dấu <code>|</code> để phân tách câu tiếng Nhật và nghĩa tiếng Việt.</p>
+                  <textarea rows={13} value={manualGrammarImportText} onChange={(e) => { setManualGrammarImportText(e.target.value); setManualGrammarItems([]); setImportSuccess(null); }} className="w-full border border-stone-200 rounded-xl p-3 text-xs leading-relaxed font-mono" placeholder={"Tiêu đề: Vị trí đồ vật\nCấu trúc: ～は～にあります\nGiải thích: Diễn tả đồ vật tồn tại hoặc ở một vị trí.\nVí dụ:\nつくえは へやに あります。 | Cái bàn ở trong phòng.\n----------\nTiêu đề: Vị trí người và động vật\nCấu trúc: ～は～にいます\nGiải thích: Diễn tả người hoặc động vật tồn tại hoặc ở một vị trí.\nVí dụ:\nねこは いすの うえに います。 | Con mèo ở trên ghế."} />
+                  <button type="button" onClick={handlePreviewManualGrammar} className="px-4 py-2 rounded-xl text-xs bg-rose-600 text-white">Tạo preview ngữ pháp</button>
+                  {/* {manualGrammarItems.length > 0 && <div className="space-y-3 rounded-xl border border-emerald-100 bg-emerald-50/40 p-3"><p className="text-xs font-extrabold text-emerald-700">Preview — {manualGrammarItems.length} mục, có thể chỉnh sửa trực tiếp:</p>{manualGrammarItems.map((item, index) => <div key={index} className="bg-white rounded-xl border border-stone-150 p-3 space-y-2"><div className="flex justify-between gap-2"><input value={item.title} onChange={(e) => setManualGrammarItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, title: e.target.value } : current))} className="font-bold text-sm text-stone-800 border-b border-stone-200 flex-1 outline-none" /><button type="button" onClick={() => setManualGrammarItems((items) => items.filter((_, itemIndex) => itemIndex !== index))} className="text-xs font-bold text-rose-500">Xóa</button></div><input value={item.pattern} onChange={(e) => setManualGrammarItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, pattern: e.target.value } : current))} className="w-full text-xs font-serif-jp border border-stone-200 rounded-lg px-2 py-1.5" /><textarea rows={2} value={item.explanation} onChange={(e) => setManualGrammarItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, explanation: e.target.value } : current))} className="w-full text-xs border border-stone-200 rounded-lg px-2 py-1.5" />{item.examples.map((example, exampleIndex) => <div key={exampleIndex} className="grid grid-cols-[1fr_1fr_auto] gap-1"><input value={example.japanese} onChange={(e) => setManualGrammarItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, examples: current.examples.map((currentExample, currentIndex) => currentIndex === exampleIndex ? { ...currentExample, japanese: e.target.value } : currentExample) } : current))} className="text-xs font-serif-jp border border-stone-200 rounded-lg px-2 py-1.5" /><input value={example.vietnameseMeaning} onChange={(e) => setManualGrammarItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, examples: current.examples.map((currentExample, currentIndex) => currentIndex === exampleIndex ? { ...currentExample, vietnameseMeaning: e.target.value } : currentExample) } : current))} className="text-xs border border-stone-200 rounded-lg px-2 py-1.5" /><button type="button" onClick={() => setManualGrammarItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, examples: current.examples.filter((_, currentIndex) => currentIndex !== exampleIndex) } : current))} className="text-rose-500 text-xs">×</button></div>)}</div>)}</div>} */}
+                </section>
+                <section className="space-y-2 border-t border-stone-150 pt-4"><h4 className="text-xs font-extrabold text-rose-600 uppercase tracking-wide">Từ vựng</h4><label className="text-xs text-stone-500 block">Mỗi dòng: <strong>tiếng Nhật | romaji | nghĩa tiếng Việt | mẹo nhớ (không bắt buộc)</strong><textarea rows={5} value={manualWordsText} onChange={(e) => setManualWordsText(e.target.value)} className="mt-1 w-full border border-stone-200 rounded-xl p-3 text-xs font-mono" placeholder={"買い物 | kaimono | mua sắm\n店 | mise | cửa hàng"} /></label></section>
+                <section className="space-y-2 border-t border-stone-150 pt-4"><h4 className="text-xs font-extrabold text-rose-600 uppercase tracking-wide">Bài tập</h4><label className="text-xs text-stone-500 block">Mỗi dòng: <strong>câu hỏi | đáp án/gợi ý (không bắt buộc)</strong><textarea rows={4} value={manualExercisesText} onChange={(e) => setManualExercisesText(e.target.value)} className="mt-1 w-full border border-stone-200 rounded-xl p-3 text-xs" placeholder={"Dịch: Tôi muốn đi mua sắm. | 買い物に行きたいです。\nĐiền vào chỗ trống: 日本語を___たいです。 | 勉強し"} /></label></section>
+                {importError && <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl text-xs text-rose-600">⚠️ {importError}</div>}
+                {importSuccess && <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-xs text-emerald-700">🎉 {importSuccess}</div>}
+              </div>
+              <div className="p-4 border-t border-stone-150 bg-stone-50 flex justify-end gap-2"><button onClick={() => setIsImportModalOpen(false)} className="px-4 py-2 text-xs font-bold text-stone-500">Đóng</button><button disabled={isImporting} onClick={handleSaveManualLesson} className="px-5 py-2 bg-rose-600 disabled:bg-stone-300 text-white rounded-xl text-xs font-extrabold">{isImporting ? "Đang lưu..." : "Lưu bài học"}</button></div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Legacy JSON importer retained in source temporarily, but no longer rendered. */}
+      <AnimatePresence>
+        {false && isImportModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -4046,22 +4261,20 @@ export default function BasicJapaneseCourse({
                     <button
                       type="button"
                       onClick={() => { sounds.playClick(); setImportScope("existing"); setImportError(null); setImportSuccess(null); }}
-                      className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
-                        importScope === "existing"
-                          ? "bg-white text-stone-850 shadow-3xs"
-                          : "text-stone-500 hover:text-stone-850"
-                      }`}
+                      className={`py-1.5 rounded-lg text-xs font-bold transition-all ${importScope === "existing"
+                        ? "bg-white text-stone-850 shadow-3xs"
+                        : "text-stone-500 hover:text-stone-850"
+                        }`}
                     >
                       Bài học hiện có
                     </button>
                     <button
                       type="button"
                       onClick={() => { sounds.playClick(); setImportScope("new"); setImportError(null); setImportSuccess(null); }}
-                      className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
-                        importScope === "new"
-                          ? "bg-white text-rose-600 shadow-3xs"
-                          : "text-stone-500 hover:text-stone-850"
-                      }`}
+                      className={`py-1.5 rounded-lg text-xs font-bold transition-all ${importScope === "new"
+                        ? "bg-white text-rose-600 shadow-3xs"
+                        : "text-stone-500 hover:text-stone-850"
+                        }`}
                     >
                       Tạo chủ đề mới hoàn toàn
                     </button>
@@ -4092,7 +4305,7 @@ export default function BasicJapaneseCourse({
                     <div className="flex items-center gap-1.5 text-xs font-extrabold text-rose-600 border-b border-stone-200 pb-1.5 mb-2">
                       <PlusCircle className="w-4 h-4" /> Thiết lập thông tin chủ đề mới
                     </div>
-                    
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <div className="space-y-1">
                         <label className="text-[11px] font-bold text-stone-700 block">Tên chủ đề <span className="text-rose-500">*</span></label>
@@ -4146,7 +4359,7 @@ export default function BasicJapaneseCourse({
                     {/* Grammar block for New Topic */}
                     <div className="border-t border-stone-200 pt-2.5 mt-2 space-y-2">
                       <span className="text-[11px] font-extrabold text-stone-500 uppercase tracking-wider block">Cấu trúc Ngữ pháp kèm theo:</span>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div className="space-y-1">
                           <label className="text-[11px] font-bold text-stone-700 block">Mẫu câu ngữ pháp</label>
@@ -4201,22 +4414,20 @@ export default function BasicJapaneseCourse({
                   <button
                     type="button"
                     onClick={() => { sounds.playClick(); setImportMethod("json"); setImportError(null); setImportSuccess(null); }}
-                    className={`pb-2 text-xs font-extrabold transition-all border-b-2 px-1 ${
-                      importMethod === "json"
-                        ? "border-rose-500 text-rose-600"
-                        : "border-transparent text-stone-500 hover:text-stone-850"
-                    }`}
+                    className={`pb-2 text-xs font-extrabold transition-all border-b-2 px-1 ${importMethod === "json"
+                      ? "border-rose-500 text-rose-600"
+                      : "border-transparent text-stone-500 hover:text-stone-850"
+                      }`}
                   >
                     Import JSON hàng loạt
                   </button>
                   <button
                     type="button"
                     onClick={() => { sounds.playClick(); setImportMethod("single"); setImportError(null); setImportSuccess(null); }}
-                    className={`pb-2 text-xs font-extrabold transition-all border-b-2 px-1 ${
-                      importMethod === "single"
-                        ? "border-rose-500 text-rose-600"
-                        : "border-transparent text-stone-500 hover:text-stone-850"
-                    }`}
+                    className={`pb-2 text-xs font-extrabold transition-all border-b-2 px-1 ${importMethod === "single"
+                      ? "border-rose-500 text-rose-600"
+                      : "border-transparent text-stone-500 hover:text-stone-850"
+                      }`}
                   >
                     Thêm từng từ thủ công
                   </button>
@@ -4227,10 +4438,10 @@ export default function BasicJapaneseCourse({
                   <div className="space-y-4 pt-1 animate-fadeIn">
                     <div className="space-y-1">
                       <label className="text-[11px] font-bold text-stone-500 uppercase tracking-wide font-mono block">Cấu trúc JSON mẫu ({importScope === "new" ? "Toàn bộ chủ đề & Ngữ pháp" : "Bổ sung từ vựng & Ngữ pháp"}):</label>
-                      
+
                       {importScope === "new" ? (
                         <div className="bg-stone-900 text-stone-300 font-mono text-[9px] p-3 rounded-xl overflow-x-auto border border-stone-800 leading-normal max-h-[140px] select-all">
-{`{
+                          {`{
   "title": "Chủ đề Thời tiết",
   "description": "Các từ vựng và ngữ pháp về khí hậu, thời tiết",
   "level": "N5",
@@ -4249,7 +4460,7 @@ export default function BasicJapaneseCourse({
                         </div>
                       ) : (
                         <div className="bg-stone-900 text-stone-300 font-mono text-[9px] p-3 rounded-xl overflow-x-auto border border-stone-800 leading-normal max-h-[140px] select-all">
-{`{
+                          {`{
   "grammar": {
     "pattern": "~たい です (Muốn làm gì)",
     "explanation": "Dùng biểu thị ý muốn...",
@@ -4263,7 +4474,7 @@ export default function BasicJapaneseCourse({
 }`}
                         </div>
                       )}
-                      
+
                       <p className="text-[10px] text-stone-400 leading-normal">
                         * Bạn có thể dán toàn bộ cấu trúc đầy đủ ở trên, hệ thống sẽ tự phân tích và điền các trường cho bạn.
                       </p>
@@ -4412,16 +4623,14 @@ export default function BasicJapaneseCourse({
                   { step: 4, label: "Đề ôn tập" }
                 ].map((item) => (
                   <div key={item.step} className="flex items-center gap-1.5 flex-1 last:flex-initial">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold font-mono transition-all duration-350 ${
-                      builderStep >= item.step
-                        ? "bg-rose-600 text-white ring-2 ring-rose-100"
-                        : "bg-stone-200 text-stone-500"
-                    }`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold font-mono transition-all duration-350 ${builderStep >= item.step
+                      ? "bg-rose-600 text-white ring-2 ring-rose-100"
+                      : "bg-stone-200 text-stone-500"
+                      }`}>
                       {item.step}
                     </div>
-                    <span className={`text-[10px] font-bold hidden sm:inline ${
-                      builderStep >= item.step ? "text-stone-800" : "text-stone-400"
-                    }`}>
+                    <span className={`text-[10px] font-bold hidden sm:inline ${builderStep >= item.step ? "text-stone-800" : "text-stone-400"
+                      }`}>
                       {item.label}
                     </span>
                     {item.step < 4 && <div className="h-[2px] bg-stone-200 flex-1 mx-2 hidden sm:block"></div>}
@@ -4431,7 +4640,7 @@ export default function BasicJapaneseCourse({
 
               {/* Body */}
               <div className="p-5 flex-1 overflow-y-auto space-y-4">
-                
+
                 {builderError && (
                   <div className="p-3.5 bg-rose-50 border border-rose-100 rounded-xl text-xs font-semibold text-rose-600 leading-relaxed">
                     ⚠️ {builderError}
@@ -4589,11 +4798,11 @@ export default function BasicJapaneseCourse({
                       {builderWords.filter(w => w.selected).map((word, idx) => (
                         <div key={idx} className="bg-stone-50 p-3.5 rounded-xl border border-stone-200 shadow-4xs space-y-1.5">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-extrabold text-white bg-rose-600 px-2 py-0.5 rounded-md font-mono">#{idx+1}</span>
+                            <span className="text-xs font-extrabold text-white bg-rose-600 px-2 py-0.5 rounded-md font-mono">#{idx + 1}</span>
                             <span className="text-xs font-extrabold text-stone-850">{word.japanese} ({word.romaji})</span>
                             <span className="text-xs text-stone-400 font-medium">| {word.vietnameseMeaning}</span>
                           </div>
-                          
+
                           <div className="bg-white p-2.5 rounded-lg border border-stone-150 font-serif-jp text-sm text-stone-800 space-y-1">
                             <p className="font-bold">{word.exampleJp || "Đang chờ tạo..."}</p>
                             <p className="text-xs text-stone-400 font-mono font-medium">{word.exampleRomaji}</p>
@@ -4626,11 +4835,10 @@ export default function BasicJapaneseCourse({
                             {q.options.map((opt, oidx) => (
                               <div
                                 key={oidx}
-                                className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 ${
-                                  oidx === q.answerIndex
-                                    ? "bg-emerald-50 border-emerald-250 text-emerald-800"
-                                    : "bg-white border-stone-200 text-stone-600"
-                                }`}
+                                className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 ${oidx === q.answerIndex
+                                  ? "bg-emerald-50 border-emerald-250 text-emerald-800"
+                                  : "bg-white border-stone-200 text-stone-600"
+                                  }`}
                               >
                                 <span className="font-mono text-[10px] bg-stone-100 text-stone-500 w-5 h-5 rounded-full flex items-center justify-center border shrink-0">
                                   {oidx + 1}
@@ -4817,18 +5025,16 @@ export default function BasicJapaneseCourse({
                   <button
                     type="button"
                     onClick={() => { sounds.playClick(); setIsRegisterMode(false); setAuthModalError(null); setAuthModalSuccess(null); }}
-                    className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center ${
-                      !isRegisterMode ? "bg-white text-rose-600 shadow-3xs" : "text-stone-500 hover:text-stone-800"
-                    }`}
+                    className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center ${!isRegisterMode ? "bg-white text-rose-600 shadow-3xs" : "text-stone-500 hover:text-stone-800"
+                      }`}
                   >
                     Đăng nhập
                   </button>
                   <button
                     type="button"
                     onClick={() => { sounds.playClick(); setIsRegisterMode(true); setAuthModalError(null); setAuthModalSuccess(null); }}
-                    className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center ${
-                      isRegisterMode ? "bg-white text-rose-600 shadow-3xs" : "text-stone-500 hover:text-stone-800"
-                    }`}
+                    className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center ${isRegisterMode ? "bg-white text-rose-600 shadow-3xs" : "text-stone-500 hover:text-stone-800"
+                      }`}
                   >
                     Đăng ký mới
                   </button>

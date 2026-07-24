@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 
@@ -478,6 +477,7 @@ Từ vựng: ${JSON.stringify(words, null, 2)}`;
 async function setupVite() {
   if (process.env.NODE_ENV !== "production") {
     console.log("Starting server in DEVELOPMENT mode with Vite middleware...");
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -497,4 +497,8 @@ async function setupVite() {
   });
 }
 
-setupVite();
+if (!process.env.VERCEL) {
+  setupVite();
+}
+
+export default app;

@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+.codegraph
+.claude
+.agents
+skills-lock.json

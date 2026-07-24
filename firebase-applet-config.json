@@ -1,10 +1,10 @@
 {
-  "projectId": "sixth-superstate-8tpfc",
-  "appId": "1:510518523751:web:1f72aa0b98a8aaaafa21c2",
-  "apiKey": "AIzaSyB0f-CIQOXZzHUXe8TnM7P-UFjTqYktc-I",
-  "authDomain": "sixth-superstate-8tpfc.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-75627f79-7021-4c97-9caf-95533fc9abb0",
-  "storageBucket": "sixth-superstate-8tpfc.firebasestorage.app",
-  "messagingSenderId": "510518523751",
-  "measurementId": ""
+  "projectId": "nihongo-queror",
+  "appId": "1:220082484787:web:92d34a7476438a07285546",
+  "apiKey": "AIzaSyBkLOKwjHh-oha0Yeaslv7JFyyq92-wOSA",
+  "authDomain": "nihongo-queror.firebaseapp.com",
+  "firestoreDatabaseId": "",
+  "storageBucket": "nihongo-queror.firebasestorage.app",
+  "messagingSenderId": "220082484787",
+  "measurementId": "G-RZMVP96B99"
 }

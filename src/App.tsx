@@ -8,7 +8,7 @@ import KanjiLearning from "./components/KanjiLearning";
 import { HIRAGANA_GROUPS, ALL_HIRAGANA } from "./data/hiragana";
 import { KATAKANA_GROUPS, ALL_KATAKANA } from "./data/katakana";
 import { sounds } from "./utils/audio";
-import { getLessonsFromCloud, getCasualVocabFromCloud } from "./utils/firebase";
+import { getLessonsFromCloud, getCasualVocabFromCloud, exportAllCollections } from "./utils/firebase";
 import { VocabularyWord } from "./data/vocabulary";
 import {
   Flame,
@@ -73,6 +73,24 @@ export default function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+  }, []);
+
+  // Run full Firestore export on app startup
+  useEffect(() => {
+    const runExport = async () => {
+      const exportedInSession = sessionStorage.getItem("firestore_exported_on_startup");
+      if (!exportedInSession) {
+        sessionStorage.setItem("firestore_exported_on_startup", "pending");
+        try {
+          await exportAllCollections();
+          sessionStorage.setItem("firestore_exported_on_startup", "true");
+        } catch (err) {
+          console.error("Auto export on startup failed:", err);
+          sessionStorage.removeItem("firestore_exported_on_startup");
+        }
+      }
+    };
+    runExport();
   }, []);
 
   // Sync user details/role from Cloud database on mount if needed
@@ -392,8 +410,8 @@ export default function App() {
             </>
           )}
 
-          {/* Student/General logged in options */}
-          <button
+          {/* Manual course authoring is restricted to course administrators. */}
+          {isLoggedIn && userRole === "admin" && <button
             id="sidebar-settings-btn-import-vocab"
             onClick={() => {
               sounds.playClick();
@@ -403,9 +421,11 @@ export default function App() {
             }}
             className="w-full py-1.5 px-3 rounded-lg bg-stone-850 text-stone-300 hover:text-white hover:bg-stone-800 text-left font-bold transition-colors flex items-center gap-2"
           >
-            <span className="text-[11px]">📥 Import JSON từ vựng</span>
+            <span className="text-[11px]">✍️ Soạn giáo trình thủ công</span>
           </button>
+          }
 
+          {/* Student/General logged in options */}
           <button
             id="sidebar-settings-btn-toggle-edit-mode"
             onClick={() => {

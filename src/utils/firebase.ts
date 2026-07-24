@@ -8,11 +8,15 @@ import { VocabularyWord } from "../data/vocabulary";
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 
+console.log(app.options.projectId);
+
 // Initialize Firebase Auth
 export const auth = getAuth(app);
 
 // Use specific databaseId from the applet-config if present
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "default");
+export const db = firebaseConfig.firestoreDatabaseId
+  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+  : getFirestore(app);
 
 const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes cache duration
 
@@ -511,4 +515,55 @@ export async function getUserDetailsFromCloud(username: string): Promise<{ usern
     role: uName === "sinh" ? "admin" : "user"
   };
 }
+
+/**
+ * Export all collections from Firestore to a JSON file.
+ * This can be imported to another Firestore instance.
+ */
+export async function exportAllCollections(): Promise<void> {
+  console.log("Starting full Firestore database export...");
+  try {
+    await ensureAuthenticated();
+    
+    const collectionsToExport = [
+      "user_progress",
+      "japanese_lessons",
+      "course_accounts",
+      "casual_vocab"
+    ];
+    
+    const exportData: Record<string, Array<{ id: string; data: any }>> = {};
+    
+    for (const colName of collectionsToExport) {
+      console.log(`Exporting collection: ${colName}`);
+      const colRef = collection(db, colName);
+      const querySnapshot = await getDocs(colRef);
+      
+      exportData[colName] = [];
+      querySnapshot.forEach((docSnap) => {
+        exportData[colName].push({
+          id: docSnap.id,
+          data: docSnap.data()
+        });
+      });
+    }
+    
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `firestore_export_${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    console.log("Firestore database export completed and download triggered successfully.");
+  } catch (error) {
+    console.error("Failed to export Firestore database:", error);
+  }
+}
+
 

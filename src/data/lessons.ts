@@ -7,6 +7,23 @@ export interface LessonGrammar {
   exampleMeaning: string;
 }
 
+export interface LessonGrammarExample {
+  japanese: string;
+  vietnameseMeaning: string;
+}
+
+export interface LessonGrammarItem {
+  title: string;
+  pattern: string;
+  explanation: string;
+  examples: LessonGrammarExample[];
+}
+
+export interface LessonExercise {
+  question: string;
+  answer?: string;
+}
+
 export interface Lesson {
   id: number;
   title: string;
@@ -14,7 +31,10 @@ export interface Lesson {
   level: "N5" | "N4" | "N3" | "N2" | "N1";
   category: string;
   grammar: LessonGrammar;
+  grammarItems?: LessonGrammarItem[];
   words: VocabularyWord[];
+  grammarExamples?: LessonGrammarExample[];
+  exercises?: LessonExercise[];
   categorizedVocab?: any[];
 }
 
